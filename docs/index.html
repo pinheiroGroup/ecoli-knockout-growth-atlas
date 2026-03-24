@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E. coli Knockout Growth Curves</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    :root {
+      --bg:        #0f1117;
+      --surface:   #1a1d27;
+      --border:    #2d3044;
+      --accent:    #4f8ef7;
+      --text:      #e2e8f0;
+      --muted:     #8892a4;
+      --tab-hover: #232738;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    header h1 { font-size: 1.25rem; font-weight: 600; }
+    header p  { color: var(--muted); font-size: 0.85rem; }
+    header a  { color: var(--accent); text-decoration: none; }
+    header a:hover { text-decoration: underline; }
+    .badge {
+      background: #1e3a5f;
+      color: var(--accent);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* ── Layout ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      height: calc(100vh - 72px);
+    }
+
+    /* ── Sidebar ── */
+    aside {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 1rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    aside h2 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── Nav tabs (vertical) ── */
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    nav button {
+      background: none;
+      border: none;
+      color: var(--text);
+      text-align: left;
+      padding: 0.55rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    nav button:hover   { background: var(--tab-hover); }
+    nav button.active  { background: #1e3a5f; color: var(--accent); font-weight: 600; }
+    nav button .icon   { font-size: 1rem; }
+
+    /* ── Controls (sidebar filters) ── */
+    .control { display: flex; flex-direction: column; gap: 0.4rem; }
+    .control label { font-size: 0.8rem; color: var(--muted); }
+    select, input[type=text], input[type=range] {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 0.4rem 0.6rem;
+      font-size: 0.85rem;
+      width: 100%;
+      outline: none;
+    }
+    select:focus, input:focus { border-color: var(--accent); }
+
+    /* ── Main content ── */
+    main {
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .tab-panel { display: none; flex-direction: column; gap: 1.25rem; }
+    .tab-panel.active { display: flex; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+    }
+    .card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .card p  { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.75rem; line-height: 1.5; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+    /* ── Stats strip ── */
+    .stats-strip {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      flex: 1;
+      min-width: 110px;
+    }
+    .stat .val { font-size: 1.4rem; font-weight: 700; color: var(--accent); }
+    .stat .lbl { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+    /* ── Legend chips ── */
+    .legend { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+    .chip:hover { border-color: var(--muted); }
+    .chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ── Gene table ── */
+    .gene-search { margin-bottom: 0.75rem; }
+    .gene-list {
+      overflow-y: auto;
+      max-height: 220px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+    .gene-list table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .gene-list th {
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      padding: 0.4rem 0.6rem;
+      text-align: left;
+      color: var(--muted);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+    }
+    .gene-list td { padding: 0.35rem 0.6rem; border-bottom: 1px solid #1e2235; }
+    .gene-list tr { cursor: pointer; }
+    .gene-list tr:hover td { background: var(--tab-hover); }
+    .gene-list tr.selected td { background: #1e3a5f; }
+    .cluster-dot {
+      display: inline-block;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+
+    /* ── Loading / error ── */
+    #loading {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 1rem;
+      z-index: 999;
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Plotly overrides ── */
+    .js-plotly-plot .plotly .modebar { background: transparent !important; }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+      aside   { border-right: none; border-bottom: 1px solid var(--border); max-height: 200px; }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <span style="color:var(--muted)">Loading curve data…</span>
+</div>
+
+<header>
+  <div>
+    <h1>E. coli Keio Knockout — Growth Curve Atlas</h1>
+    <p>
+      <a href="https://www.nature.com/articles/s41597-026-07075-9" target="_blank">
+        Nature Scientific Data 2026
+      </a>
+      &nbsp;·&nbsp; Analysed with
+      <a href="https://github.com/pinheiroGroup/KinBiont.jl" target="_blank">KinBiont.jl</a>
+    </p>
+  </div>
+  <span class="badge" id="badge-genes">— genes</span>
+  <span class="badge" id="badge-curves">— curves</span>
+  <span class="badge" id="badge-tp">— time points</span>
+</header>
+
+<div class="layout">
+  <!-- ── Sidebar ── -->
+  <aside>
+    <div>
+      <h2>View</h2>
+      <nav>
+        <button class="active" data-tab="overview">
+          <span class="icon">📊</span> Overview
+        </button>
+        <button data-tab="elbow">
+          <span class="icon">📐</span> Elbow Analysis
+        </button>
+        <button data-tab="centroids">
+          <span class="icon">🔵</span> Cluster Profiles
+        </button>
+        <button data-tab="browser">
+          <span class="icon">🧬</span> Gene Browser
+        </button>
+        <button data-tab="compare">
+          <span class="icon">⚖️</span> LB vs M63
+        </button>
+      </nav>
+    </div>
+
+    <div id="ctrl-medium" class="control">
+      <label>Medium</label>
+      <select id="sel-medium">
+        <option value="LB">LB (rich)</option>
+        <option value="M63">M63 (minimal)</option>
+      </select>
+    </div>
+
+    <div id="ctrl-gene" class="control">
+      <label>Gene filter</label>
+      <input type="text" id="gene-filter" placeholder="e.g. hchA" />
+    </div>
+
+    <div id="ctrl-cluster" class="control">
+      <label>Highlight cluster</label>
+      <select id="sel-cluster">
+        <option value="all">All clusters</option>
+      </select>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main>
+
+    <!-- ── Tab: Overview ── -->
+    <div id="tab-overview" class="tab-panel active">
+      <div class="stats-strip" id="stats-strip"></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Cluster size distribution — LB</h3>
+          <p>Number of genes assigned to each growth phenotype cluster in LB medium.</p>
+          <div id="plot-cluster-bar-lb" style="height:240px"></div>
+        </div>
+        <div class="card">
+          <h3>Cluster size distribution — M63</h3>
+          <p>Number of genes assigned to each growth phenotype cluster in M63 medium.</p>
+          <div id="plot-cluster-bar-m63" style="height:240px"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Phenotype shift LB → M63</h3>
+        <p>
+          Each cell shows how many genes move from a given LB cluster (row) to an M63 cluster (column).
+          Diagonal = same phenotype in both media.
+        </p>
+        <div id="plot-shift-heatmap" style="height:320px"></div>
+      </div>
+    </div>
+
+    <!-- ── Tab: Elbow ── -->
+    <div id="tab-elbow" class="tab-panel">
+      <div class="card">
+        <h3>WCSS elbow plot</h3>
+        <p>
+          Within-cluster sum of squares (WCSS) from KinBiont's k-means sweep.
+          The elbow point (★) was selected as the optimal number of clusters.
+        </p>
+        <div id="plot-elbow" style="height:360px"></div>
+      </div>
+      <div class="card">
+        <h3>Interpretation</h3>
+        <p>
+          WCSS measures the total variance unexplained by the clusters. It always decreases as k
+          increases, but the rate of improvement diminishes past the elbow — adding more clusters
+          gives diminishing returns in explanatory power. The elbow is detected as the point of
+          maximum curvature (largest second derivative) in the WCSS curve.
+        </p>
+      </div>
+    </div>
+
+    <!-- ── Tab: Centroids ── -->
+    <div id="tab-centroids" class="tab-panel">
+      <div class="grid-2">
+        <div class="card">
+          <h3>LB cluster profiles</h3>
+          <p>Mean growth curve (OD) ± 1 SD for each cluster. Line width ∝ cluster size.</p>
+          <div id="plot-centroids-lb" style="height:340px"></div>
+        </div>
+        <div class="card">
+          <h3>M63 cluster profiles</h3>
+          <p>Mean growth curve (OD) ± 1 SD for each cluster. Line width ∝ cluster size.</p>
+          <div id="plot-centroids-m63" style="height:340px"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Z-scored shape prototypes</h3>
+        <p>
+          Centroids normalised to zero mean / unit variance per curve, so shape is independent
+          of absolute OD. Useful for comparing growth kinetics across media despite different
+          carrying capacities.
+        </p>
+        <div id="plot-centroids-z" style="height:320px"></div>
+      </div>
+    </div>
+
+    <!-- ── Tab: Gene Browser ── -->
+    <div id="tab-browser" class="tab-panel">
+      <div class="card">
+        <h3>Gene-level growth curves</h3>
+        <p>
+          Cluster centroids shown by default. Search below and click genes to overlay
+          individual curves (up to 10 at a time). Select medium in the sidebar.
+        </p>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.5rem" id="selected-gene-chips"></div>
+        <div id="plot-browser" style="height:360px"></div>
+      </div>
+      <div class="card">
+        <h3>Gene list — click to overlay</h3>
+        <div class="gene-search">
+          <input type="text" id="browser-search" placeholder="Search gene or JW-ID…" />
+        </div>
+        <div class="gene-list">
+          <table>
+            <thead><tr>
+              <th>Gene</th><th>JW-ID</th><th>LB cluster</th><th>M63 cluster</th>
+            </tr></thead>
+            <tbody id="gene-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Tab: Compare ── -->
+    <div id="tab-compare" class="tab-panel">
+      <div class="card">
+        <h3>LB vs M63 — per-gene overlay</h3>
+        <p>
+          Select a gene from the table below to compare its growth curve in both media side by side.
+          Shaded area = ± 1 SD across replicates.
+        </p>
+        <div id="plot-compare-overlay" style="height:360px"></div>
+      </div>
+      <div class="card">
+        <h3>Select gene</h3>
+        <div class="gene-search">
+          <input type="text" id="compare-search" placeholder="Search gene…" />
+        </div>
+        <div class="gene-list">
+          <table>
+            <thead><tr>
+              <th>Gene</th><th>JW-ID</th><th>LB cluster</th><th>M63 cluster</th><th>Δ cluster?</th>
+            </tr></thead>
+            <tbody id="compare-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// Palette & helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+const PALETTE = [
+  '#4f8ef7', '#f7844f', '#4ff7b0', '#f74f8e',
+  '#c4f74f', '#a24ff7', '#f7d64f', '#4fcff7',
+  '#f74f4f', '#4ff76c', '#f7a24f',
+];
+
+const PLOTLY_TEMPLATE = {
+  layout: {
+    paper_bgcolor: '#1a1d27',
+    plot_bgcolor:  '#0f1117',
+    font: { color: '#e2e8f0', family: 'Inter, system-ui, sans-serif', size: 12 },
+    xaxis: { gridcolor: '#2d3044', zerolinecolor: '#2d3044', linecolor: '#2d3044' },
+    yaxis: { gridcolor: '#2d3044', zerolinecolor: '#2d3044', linecolor: '#2d3044' },
+    legend: { bgcolor: 'rgba(0,0,0,0)', bordercolor: '#2d3044' },
+    margin: { t: 30, r: 20, b: 50, l: 60 },
+  }
+};
+
+const clusterColor = (k) => PALETTE[(k - 1) % PALETTE.length];
+
+function layout(extra = {}) {
+  return Object.assign({}, PLOTLY_TEMPLATE.layout, extra);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// State
+// ─────────────────────────────────────────────────────────────────────────────
+
+let D = null;                    // raw JSON data
+let selectedGene = null;         // for compare tab
+let selectedMedium = 'LB';
+const overlayGenes = new Set();  // genes overlaid in browser tab
+const MAX_OVERLAY = 10;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Data loading
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function loadData() {
+  const res = await fetch('data/curves_data.json');
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+function genesForMedium(medium) {
+  return D.genes.filter(g => g[medium]);
+}
+
+function clusterCount(medium) {
+  const k = D.optimal_k[medium];
+  const counts = new Array(k).fill(0);
+  genesForMedium(medium).forEach(g => {
+    const c = g[medium].cluster;
+    if (c >= 1 && c <= k) counts[c - 1]++;
+  });
+  return counts;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Badges
+// ─────────────────────────────────────────────────────────────────────────────
+
+function renderBadges() {
+  document.getElementById('badge-genes').textContent =
+    `${D.metadata.n_genes} genes`;
+  const nCurves = D.genes.reduce((s, g) => {
+    let c = 0;
+    if (g.LB)  c += g.LB.n_replicates;
+    if (g.M63) c += g.M63.n_replicates;
+    return s + c;
+  }, 0);
+  document.getElementById('badge-curves').textContent = `${nCurves} total curves`;
+  document.getElementById('badge-tp').textContent =
+    `${D.metadata.n_timepoints} time points`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Overview tab
+// ─────────────────────────────────────────────────────────────────────────────
+
+function renderOverview() {
+  const kLB  = D.optimal_k.LB;
+  const kM63 = D.optimal_k.M63;
+
+  // Stats strip
+  const stats = [
+    { val: D.metadata.n_genes, lbl: 'Genes' },
+    { val: kLB,  lbl: 'LB clusters'  },
+    { val: kM63, lbl: 'M63 clusters' },
+    { val: `${D.wcss_sweep.LB.ks.length}`, lbl: 'k range tested' },
+  ];
+  document.getElementById('stats-strip').innerHTML = stats.map(s =>
+    `<div class="stat"><div class="val">${s.val}</div><div class="lbl">${s.lbl}</div></div>`
+  ).join('');
+
+  // Cluster bar — LB
+  renderClusterBar('plot-cluster-bar-lb', 'LB');
+  renderClusterBar('plot-cluster-bar-m63', 'M63');
+
+  // Shift heatmap
+  renderShiftHeatmap();
+}
+
+function renderClusterBar(divId, medium) {
+  const k      = D.optimal_k[medium];
+  const counts = clusterCount(medium);
+  const colors = counts.map((_, i) => clusterColor(i + 1));
+
+  Plotly.newPlot(divId, [{
+    type: 'bar',
+    x: counts.map((_, i) => `Cluster ${i + 1}`),
+    y: counts,
+    marker: { color: colors },
+    text: counts.map(String),
+    textposition: 'auto',
+  }], layout({
+    xaxis: { title: '' },
+    yaxis: { title: 'Genes' },
+    showlegend: false,
+    margin: { t: 10, r: 10, b: 40, l: 45 },
+  }), { responsive: true, displayModeBar: false });
+}
+
+function renderShiftHeatmap() {
+  // Only genes present in both media
+  const both = D.genes.filter(g => g.LB && g.M63);
+  const kLB  = D.optimal_k.LB;
+  const kM63 = D.optimal_k.M63;
+
+  // Matrix: rows = LB clusters, cols = M63 clusters
+  const mat = Array.from({ length: kLB }, () => new Array(kM63).fill(0));
+  both.forEach(g => {
+    const r = g.LB.cluster  - 1;
+    const c = g.M63.cluster - 1;
+    if (r >= 0 && r < kLB && c >= 0 && c < kM63) mat[r][c]++;
+  });
+
+  const labels_lb  = Array.from({ length: kLB  }, (_, i) => `LB ${i+1}`);
+  const labels_m63 = Array.from({ length: kM63 }, (_, i) => `M63 ${i+1}`);
+
+  // Build text annotations
+  const text = mat.map(row => row.map(v => v === 0 ? '' : String(v)));
+
+  Plotly.newPlot('plot-shift-heatmap', [{
+    type: 'heatmap',
+    z: mat,
+    x: labels_m63,
+    y: labels_lb,
+    text,
+    texttemplate: '%{text}',
+    colorscale: [
+      [0, '#0f1117'], [0.001, '#1e3a5f'], [1, '#4f8ef7']
+    ],
+    showscale: true,
+    hovertemplate: '%{y} → %{x}: %{z} genes<extra></extra>',
+  }], layout({
+    xaxis: { title: 'M63 cluster' },
+    yaxis: { title: 'LB cluster', autorange: 'reversed' },
+    margin: { t: 10, r: 60, b: 50, l: 70 },
+  }), { responsive: true, displayModeBar: false });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Elbow tab
+// ─────────────────────────────────────────────────────────────────────────────
+
+function renderElbow() {
+  const traces = ['LB', 'M63'].map((med, mi) => {
+    const sw   = D.wcss_sweep[med];
+    const optK = D.optimal_k[med];
+    const idx  = sw.ks.indexOf(optK);
+    return [
+      {
+        name: med,
+        x: sw.ks, y: sw.wcss,
+        mode: 'lines+markers',
+        line: { color: PALETTE[mi * 3], width: 2 },
+        marker: { size: 6 },
+      },
+      {
+        name: `Optimal k=${optK} (${med})`,
+        x: [optK], y: [sw.wcss[idx]],
+        mode: 'markers+text',
+        text: ['★'],
+        textposition: 'top center',
+        textfont: { size: 18, color: PALETTE[mi * 3] },
+        marker: { size: 12, color: PALETTE[mi * 3], symbol: 'star' },
+        showlegend: false,
+      }
+    ];
+  }).flat();
+
+  Plotly.newPlot('plot-elbow', traces, layout({
+    xaxis: { title: 'Number of clusters (k)', dtick: 1 },
+    yaxis: { title: 'WCSS (within-cluster sum of squares)' },
+    legend: { x: 0.75, y: 0.95 },
+  }), { responsive: true });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Centroids tab
+// ─────────────────────────────────────────────────────────────────────────────
+
+function renderCentroids() {
+  renderCentroidPlot('plot-centroids-lb',  'LB',  false);
+  renderCentroidPlot('plot-centroids-m63', 'M63', false);
+  renderCentroidsZ();
+}
+
+function renderCentroidPlot(divId, medium, zScored) {
+  const k      = D.optimal_k[medium];
+  const cents  = zScored ? D.centroids_z[medium] : D.centroids[medium];
+  const counts = clusterCount(medium);
+  const lw_min = 1.5, lw_max = 4;
+  const maxCount = Math.max(...counts);
+
+  const traces = cents.map((centroid, i) => {
+    const color = clusterColor(i + 1);
+    const lw    = lw_min + (lw_max - lw_min) * (counts[i] / (maxCount || 1));
+    return {
+      name: `Cluster ${i + 1} (n=${counts[i]})`,
+      x: D.times,
+      y: centroid,
+      mode: 'lines',
+      line: { color, width: lw },
+    };
+  });
+
+  Plotly.newPlot(divId, traces, layout({
+    xaxis: { title: 'Time (h)' },
+    yaxis: { title: zScored ? 'z-score' : 'OD' },
+    legend: { x: 0.01, y: 0.99 },
+  }), { responsive: true });
+}
+
+function renderCentroidsZ() {
+  const traces = ['LB', 'M63'].flatMap((med, mi) => {
+    const cents = D.centroids_z[med];
+    const k     = D.optimal_k[med];
+    return cents.map((centroid, i) => ({
+      name: `${med} C${i+1}`,
+      x: D.times,
+      y: centroid,
+      mode: 'lines',
+      line: { color: clusterColor(i + 1), width: 2, dash: mi === 0 ? 'solid' : 'dash' },
+    }));
+  });
+
+  Plotly.newPlot('plot-centroids-z', traces, layout({
+    xaxis: { title: 'Time (h)' },
+    yaxis: { title: 'z-score (normalised OD shape)' },
+    legend: { x: 0.01, y: 0.99 },
+  }), { responsive: true });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Gene Browser tab
+// ─────────────────────────────────────────────────────────────────────────────
+
+function renderBrowserPlot() {
+  const med   = selectedMedium;
+  const selCl = document.getElementById('sel-cluster').value;
+  const cents = D.centroids[med];
+  const k     = D.optimal_k[med];
+
+  const traces = [];
+
+  // 1. Faint background lines for ALL genes (no hover, just context)
+  const allGenes = genesForMedium(med);
+  const clFilter = selCl !== 'all' ? +selCl : null;
+  allGenes.forEach(g => {
+    const info = g[med];
+    if (clFilter && info.cluster !== clFilter) return;
+    traces.push({
+      x: D.times, y: info.mean,
+      mode: 'lines',
+      line: { color: clusterColor(info.cluster), width: 0.6 },
+      opacity: 0.18,
+      hoverinfo: 'skip',
+      showlegend: false,
+    });
+  });
+
+  // 2. Cluster centroids (bold)
+  cents.forEach((centroid, i) => {
+    if (clFilter && (i + 1) !== clFilter) return;
+    traces.push({
+      name: `Cluster ${i + 1} (centroid)`,
+      x: D.times, y: centroid,
+      mode: 'lines',
+      line: { color: clusterColor(i + 1), width: 3 },
+      hovertemplate: `Cluster ${i+1} centroid<br>OD: %{y:.4f}<extra></extra>`,
+    });
+  });
+
+  // 3. Overlaid individual genes (interactive)
+  overlayGenes.forEach(gene => {
+    const g = D.genes.find(x => x.gene === gene);
+    if (!g || !g[med]) return;
+    const info  = g[med];
+    const color = clusterColor(info.cluster);
+    traces.push({
+      name: `${gene} (C${info.cluster})`,
+      x: D.times, y: info.mean,
+      mode: 'lines',
+      line: { color, width: 2.5, dash: 'dot' },
+      hovertemplate: `<b>${gene}</b> | Cluster ${info.cluster}<br>OD: %{y:.4f}<extra></extra>`,
+    });
+  });
+
+  Plotly.react('plot-browser', traces, layout({
+    xaxis: { title: 'Time (h)' },
+    yaxis: { title: 'OD' },
+    hovermode: 'closest',
+    legend: { x: 0.01, y: 0.99 },
+  }), { responsive: true });
+}
+
+function renderOverlayChips() {
+  const container = document.getElementById('selected-gene-chips');
+  container.innerHTML = [...overlayGenes].map(gene => {
+    const g = D.genes.find(x => x.gene === gene);
+    const cl = g?.[selectedMedium]?.cluster ?? 1;
+    const color = clusterColor(cl);
+    return `<span class="chip" data-gene="${gene}" style="background:${color}22;color:${color}">
+      <span class="dot" style="background:${color}"></span>${gene}
+      <span style="margin-left:4px;cursor:pointer;opacity:0.7" data-remove="${gene}">✕</span>
+    </span>`;
+  }).join('');
+
+  container.querySelectorAll('[data-remove]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      overlayGenes.delete(el.dataset.remove);
+      renderOverlayChips();
+      renderBrowserPlot();
+      // deselect row in table
+      document.querySelectorAll('#gene-table-body tr').forEach(tr =>
+        tr.classList.toggle('selected', overlayGenes.has(tr.dataset.gene))
+      );
+    });
+  });
+}
+
+function renderGeneTable(tableId, searchId, withDelta) {
+  const body   = document.getElementById(tableId);
+  const search = document.getElementById(searchId);
+  const isBrowser = tableId === 'gene-table-body';
+
+  function update() {
+    const q = search.value.trim().toLowerCase();
+    let genes = D.genes.filter(g => g.LB || g.M63);
+    if (q) genes = genes.filter(g =>
+      g.gene.toLowerCase().includes(q) || g.jw_id.toLowerCase().includes(q)
+    );
+    // Limit visible rows for performance
+    const shown = genes.slice(0, 200);
+
+    body.innerHTML = shown.map(g => {
+      const lb  = g.LB  ? `<span class="cluster-dot" style="background:${clusterColor(g.LB.cluster)}"></span>${g.LB.cluster}`  : '—';
+      const m63 = g.M63 ? `<span class="cluster-dot" style="background:${clusterColor(g.M63.cluster)}"></span>${g.M63.cluster}` : '—';
+      const isSel = isBrowser ? overlayGenes.has(g.gene) : g.gene === selectedGene;
+      const selClass = isSel ? ' class="selected"' : '';
+      const delta = withDelta
+        ? `<td>${(g.LB && g.M63 && g.LB.cluster !== g.M63.cluster) ? '✓' : ''}</td>`
+        : '';
+      return `<tr${selClass} data-gene="${g.gene}">
+        <td><b>${g.gene}</b></td>
+        <td style="color:var(--muted)">${g.jw_id}</td>
+        <td>${lb}</td><td>${m63}</td>${delta}
+      </tr>`;
+    }).join('');
+    if (genes.length > 200) {
+      body.innerHTML += `<tr><td colspan="4" style="color:var(--muted);text-align:center;padding:0.5rem">
+        ${genes.length - 200} more — refine search to see them</td></tr>`;
+    }
+
+    body.querySelectorAll('tr[data-gene]').forEach(tr => {
+      tr.addEventListener('click', () => {
+        const gene = tr.dataset.gene;
+        if (isBrowser) {
+          if (overlayGenes.has(gene)) {
+            overlayGenes.delete(gene);
+          } else if (overlayGenes.size < MAX_OVERLAY) {
+            overlayGenes.add(gene);
+          }
+          tr.classList.toggle('selected', overlayGenes.has(gene));
+          renderOverlayChips();
+          renderBrowserPlot();
+        } else {
+          selectedGene = gene;
+          renderCompareOverlay();
+          document.querySelectorAll(`#${tableId} tr`).forEach(r =>
+            r.classList.toggle('selected', r.dataset.gene === selectedGene)
+          );
+        }
+      });
+    });
+  }
+
+  search.addEventListener('input', update);
+  update();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Compare tab
+// ─────────────────────────────────────────────────────────────────────────────
+
+function renderCompareOverlay() {
+  const gene = selectedGene || D.genes.find(g => g.LB && g.M63)?.gene;
+  if (!gene) return;
+  const g = D.genes.find(x => x.gene === gene);
+  if (!g) return;
+
+  const traces = [];
+  ['LB', 'M63'].forEach((med, mi) => {
+    if (!g[med]) return;
+    const info  = g[med];
+    const color = PALETTE[mi * 3];
+    const upper = info.mean.map((v, i) => v + info.std[i]);
+    const lower = info.mean.map((v, i) => v - info.std[i]);
+
+    // SD band
+    traces.push({
+      x: [...D.times, ...D.times.slice().reverse()],
+      y: [...upper, ...lower.slice().reverse()],
+      fill: 'toself',
+      fillcolor: color.replace(')', ',0.15)').replace('rgb', 'rgba').replace('#', '').padEnd(9),
+      line: { width: 0 },
+      showlegend: false,
+      hoverinfo: 'skip',
+    });
+    // Fix: use hex→rgba properly
+    traces[traces.length - 1].fillcolor = hexToRgba(color, 0.15);
+
+    traces.push({
+      name: `${med} (cluster ${info.cluster}, n=${info.n_replicates})`,
+      x: D.times,
+      y: info.mean,
+      mode: 'lines',
+      line: { color, width: 2.5 },
+      hovertemplate: `${med} OD: %{y:.4f}<extra></extra>`,
+    });
+  });
+
+  Plotly.react('plot-compare-overlay', traces, layout({
+    title: { text: gene, font: { size: 14 } },
+    xaxis: { title: 'Time (h)' },
+    yaxis: { title: 'OD (mean of replicates)' },
+    legend: { x: 0.01, y: 0.99 },
+  }), { responsive: true });
+}
+
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Cluster selector options
+// ─────────────────────────────────────────────────────────────────────────────
+
+function updateClusterSelector() {
+  const sel = document.getElementById('sel-cluster');
+  const k   = D.optimal_k[selectedMedium];
+  sel.innerHTML = '<option value="all">All clusters</option>' +
+    Array.from({ length: k }, (_, i) =>
+      `<option value="${i+1}">Cluster ${i+1}</option>`
+    ).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tab switching
+// ─────────────────────────────────────────────────────────────────────────────
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+  document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+
+  // Lazy render on first visit
+  if (name === 'elbow')     renderElbow();
+  if (name === 'centroids') renderCentroids();
+  if (name === 'browser')   { renderBrowserPlot(); renderGeneTable('gene-table-body', 'browser-search', false); renderOverlayChips(); }
+  if (name === 'compare')   { renderCompareOverlay(); renderGeneTable('compare-table-body', 'compare-search', true); }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Init
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function init() {
+  try {
+    D = await loadData();
+  } catch (e) {
+    document.getElementById('loading').innerHTML =
+      `<div style="color:#f74f4f;text-align:center">
+        <b>Could not load data/curves_data.json</b><br>
+        <span style="color:var(--muted);font-size:0.85rem">
+          Run <code>julia --project=analysis analysis/analyse.jl</code> first.
+        </span>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('loading').style.display = 'none';
+
+  renderBadges();
+  renderOverview();
+
+  // Wire controls
+  document.querySelectorAll('nav button').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+
+  document.getElementById('sel-medium').addEventListener('change', e => {
+    selectedMedium = e.target.value;
+    updateClusterSelector();
+    renderBrowserPlot();
+  });
+
+  document.getElementById('gene-filter').addEventListener('input', renderBrowserPlot);
+  document.getElementById('sel-cluster').addEventListener('change', renderBrowserPlot);
+
+  updateClusterSelector();
+  // Pre-select first gene for compare tab
+  const first = D.genes.find(g => g.LB && g.M63);
+  if (first) selectedGene = first.gene;
+}
+
+init();
+</script>
+</body>
+</html>

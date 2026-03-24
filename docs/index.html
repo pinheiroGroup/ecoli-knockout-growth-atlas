@@ -360,9 +360,22 @@
         <h3>Phenotype shift LB → M63</h3>
         <p>
           Each cell shows how many genes move from a given LB cluster (row) to an M63 cluster (column).
-          Diagonal = same phenotype in both media.
+          Diagonal = same phenotype in both media. <b>✕ = non-growing sentinel cluster.</b>
         </p>
         <div id="plot-shift-heatmap" style="height:320px"></div>
+      </div>
+
+      <div class="card" id="card-nongrowing">
+        <h3 style="display:flex;align-items:center;gap:0.5rem">
+          <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#6b7280"></span>
+          Non-growing knockouts in M63 — putative auxotrophs
+        </h3>
+        <p>
+          These <b id="ng-count">—</b> genes do not grow in M63 minimal medium but grow normally in LB.
+          Their knockouts cannot synthesise an essential metabolite from the minimal carbon/nitrogen source,
+          making them dependent on external supply (auxotrophs).
+        </p>
+        <div id="ng-gene-grid" style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.5rem"></div>
       </div>
     </div>
 
@@ -790,6 +803,7 @@ const PALETTE = [
   '#c4f74f', '#a24ff7', '#f7d64f', '#4fcff7',
   '#f74f4f', '#4ff76c', '#f7a24f',
 ];
+const NONGROWING_COLOR = '#6b7280';  // grey for non-growing clusters
 
 const PLOTLY_TEMPLATE = {
   layout: {
@@ -803,7 +817,18 @@ const PLOTLY_TEMPLATE = {
   }
 };
 
-const clusterColor = (k) => PALETTE[(k - 1) % PALETTE.length];
+// Returns grey when cluster k is the non-growing sentinel for that medium
+function isNongrowing(medium, k) {
+  return D && D.nongrowing_cluster[medium] === k &&
+         D.nongrowing_genes[medium].length > 0;
+}
+function clusterColor(k, medium = null) {
+  if (medium && isNongrowing(medium, k)) return NONGROWING_COLOR;
+  return PALETTE[(k - 1) % PALETTE.length];
+}
+function clusterLabel(k, medium) {
+  return isNongrowing(medium, k) ? `Cluster ${k} — non-growing` : `Cluster ${k}`;
+}
 
 function layout(extra = {}) {
   return Object.assign({}, PLOTLY_TEMPLATE.layout, extra);
@@ -872,44 +897,67 @@ function renderBadges() {
 function renderOverview() {
   const kLB  = D.optimal_k.LB;
   const kM63 = D.optimal_k.M63;
+  const ngM63 = D.nongrowing_genes.M63.length;
+  const ngLB  = D.nongrowing_genes.LB.length;
 
-  // Stats strip
   const stats = [
     { val: D.metadata.n_genes, lbl: 'Genes' },
     { val: kLB,  lbl: 'LB clusters'  },
     { val: kM63, lbl: 'M63 clusters' },
-    { val: `${D.wcss_sweep.LB.ks.length}`, lbl: 'k range tested' },
+    { val: ngM63, lbl: 'Non-growing (M63)' },
   ];
   document.getElementById('stats-strip').innerHTML = stats.map(s =>
     `<div class="stat"><div class="val">${s.val}</div><div class="lbl">${s.lbl}</div></div>`
   ).join('');
 
-  // Cluster bar — LB
   renderClusterBar('plot-cluster-bar-lb', 'LB');
   renderClusterBar('plot-cluster-bar-m63', 'M63');
-
-  // Shift heatmap
   renderShiftHeatmap();
+  renderNongrowingPanel();
 }
 
 function renderClusterBar(divId, medium) {
-  const k      = D.optimal_k[medium];
   const counts = clusterCount(medium);
-  const colors = counts.map((_, i) => clusterColor(i + 1));
+  const labels = counts.map((_, i) => clusterLabel(i + 1, medium));
+  const colors = counts.map((_, i) => clusterColor(i + 1, medium));
+  const patterns = counts.map((_, i) =>
+    isNongrowing(medium, i + 1) ? 'x' : '');
 
   Plotly.newPlot(divId, [{
     type: 'bar',
-    x: counts.map((_, i) => `Cluster ${i + 1}`),
+    x: labels,
     y: counts,
-    marker: { color: colors },
+    marker: { color: colors, pattern: { shape: patterns, fgcolor: '#9ca3af', size: 6 } },
     text: counts.map(String),
     textposition: 'auto',
   }], layout({
-    xaxis: { title: '' },
+    xaxis: { title: '', tickangle: -15 },
     yaxis: { title: 'Genes' },
     showlegend: false,
-    margin: { t: 10, r: 10, b: 40, l: 45 },
+    margin: { t: 10, r: 10, b: 55, l: 45 },
   }), { responsive: true, displayModeBar: false });
+}
+
+function renderNongrowingPanel() {
+  const genes = D.nongrowing_genes.M63;
+  document.getElementById('ng-count').textContent = genes.length;
+  document.getElementById('ng-gene-grid').innerHTML = genes.map(gene => {
+    const g   = D.genes.find(x => x.gene === gene);
+    const lbCl = g?.LB?.cluster;
+    const lbColor = lbCl ? clusterColor(lbCl, 'LB') : '#6b7280';
+    return `<span class="chip" style="background:#1f2937;color:#e2e8f0;border:1px solid #374151;cursor:pointer"
+                  data-gene="${gene}" title="LB: cluster ${lbCl ?? '—'} · click to compare">
+      <span class="dot" style="background:${lbColor}" title="LB cluster ${lbCl}"></span>
+      ${gene}
+    </span>`;
+  }).join('');
+
+  document.getElementById('ng-gene-grid').querySelectorAll('[data-gene]').forEach(el => {
+    el.addEventListener('click', () => {
+      selectedGene = el.dataset.gene;
+      switchTab('compare');
+    });
+  });
 }
 
 function renderShiftHeatmap() {
@@ -926,8 +974,10 @@ function renderShiftHeatmap() {
     if (r >= 0 && r < kLB && c >= 0 && c < kM63) mat[r][c]++;
   });
 
-  const labels_lb  = Array.from({ length: kLB  }, (_, i) => `LB ${i+1}`);
-  const labels_m63 = Array.from({ length: kM63 }, (_, i) => `M63 ${i+1}`);
+  const labels_lb  = Array.from({ length: kLB  }, (_, i) =>
+    isNongrowing('LB',  i+1) ? `LB ${i+1} ✕` : `LB ${i+1}`);
+  const labels_m63 = Array.from({ length: kM63 }, (_, i) =>
+    isNongrowing('M63', i+1) ? `M63 ${i+1} ✕` : `M63 ${i+1}`);
 
   // Build text annotations
   const text = mat.map(row => row.map(v => v === 0 ? '' : String(v)));
@@ -999,21 +1049,22 @@ function renderCentroids() {
 }
 
 function renderCentroidPlot(divId, medium, zScored) {
-  const k      = D.optimal_k[medium];
   const cents  = zScored ? D.centroids_z[medium] : D.centroids[medium];
   const counts = clusterCount(medium);
   const lw_min = 1.5, lw_max = 4;
-  const maxCount = Math.max(...counts);
+  const maxCount = Math.max(...counts.filter((_, i) => !isNongrowing(medium, i + 1))) || 1;
 
   const traces = cents.map((centroid, i) => {
-    const color = clusterColor(i + 1);
-    const lw    = lw_min + (lw_max - lw_min) * (counts[i] / (maxCount || 1));
+    const ng    = isNongrowing(medium, i + 1);
+    const color = clusterColor(i + 1, medium);
+    const lw    = ng ? 1.5 : lw_min + (lw_max - lw_min) * (counts[i] / maxCount);
     return {
-      name: `Cluster ${i + 1} (n=${counts[i]})`,
+      name: ng ? `Cluster ${i+1} — non-growing (n=${counts[i]})` : `Cluster ${i+1} (n=${counts[i]})`,
       x: D.times,
       y: centroid,
       mode: 'lines',
-      line: { color, width: lw },
+      line: { color, width: lw, dash: ng ? 'dot' : 'solid' },
+      opacity: ng ? 0.55 : 1,
     };
   });
 
@@ -1027,14 +1078,18 @@ function renderCentroidPlot(divId, medium, zScored) {
 function renderCentroidsZ() {
   const traces = ['LB', 'M63'].flatMap((med, mi) => {
     const cents = D.centroids_z[med];
-    const k     = D.optimal_k[med];
-    return cents.map((centroid, i) => ({
-      name: `${med} C${i+1}`,
-      x: D.times,
-      y: centroid,
-      mode: 'lines',
-      line: { color: clusterColor(i + 1), width: 2, dash: mi === 0 ? 'solid' : 'dash' },
-    }));
+    return cents.map((centroid, i) => {
+      const ng = isNongrowing(med, i + 1);
+      return {
+        name: `${med} C${i+1}${ng ? ' ✕' : ''}`,
+        x: D.times,
+        y: centroid,
+        mode: 'lines',
+        line: { color: clusterColor(i + 1, med), width: ng ? 1 : 2,
+                dash: ng ? 'dot' : (mi === 0 ? 'solid' : 'dash') },
+        opacity: ng ? 0.4 : 1,
+      };
+    });
   });
 
   Plotly.newPlot('plot-centroids-z', traces, layout({
@@ -1062,25 +1117,28 @@ function renderBrowserPlot() {
   allGenes.forEach(g => {
     const info = g[med];
     if (clFilter && info.cluster !== clFilter) return;
+    const ng = isNongrowing(med, info.cluster);
     traces.push({
       x: D.times, y: info.mean,
       mode: 'lines',
-      line: { color: clusterColor(info.cluster), width: 0.6 },
-      opacity: 0.18,
+      line: { color: clusterColor(info.cluster, med), width: ng ? 0.4 : 0.6 },
+      opacity: ng ? 0.1 : 0.18,
       hoverinfo: 'skip',
       showlegend: false,
     });
   });
 
-  // 2. Cluster centroids (bold)
+  // 2. Cluster centroids (bold; non-growing shown grey/dashed)
   cents.forEach((centroid, i) => {
     if (clFilter && (i + 1) !== clFilter) return;
+    const ng = isNongrowing(med, i + 1);
     traces.push({
-      name: `Cluster ${i + 1} (centroid)`,
+      name: ng ? `Cluster ${i+1} — non-growing (centroid)` : `Cluster ${i+1} (centroid)`,
       x: D.times, y: centroid,
       mode: 'lines',
-      line: { color: clusterColor(i + 1), width: 3 },
-      hovertemplate: `Cluster ${i+1} centroid<br>OD: %{y:.4f}<extra></extra>`,
+      line: { color: clusterColor(i + 1, med), width: ng ? 1.5 : 3, dash: ng ? 'dot' : 'solid' },
+      opacity: ng ? 0.5 : 1,
+      hovertemplate: `Cluster ${i+1}${ng?' — non-growing':''} centroid<br>OD: %{y:.4f}<extra></extra>`,
     });
   });
 
@@ -1148,8 +1206,14 @@ function renderGeneTable(tableId, searchId, withDelta) {
     const shown = genes.slice(0, 200);
 
     body.innerHTML = shown.map(g => {
-      const lb  = g.LB  ? `<span class="cluster-dot" style="background:${clusterColor(g.LB.cluster)}"></span>${g.LB.cluster}`  : '—';
-      const m63 = g.M63 ? `<span class="cluster-dot" style="background:${clusterColor(g.M63.cluster)}"></span>${g.M63.cluster}` : '—';
+      const ngLB  = g.LB  && isNongrowing('LB',  g.LB.cluster);
+      const ngM63 = g.M63 && isNongrowing('M63', g.M63.cluster);
+      const lb  = g.LB
+        ? `<span class="cluster-dot" style="background:${clusterColor(g.LB.cluster,'LB')}"></span>${g.LB.cluster}${ngLB  ? ' <span style="color:#6b7280;font-size:0.7em">✕</span>' : ''}`
+        : '—';
+      const m63 = g.M63
+        ? `<span class="cluster-dot" style="background:${clusterColor(g.M63.cluster,'M63')}"></span>${g.M63.cluster}${ngM63 ? ' <span style="color:#6b7280;font-size:0.7em">✕</span>' : ''}`
+        : '—';
       const isSel = isBrowser ? overlayGenes.has(g.gene) : g.gene === selectedGene;
       const selClass = isSel ? ' class="selected"' : '';
       const delta = withDelta

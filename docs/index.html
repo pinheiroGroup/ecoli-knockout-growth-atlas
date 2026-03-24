@@ -417,9 +417,10 @@
       <div class="card">
         <h3>Z-scored shape prototypes</h3>
         <p>
-          Centroids normalised to zero mean / unit variance per curve, so shape is independent
-          of absolute OD. Useful for comparing growth kinetics across media despite different
-          carrying capacities.
+          Centroids normalised to zero mean / unit variance per curve — shape is independent
+          of absolute OD magnitude. Non-growing clusters are excluded: z-scoring a flat signal
+          either collapses to all-zeros (constant curves) or amplifies measurement noise, so
+          their z-score carries no shape information.
         </p>
         <div id="plot-centroids-z" style="height:320px"></div>
       </div>
@@ -1078,18 +1079,17 @@ function renderCentroidPlot(divId, medium, zScored) {
 function renderCentroidsZ() {
   const traces = ['LB', 'M63'].flatMap((med, mi) => {
     const cents = D.centroids_z[med];
-    return cents.map((centroid, i) => {
-      const ng = isNongrowing(med, i + 1);
-      return {
-        name: `${med} C${i+1}${ng ? ' ✕' : ''}`,
+    return cents
+      .map((centroid, i) => ({ centroid, i }))
+      .filter(({ i }) => !isNongrowing(med, i + 1))   // exclude non-growing: z-score is meaningless for flat signals
+      .map(({ centroid, i }) => ({
+        name: `${med} C${i+1}`,
         x: D.times,
         y: centroid,
         mode: 'lines',
-        line: { color: clusterColor(i + 1, med), width: ng ? 1 : 2,
-                dash: ng ? 'dot' : (mi === 0 ? 'solid' : 'dash') },
-        opacity: ng ? 0.4 : 1,
-      };
-    });
+        line: { color: clusterColor(i + 1, med), width: 2,
+                dash: mi === 0 ? 'solid' : 'dash' },
+      }));
   });
 
   Plotly.newPlot('plot-centroids-z', traces, layout({

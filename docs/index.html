@@ -328,24 +328,26 @@
       </nav>
     </div>
 
-    <div id="ctrl-medium" class="control">
-      <label>Medium</label>
-      <select id="sel-medium">
-        <option value="LB">LB (rich)</option>
-        <option value="M63">M63 (minimal)</option>
-      </select>
-    </div>
+    <div id="browser-controls" style="display:none;flex-direction:column;gap:1.25rem">
+      <div id="ctrl-medium" class="control">
+        <label>Medium</label>
+        <select id="sel-medium">
+          <option value="LB">LB (rich)</option>
+          <option value="M63">M63 (minimal)</option>
+        </select>
+      </div>
 
-    <div id="ctrl-gene" class="control">
-      <label>Gene filter</label>
-      <input type="text" id="gene-filter" placeholder="e.g. hchA" />
-    </div>
+      <div id="ctrl-gene" class="control">
+        <label>Gene filter</label>
+        <input type="text" id="gene-filter" placeholder="e.g. hchA" />
+      </div>
 
-    <div id="ctrl-cluster" class="control">
-      <label>Highlight cluster</label>
-      <select id="sel-cluster">
-        <option value="all">All clusters</option>
-      </select>
+      <div id="ctrl-cluster" class="control">
+        <label>Highlight cluster</label>
+        <select id="sel-cluster">
+          <option value="all">All clusters</option>
+        </select>
+      </div>
     </div>
   </aside>
 
@@ -1384,6 +1386,8 @@ function switchTab(name) {
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
   document.getElementById(`tab-${name}`).classList.add('active');
   document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+  document.getElementById('browser-controls').style.display =
+    name === 'browser' ? 'flex' : 'none';
 
   // Lazy render on first visit
   if (name === 'elbow')     renderElbow();

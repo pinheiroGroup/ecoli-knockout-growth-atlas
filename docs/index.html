@@ -872,7 +872,30 @@ const MAX_OVERLAY = 10;
 async function loadData() {
   const res = await fetch('data/curves_data.json');
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
+  const d = await res.json();
+  trimAllTrailingZeros(d);
+  return d;
+}
+
+// Replace exactly-zero trailing values with null so Plotly shows a gap
+// instead of a diagonal line to zero (artifact from NaN→0 in data loading).
+function trimTrailingZeros(arr) {
+  let end = arr.length;
+  while (end > 0 && arr[end - 1] === 0) end--;
+  if (end === arr.length) return arr;
+  const out = arr.slice();
+  for (let i = end; i < out.length; i++) out[i] = null;
+  return out;
+}
+
+function trimAllTrailingZeros(d) {
+  d.genes.forEach(g => {
+    ['LB', 'M63'].forEach(med => {
+      if (!g[med]) return;
+      g[med].mean = trimTrailingZeros(g[med].mean);
+      g[med].std  = trimTrailingZeros(g[med].std);
+    });
+  });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

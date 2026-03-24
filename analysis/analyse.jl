@@ -317,6 +317,16 @@ function main()
             "M63" => [ds_vec(cl_m63.centroids_z[k, :]) for k in 1:cl_m63.optimal_k],
         ),
         "genes" => gene_records,
+        # With cluster_prescreen_constant=true, KinBiont always assigns
+        # non-growing wells to label n_clusters (the last index).
+        "nongrowing_cluster" => Dict(
+            "LB"  => cl_lb.optimal_k,
+            "M63" => cl_m63.optimal_k,
+        ),
+        "nongrowing_genes" => Dict(
+            "LB"  => sort([g for g in genes_lb_sorted  if lb_cluster_map[g]  == cl_lb.optimal_k]),
+            "M63" => sort([g for g in genes_m63_sorted if m63_cluster_map[g] == cl_m63.optimal_k]),
+        ),
     )
 
     mkpath(dirname(OUT_PATH))

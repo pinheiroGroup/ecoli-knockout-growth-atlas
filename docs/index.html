@@ -202,6 +202,19 @@
       margin-right: 4px;
     }
 
+    /* ── Cluster toggle buttons ── */
+    .cl-btn {
+      padding: 0.3rem 0.7rem;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.15s, border-color 0.15s;
+      opacity: 0.45;
+    }
+    .cl-btn.active { opacity: 1; border-color: rgba(255,255,255,0.25); }
+
     /* ── Loading / error ── */
     #loading {
       position: fixed; inset: 0;
@@ -431,9 +444,13 @@
       <div class="card">
         <h3>Gene-level growth curves</h3>
         <p>
-          Cluster centroids shown by default. Search below and click genes to overlay
-          individual curves (up to 10 at a time). Select medium in the sidebar.
+          Cluster centroids shown by default. Use the buttons to reveal all curves for a cluster,
+          or search below and click genes to overlay individual curves (up to 10).
         </p>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;margin-bottom:0.75rem">
+          <span style="font-size:0.78rem;color:var(--muted)">Show all curves:</span>
+          <div id="cluster-curve-btns" style="display:flex;gap:0.4rem;flex-wrap:wrap"></div>
+        </div>
         <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.5rem" id="selected-gene-chips"></div>
         <div id="plot-browser" style="height:360px"></div>
       </div>
@@ -842,7 +859,8 @@ function layout(extra = {}) {
 let D = null;                    // raw JSON data
 let selectedGene = null;         // for compare tab
 let selectedMedium = 'LB';
-const overlayGenes = new Set();  // genes overlaid in browser tab
+const overlayGenes = new Set();        // genes overlaid in browser tab
+const shownClusterCurves = new Set();  // clusters whose raw curves are shown
 const MAX_OVERLAY = 10;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1105,32 +1123,28 @@ function renderCentroidsZ() {
 
 function renderBrowserPlot() {
   const med   = selectedMedium;
-  const selCl = document.getElementById('sel-cluster').value;
   const cents = D.centroids[med];
-  const k     = D.optimal_k[med];
-
   const traces = [];
 
-  // 1. Faint background lines for ALL genes (no hover, just context)
-  const allGenes = genesForMedium(med);
-  const clFilter = selCl !== 'all' ? +selCl : null;
-  allGenes.forEach(g => {
-    const info = g[med];
-    if (clFilter && info.cluster !== clFilter) return;
-    const ng = isNongrowing(med, info.cluster);
-    traces.push({
-      x: D.times, y: info.mean,
-      mode: 'lines',
-      line: { color: clusterColor(info.cluster, med), width: ng ? 0.4 : 0.6 },
-      opacity: ng ? 0.1 : 0.18,
-      hoverinfo: 'skip',
-      showlegend: false,
+  // 1. Faint curves only for clusters the user has toggled on
+  if (shownClusterCurves.size > 0) {
+    genesForMedium(med).forEach(g => {
+      const info = g[med];
+      if (!shownClusterCurves.has(info.cluster)) return;
+      const ng = isNongrowing(med, info.cluster);
+      traces.push({
+        x: D.times, y: info.mean,
+        mode: 'lines',
+        line: { color: clusterColor(info.cluster, med), width: ng ? 0.4 : 0.6 },
+        opacity: ng ? 0.1 : 0.2,
+        hoverinfo: 'skip',
+        showlegend: false,
+      });
     });
-  });
+  }
 
-  // 2. Cluster centroids (bold; non-growing shown grey/dashed)
+  // 2. Cluster centroids (always shown; non-growing grey/dashed)
   cents.forEach((centroid, i) => {
-    if (clFilter && (i + 1) !== clFilter) return;
     const ng = isNongrowing(med, i + 1);
     traces.push({
       name: ng ? `Cluster ${i+1} — non-growing (centroid)` : `Cluster ${i+1} (centroid)`,
@@ -1138,16 +1152,16 @@ function renderBrowserPlot() {
       mode: 'lines',
       line: { color: clusterColor(i + 1, med), width: ng ? 1.5 : 3, dash: ng ? 'dot' : 'solid' },
       opacity: ng ? 0.5 : 1,
-      hovertemplate: `Cluster ${i+1}${ng?' — non-growing':''} centroid<br>OD: %{y:.4f}<extra></extra>`,
+      hovertemplate: `Cluster ${i+1}${ng ? ' — non-growing' : ''} centroid<br>OD: %{y:.4f}<extra></extra>`,
     });
   });
 
-  // 3. Overlaid individual genes (interactive)
+  // 3. Individually overlaid genes (dotted, labelled)
   overlayGenes.forEach(gene => {
     const g = D.genes.find(x => x.gene === gene);
     if (!g || !g[med]) return;
     const info  = g[med];
-    const color = clusterColor(info.cluster);
+    const color = clusterColor(info.cluster, med);
     traces.push({
       name: `${gene} (C${info.cluster})`,
       x: D.times, y: info.mean,
@@ -1163,6 +1177,41 @@ function renderBrowserPlot() {
     hovermode: 'closest',
     legend: { x: 0.01, y: 0.99 },
   }), { responsive: true });
+}
+
+function renderClusterButtons() {
+  const med = selectedMedium;
+  const k   = D.optimal_k[med];
+  const counts = clusterCount(med);
+  const container = document.getElementById('cluster-curve-btns');
+
+  container.innerHTML = Array.from({ length: k }, (_, i) => {
+    const cl    = i + 1;
+    const ng    = isNongrowing(med, cl);
+    const color = clusterColor(cl, med);
+    const label = ng
+      ? `Cluster ${cl} — non-growing (${counts[i]})`
+      : `Cluster ${cl} (${counts[i]})`;
+    const active = shownClusterCurves.has(cl) ? ' active' : '';
+    return `<button class="cl-btn${active}" data-cl="${cl}"
+              style="background:${color}22;color:${color};border-color:${color}55">
+              ${label}
+            </button>`;
+  }).join('');
+
+  container.querySelectorAll('.cl-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cl = +btn.dataset.cl;
+      if (shownClusterCurves.has(cl)) {
+        shownClusterCurves.delete(cl);
+        btn.classList.remove('active');
+      } else {
+        shownClusterCurves.add(cl);
+        btn.classList.add('active');
+      }
+      renderBrowserPlot();
+    });
+  });
 }
 
 function renderOverlayChips() {
@@ -1339,7 +1388,7 @@ function switchTab(name) {
   // Lazy render on first visit
   if (name === 'elbow')     renderElbow();
   if (name === 'centroids') renderCentroids();
-  if (name === 'browser')   { renderBrowserPlot(); renderGeneTable('gene-table-body', 'browser-search', false); renderOverlayChips(); }
+  if (name === 'browser')   { renderClusterButtons(); renderBrowserPlot(); renderGeneTable('gene-table-body', 'browser-search', false); renderOverlayChips(); }
   if (name === 'compare')   { renderCompareOverlay(); renderGeneTable('compare-table-body', 'compare-search', true); }
   if (name === 'source')    hljs.highlightAll();
 }
@@ -1374,12 +1423,13 @@ async function init() {
 
   document.getElementById('sel-medium').addEventListener('change', e => {
     selectedMedium = e.target.value;
+    shownClusterCurves.clear();
     updateClusterSelector();
+    renderClusterButtons();
     renderBrowserPlot();
   });
 
   document.getElementById('gene-filter').addEventListener('input', renderBrowserPlot);
-  document.getElementById('sel-cluster').addEventListener('change', renderBrowserPlot);
 
   updateClusterSelector();
   // Pre-select first gene for compare tab

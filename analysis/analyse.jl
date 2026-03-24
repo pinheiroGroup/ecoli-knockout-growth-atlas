@@ -103,8 +103,7 @@ function load_curves(path::String, sheet_name::String, wanted::Set{String})
         hdr = headers[j]
         hdr in wanted || continue
         vals = [_as_float(data[row_index[k], j]) for k in eachindex(row_index)]
-        # Replace NaN with 0 (blank baseline)
-        replace!(vals, NaN => 0.0)
+        # Keep NaN for missing/empty cells — downstream handles them
         curves[hdr] = vals
     end
 
@@ -134,9 +133,16 @@ function aggregate_by_gene(meta, curves_dict::Dict{String,Vector{Float64}})
     result = Dict{String, @NamedTuple{mean::Vector{Float64}, std::Vector{Float64},
                                        n::Int, jw_id::String}}()
     for (gene, replicates) in groups
-        mat      = reduce(hcat, replicates)   # n_tp × n_replicates
-        μ        = vec(Statistics.mean(mat, dims=2))
-        σ        = size(mat, 2) > 1 ? vec(Statistics.std(mat, dims=2)) : zeros(length(μ))
+        mat = reduce(hcat, replicates)   # n_tp × n_replicates
+        # NaN-aware mean and std: ignore missing values per timepoint
+        μ = map(1:size(mat, 1)) do i
+            vs = filter(!isnan, mat[i, :])
+            isempty(vs) ? NaN : Statistics.mean(vs)
+        end
+        σ = map(1:size(mat, 1)) do i
+            vs = filter(!isnan, mat[i, :])
+            length(vs) > 1 ? Statistics.std(vs) : 0.0
+        end
         result[gene] = (; mean=μ, std=σ, n=size(mat, 2), jw_id=jw_map[gene])
     end
     return result
@@ -242,19 +248,24 @@ function main()
     mat_lb  = reduce(vcat, [agg_lb[g].mean'  for g in genes_lb_sorted])   # n_genes_lb  × n_tp
     mat_m63 = reduce(vcat, [agg_m63[g].mean' for g in genes_m63_sorted])  # n_genes_m63 × n_tp
 
+    # Clustering needs finite values — replace NaN with 0 only for this input
+    mat_lb_cl  = replace(mat_lb,  NaN => 0.0)
+    mat_m63_cl = replace(mat_m63, NaN => 0.0)
+
     # Cluster
     @info "Clustering LB gene curves..."
-    cl_lb  = cluster_gene_curves(mat_lb,  times, genes_lb_sorted)
+    cl_lb  = cluster_gene_curves(mat_lb_cl,  times, genes_lb_sorted)
 
     @info "Clustering M63 gene curves..."
-    cl_m63 = cluster_gene_curves(mat_m63, times, genes_m63_sorted)
+    cl_m63 = cluster_gene_curves(mat_m63_cl, times, genes_m63_sorted)
 
     # Downsample time axis for JSON output (full resolution used for clustering above)
     # Keep every 4th point → 200 → ~50 points: reduces JSON ~4x with negligible visual loss
     ds       = 4
     ds_idx   = 1:ds:n_tp
     times_ds = times[ds_idx]
-    ds_vec(v) = round.(v[ds_idx]; digits=6)
+    # NaN → nothing so JSON3 writes null (Plotly draws a gap, not a line to zero)
+    ds_vec(v) = Union{Float64,Nothing}[isnan(x) ? nothing : round(x; digits=6) for x in v[ds_idx]]
 
     # Build per-gene JSON records
     lb_cluster_map  = Dict(zip(genes_lb_sorted,  cl_lb.clusters))

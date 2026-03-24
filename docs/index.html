@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>E. coli Knockout Growth Curves</title>
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/julia.min.js"></script>
   <style>
     :root {
       --bg:        #0f1117;
@@ -216,6 +219,42 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── Source code tab ── */
+    .source-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .source-header h3 { margin: 0; }
+    .gh-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #e2e8f0;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .gh-link:hover { background: #30363d; border-color: var(--accent); color: var(--accent); }
+    .gh-link svg   { flex-shrink: 0; }
+    .code-wrap {
+      border-radius: 8px;
+      overflow: auto;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      max-height: calc(100vh - 260px);
+    }
+    .code-wrap pre { margin: 0; }
+    .code-wrap code.hljs { background: #161b22; border-radius: 8px; padding: 1.25rem 1.5rem; }
+    .hljs-comment { color: #8b949e !important; font-style: italic; }
+
     /* ── Plotly overrides ── */
     .js-plotly-plot .plotly .modebar { background: transparent !important; }
 
@@ -269,6 +308,9 @@
         </button>
         <button data-tab="compare">
           <span class="icon">⚖️</span> LB vs M63
+        </button>
+        <button data-tab="source">
+          <span class="icon">📄</span> Source Code
         </button>
       </nav>
     </div>
@@ -419,6 +461,318 @@
             </tr></thead>
             <tbody id="compare-table-body"></tbody>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Tab: Source Code ── -->
+    <div id="tab-source" class="tab-panel">
+      <div class="card">
+        <div class="source-header">
+          <div>
+            <h3>Analysis script — <code style="font-size:0.9em;color:var(--accent)">analysis/analyse.jl</code></h3>
+            <p style="margin:0.25rem 0 0;font-size:0.82rem;color:var(--muted)">
+              Julia · reads XLSX data · aggregates replicates · runs KinBiont.jl k-means (WCSS elbow) · exports JSON
+            </p>
+          </div>
+          <a class="gh-link"
+             href="https://github.com/pinheiroGroup/ecoli-knockout-growth-atlas/blob/main/analysis/analyse.jl"
+             target="_blank" rel="noopener">
+            <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+                       0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+                       -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+                       .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+                       -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27
+                       .68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12
+                       .51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+                       0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            View on GitHub
+          </a>
+        </div>
+        <div class="code-wrap">
+<pre><code class="language-julia">#!/usr/bin/env julia
+# analyse.jl &#x2014; Growth curve analysis for E. coli Keio knockout dataset
+#
+# Setup (run once):
+#   julia --project=. -e &#39;
+#     using Pkg
+#     Pkg.develop(path=&quot;../../KinBiont.jl&quot;)
+#     Pkg.instantiate()
+#   &#39;
+#
+# Run:
+#   julia --project=. analyse.jl
+#
+# Output: ../docs/data/curves_data.json
+
+using XLSX
+using Statistics
+using JSON3
+using Kinbiont
+
+const DATA_DIR = joinpath(@__DIR__, &quot;..&quot;)
+const OUT_PATH = joinpath(DATA_DIR, &quot;docs&quot;, &quot;data&quot;, &quot;curves_data.json&quot;)
+
+# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# Helpers
+# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+
+_as_float(v) = (ismissing(v) || v === nothing) ? NaN : Float64(v)
+_as_str(v)   = (ismissing(v) || v === nothing) ? &quot;&quot;  : string(v)
+
+function find_elbow(ks, wcss_vals)
+    # Largest second-difference (maximum curvature in the elbow)
+    length(ks) &lt; 3 &amp;&amp; return ks[end]
+    d2 = diff(diff(wcss_vals))
+    return ks[argmax(d2) + 1]
+end
+
+function raw_centroids(curves::Matrix{Float64}, labels::Vector{Int}, n_k::Int)
+    n_tp = size(curves, 2)
+    cents = zeros(n_k, n_tp)
+    for k in 1:n_k
+        idx = findall(==(k), labels)
+        isempty(idx) &amp;&amp; continue
+        cents[k, :] = vec(mean(curves[idx, :], dims=1))
+    end
+    return cents
+end
+
+# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# 1. Metadata: curve_id &#x2192; (gene, jw_id, medium)
+# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+
+function load_metadata()
+    path = joinpath(DATA_DIR, &quot;Curves_knockouts_media.xlsx&quot;)
+    @info &quot;Reading metadata from $path&quot;
+    xf = XLSX.readxlsx(path)
+    sh = xf[1]
+    data = sh[:]
+
+    meta = Dict{String, @NamedTuple{gene::String, jw_id::String, medium::String}}()
+    for i in 2:size(data, 1)
+        row = data[i, :]
+        any(j -&gt; ismissing(row[j]), 1:5) &amp;&amp; continue
+        curve_id  = _as_str(row[1])
+        jw_id     = _as_str(row[2])
+        gene_name = _as_str(row[3])
+        # col 4 = gene_category (unused here)
+        medium    = _as_str(row[5])
+        isempty(curve_id) &amp;&amp; continue
+        meta[curve_id] = (; gene=gene_name, jw_id, medium)
+    end
+    @info &quot;  $(length(meta)) curve-to-gene mappings loaded&quot;
+    return meta
+end
+
+# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# 2. Growth curves for one medium file
+# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+
+function load_curves(path::String, sheet_name::String, wanted::Set{String})
+    @info &quot;Reading curves from $path (sheet=$sheet_name, want=$(length(wanted)) curves)&quot;
+    xf   = XLSX.readxlsx(path)
+    sh   = xf[sheet_name]
+    data = sh[:]
+    nrows, ncols = size(data)
+
+    # Row 1: column headers  (Time, Curve00001, &#x2026;)
+    headers = [_as_str(data[1, j]) for j in 1:ncols]
+
+    # Collect valid time rows
+    times     = Float64[]
+    row_index = Int[]
+    for i in 2:nrows
+        t = _as_float(data[i, 1])
+        isfinite(t) || continue
+        push!(times, t)
+        push!(row_index, i)
+    end
+
+    # Extract only curves in `wanted`
+    curves = Dict{String, Vector{Float64}}()
+    for j in 2:ncols
+        hdr = headers[j]
+        hdr in wanted || continue
+        vals = [_as_float(data[row_index[k], j]) for k in eachindex(row_index)]
+        # Replace NaN with 0 (blank baseline)
+        replace!(vals, NaN =&gt; 0.0)
+        curves[hdr] = vals
+    end
+
+    @info &quot;  $(length(times)) time points, $(length(curves)) curves extracted&quot;
+    return times, curves
+end
+
+# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# 3. Aggregate replicates &#x2192; mean &#xb1; std per (gene, medium)
+# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+
+function aggregate_by_gene(meta, curves_dict::Dict{String,Vector{Float64}})
+    # curves_dict: curve_id &#x2192; OD vector (all same medium)
+    groups = Dict{String, Vector{Vector{Float64}}}()   # gene &#x2192; list of replicate vectors
+    jw_map = Dict{String, String}()
+
+    for (curve_id, info) in meta
+        haskey(curves_dict, curve_id) || continue
+        gene = info.gene
+        if !haskey(groups, gene)
+            groups[gene]  = Vector{Float64}[]
+            jw_map[gene]  = info.jw_id
+        end
+        push!(groups[gene], curves_dict[curve_id])
+    end
+
+    result = Dict{String, @NamedTuple{mean::Vector{Float64}, std::Vector{Float64},
+                                       n::Int, jw_id::String}}()
+    for (gene, replicates) in groups
+        mat      = reduce(hcat, replicates)   # n_tp &#xd7; n_replicates
+        &#x3bc;        = vec(Statistics.mean(mat, dims=2))
+        &#x3c3;        = size(mat, 2) &gt; 1 ? vec(Statistics.std(mat, dims=2)) : zeros(length(&#x3bc;))
+        result[gene] = (; mean=&#x3bc;, std=&#x3c3;, n=size(mat, 2), jw_id=jw_map[gene])
+    end
+    return result
+end
+
+# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# 4. KinBiont clustering with WCSS elbow sweep
+# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+
+function cluster_gene_curves(
+    gene_means::Matrix{Float64},   # n_genes &#xd7; n_tp
+    times::Vector{Float64},
+    gene_labels::Vector{String};
+    k_range = 2:10,
+)
+    gd = GrowthData(gene_means, times, gene_labels)
+
+    # WCSS sweep
+    @info &quot;  Running WCSS sweep k=$(first(k_range))..$(last(k_range))&quot;
+    ks        = collect(k_range)
+    wcss_vals = Float64[]
+    for k in ks
+        opts      = FitOptions(
+            cluster                    = true,
+            n_clusters                 = k,
+            cluster_prescreen_constant = true,
+            cluster_tol_const          = 1.5,
+        )
+        proc = preprocess(gd, opts)
+        push!(wcss_vals, something(proc.wcss, 0.0))
+    end
+
+    # Elbow
+    opt_k = find_elbow(ks, wcss_vals)
+    @info &quot;  Optimal k = $opt_k (elbow method)&quot;
+
+    # Final clustering
+    opts_final = FitOptions(
+        cluster                    = true,
+        n_clusters                 = opt_k,
+        cluster_prescreen_constant = true,
+        cluster_tol_const          = 1.5,
+    )
+    proc_final = preprocess(gd, opts_final)
+
+    return (
+        ks            = ks,
+        wcss          = wcss_vals,
+        optimal_k     = opt_k,
+        clusters      = something(proc_final.clusters, ones(Int, size(gene_means, 1))),
+        centroids_z   = proc_final.centroids,          # z-scored shape prototypes
+        centroids_raw = raw_centroids(gene_means,
+                            something(proc_final.clusters,
+                                      ones(Int, size(gene_means, 1))), opt_k),
+    )
+end
+
+# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# 5. Main
+# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+
+function main()
+    meta = load_metadata()
+
+    ids_lb  = Set(k for (k, v) in meta if v.medium == &quot;LB&quot;)
+    ids_m63 = Set(k for (k, v) in meta if v.medium == &quot;M63&quot;)
+    meta_lb  = Dict(k =&gt; v for (k, v) in meta if v.medium == &quot;LB&quot;)
+    meta_m63 = Dict(k =&gt; v for (k, v) in meta if v.medium == &quot;M63&quot;)
+
+    times_lb,  curves_lb  = load_curves(joinpath(DATA_DIR, &quot;Growth_curves_LB.xlsx&quot;),  &quot;LB&quot;,  ids_lb)
+    times_m63, curves_m63 = load_curves(joinpath(DATA_DIR, &quot;Growth_curves_M63.xlsx&quot;), &quot;M63&quot;, ids_m63)
+
+    times = length(times_lb) &lt;= length(times_m63) ? times_lb : times_m63
+    n_tp  = length(times)
+    foreach(k -&gt; curves_lb[k]  = curves_lb[k][1:n_tp],  keys(curves_lb))
+    foreach(k -&gt; curves_m63[k] = curves_m63[k][1:n_tp], keys(curves_m63))
+
+    @info &quot;Aggregating replicates by gene...&quot;
+    agg_lb  = aggregate_by_gene(meta_lb,  curves_lb)
+    agg_m63 = aggregate_by_gene(meta_m63, curves_m63)
+
+    genes_lb_sorted  = sort(collect(keys(agg_lb)))
+    genes_m63_sorted = sort(collect(keys(agg_m63)))
+    all_genes         = sort(collect(Set(genes_lb_sorted) &#x222a; Set(genes_m63_sorted)))
+    @info &quot;  $(length(all_genes)) unique genes&quot;
+
+    mat_lb  = reduce(vcat, [agg_lb[g].mean'  for g in genes_lb_sorted])
+    mat_m63 = reduce(vcat, [agg_m63[g].mean' for g in genes_m63_sorted])
+
+    @info &quot;Clustering LB gene curves...&quot;
+    cl_lb  = cluster_gene_curves(mat_lb,  times, genes_lb_sorted)
+    @info &quot;Clustering M63 gene curves...&quot;
+    cl_m63 = cluster_gene_curves(mat_m63, times, genes_m63_sorted)
+
+    # Downsample for JSON (every 4th point: 200 &#x2192; 50 time points)
+    ds_idx   = 1:4:n_tp
+    times_ds = times[ds_idx]
+    ds_vec(v) = round.(v[ds_idx]; digits=6)
+
+    lb_cluster_map  = Dict(zip(genes_lb_sorted,  cl_lb.clusters))
+    m63_cluster_map = Dict(zip(genes_m63_sorted, cl_m63.clusters))
+
+    jw_ids = Dict{String,String}()
+    for (g, info) in agg_lb;  jw_ids[g] = info.jw_id; end
+    for (g, info) in agg_m63; haskey(jw_ids, g) || (jw_ids[g] = info.jw_id); end
+
+    gene_records = [
+        let rec = Dict{String,Any}(&quot;gene&quot; =&gt; gene, &quot;jw_id&quot; =&gt; get(jw_ids, gene, &quot;&quot;))
+            haskey(agg_lb,  gene) &amp;&amp; (rec[&quot;LB&quot;]  = Dict(&quot;mean&quot; =&gt; ds_vec(agg_lb[gene].mean),
+                &quot;std&quot; =&gt; ds_vec(agg_lb[gene].std),  &quot;n_replicates&quot; =&gt; agg_lb[gene].n,
+                &quot;cluster&quot; =&gt; lb_cluster_map[gene]))
+            haskey(agg_m63, gene) &amp;&amp; (rec[&quot;M63&quot;] = Dict(&quot;mean&quot; =&gt; ds_vec(agg_m63[gene].mean),
+                &quot;std&quot; =&gt; ds_vec(agg_m63[gene].std), &quot;n_replicates&quot; =&gt; agg_m63[gene].n,
+                &quot;cluster&quot; =&gt; m63_cluster_map[gene]))
+            rec
+        end
+        for gene in all_genes
+    ]
+
+    out = Dict(
+        &quot;metadata&quot;    =&gt; Dict(&quot;n_genes&quot; =&gt; length(all_genes),
+                               &quot;n_timepoints&quot; =&gt; length(times_ds),
+                               &quot;media&quot; =&gt; [&quot;LB&quot;, &quot;M63&quot;]),
+        &quot;times&quot;       =&gt; round.(times_ds; digits=4),
+        &quot;wcss_sweep&quot;  =&gt; Dict(&quot;LB&quot;  =&gt; Dict(&quot;ks&quot; =&gt; cl_lb.ks,
+                                               &quot;wcss&quot; =&gt; round.(cl_lb.wcss; digits=4)),
+                               &quot;M63&quot; =&gt; Dict(&quot;ks&quot; =&gt; cl_m63.ks,
+                                               &quot;wcss&quot; =&gt; round.(cl_m63.wcss; digits=4))),
+        &quot;optimal_k&quot;   =&gt; Dict(&quot;LB&quot; =&gt; cl_lb.optimal_k, &quot;M63&quot; =&gt; cl_m63.optimal_k),
+        &quot;centroids&quot;   =&gt; Dict(&quot;LB&quot;  =&gt; [ds_vec(cl_lb.centroids_raw[k,:])  for k in 1:cl_lb.optimal_k],
+                               &quot;M63&quot; =&gt; [ds_vec(cl_m63.centroids_raw[k,:]) for k in 1:cl_m63.optimal_k]),
+        &quot;centroids_z&quot; =&gt; Dict(&quot;LB&quot;  =&gt; [ds_vec(cl_lb.centroids_z[k,:])  for k in 1:cl_lb.optimal_k],
+                               &quot;M63&quot; =&gt; [ds_vec(cl_m63.centroids_z[k,:]) for k in 1:cl_m63.optimal_k]),
+        &quot;genes&quot;       =&gt; gene_records,
+    )
+
+    mkpath(dirname(OUT_PATH))
+    open(OUT_PATH, &quot;w&quot;) do io; JSON3.write(io, out) end
+    @info &quot;Output written to $OUT_PATH&quot;
+end
+
+main()</code></pre>
         </div>
       </div>
     </div>
@@ -923,6 +1277,7 @@ function switchTab(name) {
   if (name === 'centroids') renderCentroids();
   if (name === 'browser')   { renderBrowserPlot(); renderGeneTable('gene-table-body', 'browser-search', false); renderOverlayChips(); }
   if (name === 'compare')   { renderCompareOverlay(); renderGeneTable('compare-table-body', 'compare-search', true); }
+  if (name === 'source')    hljs.highlightAll();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

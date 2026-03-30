@@ -1,0 +1,24 @@
+cog_category,importance,method,parameter,medium,n_genes,cog_description
+S,0.0714491248159751,Spearman_abs_rho,N_max,M63,3885,Unknown function
+H,0.052337216820246245,Spearman_abs_rho,N_max,M63,3885,Coenzyme metabolism
+F,0.04600108413933244,Spearman_abs_rho,N_max,M63,3885,Nucleotide metabolism
+N,0.044502994835699236,Spearman_abs_rho,N_max,M63,3885,Cell motility
+E,0.039919397400665496,Spearman_abs_rho,N_max,M63,3885,Amino acid metabolism
+D,0.03358055414085814,Spearman_abs_rho,N_max,M63,3885,Cell cycle/division
+V,0.031938819085794774,Spearman_abs_rho,N_max,M63,3885,Defense mechanisms
+G,0.025454112155153943,Spearman_abs_rho,N_max,M63,3885,Carbohydrate metabolism
+P,0.02352312584640833,Spearman_abs_rho,N_max,M63,3885,Inorganic ion transport
+W,0.023385300753154467,Spearman_abs_rho,N_max,M63,3885,Unknown
+C,0.022339149135141192,Spearman_abs_rho,N_max,M63,3885,Energy production
+I,0.021622755988672835,Spearman_abs_rho,N_max,M63,3885,Lipid metabolism
+U,0.021199887996538106,Spearman_abs_rho,N_max,M63,3885,Intracellular trafficking
+K,0.018341623311271735,Spearman_abs_rho,N_max,M63,3885,Transcription
+A,0.015165819014943597,Spearman_abs_rho,N_max,M63,3885,RNA processing
+L,0.015111036091161916,Spearman_abs_rho,N_max,M63,3885,DNA replication/repair
+Q,0.013842297029628298,Spearman_abs_rho,N_max,M63,3885,Secondary metabolites
+T,0.01136021174367909,Spearman_abs_rho,N_max,M63,3885,Signal transduction
+R,0.007984923863418543,Spearman_abs_rho,N_max,M63,3885,General function
+O,0.00487972627655059,Spearman_abs_rho,N_max,M63,3885,Post-transl. modification
+J,0.004640735234507578,Spearman_abs_rho,N_max,M63,3885,Translation
+X,0.0038110439930858285,Spearman_abs_rho,N_max,M63,3885,Mobilome
+M,0.0005967353931874688,Spearman_abs_rho,N_max,M63,3885,Cell wall/membrane

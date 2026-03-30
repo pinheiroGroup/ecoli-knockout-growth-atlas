@@ -1,0 +1,23 @@
+cog_category,importance,method,parameter,medium,n_genes,cog_description
+X,0.09863317571476023,Spearman_abs_rho,lag,LB,726,Mobilome
+R,0.08431480075525394,Spearman_abs_rho,lag,LB,726,General function
+N,0.08299282759933059,Spearman_abs_rho,lag,LB,726,Cell motility
+I,0.07662834754045893,Spearman_abs_rho,lag,LB,726,Lipid metabolism
+U,0.05543083502709836,Spearman_abs_rho,lag,LB,726,Intracellular trafficking
+K,0.04523984951376813,Spearman_abs_rho,lag,LB,726,Transcription
+G,0.03869914603333483,Spearman_abs_rho,lag,LB,726,Carbohydrate metabolism
+S,0.03357280686988499,Spearman_abs_rho,lag,LB,726,Unknown function
+H,0.029282251200047734,Spearman_abs_rho,lag,LB,726,Coenzyme metabolism
+C,0.023205349192526786,Spearman_abs_rho,lag,LB,726,Energy production
+Q,0.02101797982329531,Spearman_abs_rho,lag,LB,726,Secondary metabolites
+L,0.018922238073623813,Spearman_abs_rho,lag,LB,726,DNA replication/repair
+V,0.01665276804652378,Spearman_abs_rho,lag,LB,726,Defense mechanisms
+M,0.015586409921955936,Spearman_abs_rho,lag,LB,726,Cell wall/membrane
+O,0.014876902753121623,Spearman_abs_rho,lag,LB,726,Post-transl. modification
+D,0.014028553954559252,Spearman_abs_rho,lag,LB,726,Cell cycle/division
+F,0.01396183216371721,Spearman_abs_rho,lag,LB,726,Nucleotide metabolism
+T,0.012490924074438019,Spearman_abs_rho,lag,LB,726,Signal transduction
+P,0.01050653044559362,Spearman_abs_rho,lag,LB,726,Inorganic ion transport
+W,0.009233984881482039,Spearman_abs_rho,lag,LB,726,Unknown
+E,0.007881977898828024,Spearman_abs_rho,lag,LB,726,Amino acid metabolism
+J,0.0023968841652336147,Spearman_abs_rho,lag,LB,726,Translation

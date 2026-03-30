@@ -3,6 +3,8 @@ uuid = "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 version = "0.1.0"
 
 [deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
 Kinbiont = "3b7c519f-be5e-4159-a208-6486ce96bb37"
 XLSX = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"

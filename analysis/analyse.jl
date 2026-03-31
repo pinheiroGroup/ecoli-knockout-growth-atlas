@@ -205,20 +205,33 @@ function aggregate_by_gene(meta, curves_dict::Dict{String,Vector{Float64}})
                                        n::Int, jw_id::String}}()
     for (gene, replicates) in groups
         mat = reduce(hcat, replicates)   # n_tp × n_replicates
-        # NaN-aware mean and std: ignore missing values per timepoint
+        n_rep = size(mat, 2)
+
+        # Per-replicate valid range: last timepoint where each replicate has finite data.
+        # The gene mean is only valid up to the minimum last-valid index across all
+        # replicates; beyond that, one or more replicates have dropped out and the mean
+        # would be biased by whichever replicate happens to run longest.
+        last_valid = n_rep > 1 ? minimum(
+            let li = findlast(isfinite, mat[:, j])
+                li === nothing ? 0 : li
+            end
+            for j in 1:n_rep
+        ) : size(mat, 1)
+
         μ = map(1:size(mat, 1)) do i
+            i > last_valid && return NaN
             vs = filter(!isnan, mat[i, :])
             isempty(vs) ? NaN : Statistics.mean(vs)
         end
-        # SEM (std / sqrt(n_finite)) so the shaded band shows uncertainty in
-        # the mean rather than raw replicate spread (more meaningful at n=3).
-        # NaN where no replicates exist so interpolation respects the valid range.
+        # SEM (std / sqrt(n)) shows uncertainty in the mean (more meaningful at n=3).
+        # NaN beyond last_valid so interpolation respects the gene's true range.
         sem = map(1:size(mat, 1)) do i
+            i > last_valid && return NaN
             vs = filter(!isnan, mat[i, :])
             isempty(vs) ? NaN :
             length(vs) > 1 ? Statistics.std(vs) / sqrt(length(vs)) : 0.0
         end
-        result[gene] = (; mean=μ, std=sem, n=size(mat, 2), jw_id=jw_map[gene])
+        result[gene] = (; mean=μ, std=sem, n=n_rep, jw_id=jw_map[gene])
     end
     return result
 end

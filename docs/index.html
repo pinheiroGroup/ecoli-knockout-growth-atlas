@@ -931,7 +931,7 @@ function renderBadges() {
   }, 0);
   document.getElementById('badge-curves').textContent = `${nCurves} total curves`;
   document.getElementById('badge-tp').textContent =
-    `${D.metadata.n_timepoints} time points`;
+    `${D.times_LB.length} time points`;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1115,7 +1115,7 @@ function renderCentroidPlot(divId, medium, zScored) {
   Plotly.newPlot(divId, traces, layout({
     xaxis: { title: 'Time (h)' },
     yaxis: { title: zScored ? 'z-score' : 'OD' },
-    legend: { x: 0.01, y: 0.99 },
+    legend: { x: 1.02, y: 1, xanchor: 'left', yanchor: 'top' },
   }), { responsive: true });
 }
 
@@ -1138,7 +1138,7 @@ function renderCentroidsZ() {
   Plotly.newPlot('plot-centroids-z', traces, layout({
     xaxis: { title: 'Time (h)' },
     yaxis: { title: 'z-score (normalised OD shape)' },
-    legend: { x: 0.01, y: 0.99 },
+    legend: { x: 1.02, y: 1, xanchor: 'left', yanchor: 'top' },
   }), { responsive: true });
 }
 
@@ -1157,8 +1157,9 @@ function renderBrowserPlot() {
       const info = g[med];
       if (!shownClusterCurves.has(info.cluster)) return;
       const ng = isNongrowing(med, info.cluster);
+      const [tx, ty] = trimTrailingNulls(D[`times_${med}`], info.mean);
       traces.push({
-        x: D[`times_${med}`], y: info.mean,
+        x: tx, y: ty,
         mode: 'lines',
         line: { color: clusterColor(info.cluster, med), width: ng ? 0.4 : 0.6 },
         opacity: ng ? 0.1 : 0.2,
@@ -1187,20 +1188,23 @@ function renderBrowserPlot() {
     if (!g || !g[med]) return;
     const info  = g[med];
     const color = clusterColor(info.cluster, med);
+    const [tx, ty] = trimTrailingNulls(D[`times_${med}`], info.mean);
     traces.push({
       name: `${gene} (C${info.cluster})`,
-      x: D[`times_${med}`], y: info.mean,
+      x: tx, y: ty,
       mode: 'lines',
       line: { color, width: 2.5, dash: 'dot' },
       hovertemplate: `<b>${gene}</b> | Cluster ${info.cluster}<br>OD: %{y:.4f}<extra></extra>`,
     });
   });
 
+  const centTimes = D.centroid_times[med];
+  const xMaxBrowser = centTimes[centTimes.length - 1];
   Plotly.react('plot-browser', traces, layout({
-    xaxis: { title: 'Time (h)' },
+    xaxis: { title: 'Time (h)', range: [0, xMaxBrowser * 1.05] },
     yaxis: { title: 'OD' },
     hovermode: 'closest',
-    legend: { x: 0.01, y: 0.99 },
+    legend: { x: 1.02, y: 1, xanchor: 'left', yanchor: 'top' },
   }), { responsive: true });
 }
 
@@ -1342,43 +1346,62 @@ function renderCompareOverlay() {
   if (!g) return;
 
   const traces = [];
+  let xMax = 0;  // track max x with actual data, to avoid showing empty space
+
   ['LB', 'M63'].forEach((med, mi) => {
     if (!g[med]) return;
     const info  = g[med];
     const color = PALETTE[mi * 3];
-    const upper = info.mean.map((v, i) => v + info.std[i]);
-    const lower = info.mean.map((v, i) => v - info.std[i]);
-
     const tAxis = D[`times_${med}`];
-    // SD band
-    traces.push({
-      x: [...tAxis, ...tAxis.slice().reverse()],
-      y: [...upper, ...lower.slice().reverse()],
-      fill: 'toself',
-      fillcolor: color.replace(')', ',0.15)').replace('rgb', 'rgba').replace('#', '').padEnd(9),
-      line: { width: 0 },
-      showlegend: false,
-      hoverinfo: 'skip',
-    });
-    // Fix: use hex→rgba properly
-    traces[traces.length - 1].fillcolor = hexToRgba(color, 0.15);
 
+    // Compute the last valid timepoint for this gene's mean (controls x axis range)
+    const [tx_m, ty_m] = trimTrailingNulls(tAxis, info.mean);
+    const meanXMax = tx_m.length > 0 ? tx_m[tx_m.length - 1] : 0;
+    if (meanXMax > xMax) xMax = meanXMax;
+
+    // Individual replicate curves (faint) — clip to mean's valid range
+    if (info.replicates) {
+      info.replicates.forEach((rep, ri) => {
+        const clipped = rep.slice(0, tx_m.length);
+        const [tx, ty] = trimTrailingNulls(tAxis.slice(0, tx_m.length), clipped);
+        traces.push({
+          name: ri === 0 ? `${med} replicates (n=${info.n_replicates})` : undefined,
+          x: tx, y: ty,
+          mode: 'lines',
+          line: { color, width: 1 },
+          opacity: 0.35,
+          showlegend: ri === 0,
+          legendgroup: med,
+          hoverinfo: 'skip',
+        });
+      });
+    }
+
+    // Mean line
     traces.push({
-      name: `${med} (cluster ${info.cluster}, n=${info.n_replicates})`,
-      x: tAxis,
-      y: info.mean,
+      name: `${med} mean (cluster ${info.cluster})`,
+      x: tx_m, y: ty_m,
       mode: 'lines',
       line: { color, width: 2.5 },
+      legendgroup: med,
       hovertemplate: `${med} OD: %{y:.4f}<extra></extra>`,
     });
   });
 
   Plotly.react('plot-compare-overlay', traces, layout({
     title: { text: gene, font: { size: 14 } },
-    xaxis: { title: 'Time (h)' },
-    yaxis: { title: 'OD (mean of replicates)' },
-    legend: { x: 0.01, y: 0.99 },
+    xaxis: { title: 'Time (h)', range: [0, xMax * 1.05] },
+    yaxis: { title: 'OD' },
+    legend: { x: 1.02, y: 1, xanchor: 'left', yanchor: 'top' },
   }), { responsive: true });
+}
+
+// Return [times, values] with trailing null/undefined values removed so that
+// Plotly auto-scales the x-axis to the actual data range, not the full time array.
+function trimTrailingNulls(times, values) {
+  let last = values.length - 1;
+  while (last >= 0 && (values[last] === null || values[last] === undefined)) last--;
+  return [times.slice(0, last + 1), values.slice(0, last + 1)];
 }
 
 function hexToRgba(hex, alpha) {

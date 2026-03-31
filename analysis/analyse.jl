@@ -222,7 +222,8 @@ function aggregate_by_gene(meta, curves_dict::Dict{String,Vector{Float64}})
     end
 
     result = Dict{String, @NamedTuple{mean::Vector{Float64}, std::Vector{Float64},
-                                       n::Int, jw_id::String}}()
+                                       n::Int, jw_id::String,
+                                       replicates::Vector{Vector{Float64}}}}()
     for (gene, replicates) in groups
         mat = reduce(hcat, replicates)   # n_tp × n_replicates
         n_rep = size(mat, 2)
@@ -251,7 +252,8 @@ function aggregate_by_gene(meta, curves_dict::Dict{String,Vector{Float64}})
             isempty(vs) ? NaN :
             length(vs) > 1 ? Statistics.std(vs) / sqrt(length(vs)) : 0.0
         end
-        result[gene] = (; mean=μ, std=sem, n=n_rep, jw_id=jw_map[gene])
+        result[gene] = (; mean=μ, std=sem, n=n_rep, jw_id=jw_map[gene],
+                          replicates=[vec(mat[:, j]) for j in 1:n_rep])
     end
     return result
 end
@@ -400,6 +402,7 @@ function main()
                 "std"          => to_json_vec(agg_lb[gene].std[lb_ds_idx]),
                 "n_replicates" => agg_lb[gene].n,
                 "cluster"      => lb_cluster_map[gene],
+                "replicates"   => [to_json_vec(rep[lb_ds_idx]) for rep in agg_lb[gene].replicates],
             )
         end
         if haskey(agg_m63, gene)
@@ -408,6 +411,7 @@ function main()
                 "std"          => to_json_vec(agg_m63[gene].std[m63_ds_idx]),
                 "n_replicates" => agg_m63[gene].n,
                 "cluster"      => m63_cluster_map[gene],
+                "replicates"   => [to_json_vec(rep[m63_ds_idx]) for rep in agg_m63[gene].replicates],
             )
         end
         push!(gene_records, rec)
@@ -443,8 +447,8 @@ function main()
             "M63" => [to_json_vec(cl_m63.centroids_raw[k, :]) for k in 1:cl_m63.optimal_k],
         ),
         "centroids_z" => Dict(
-            "LB"  => [to_json_vec(cl_lb.centroids_z[k, :])  for k in 1:cl_lb.optimal_k],
-            "M63" => [to_json_vec(cl_m63.centroids_z[k, :]) for k in 1:cl_m63.optimal_k],
+            "LB"  => [to_json_vec(cl_lb.centroids_z[k, :])  for k in 1:size(cl_lb.centroids_z, 1)],
+            "M63" => [to_json_vec(cl_m63.centroids_z[k, :]) for k in 1:size(cl_m63.centroids_z, 1)],
         ),
         "genes" => gene_records,
         # With cluster_prescreen_constant=true, KinBiont always assigns

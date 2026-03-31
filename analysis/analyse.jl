@@ -28,19 +28,75 @@ const OUT_PATH = joinpath(DATA_DIR, "docs", "data", "curves_data.json")
 _as_float(v) = (ismissing(v) || v === nothing) ? NaN : Float64(v)
 _as_str(v)   = (ismissing(v) || v === nothing) ? ""  : string(v)
 
-# Replace NaN/Inf in each column with the column finite mean (or 0 if all non-finite).
-# Same approach as GUIbiont clustering pipeline — avoids distorting cluster shapes with 0.
-function _fill_nan_colmean(m::Matrix{Float64})::Matrix{Float64}
-    out = copy(m)
-    for j in axes(m, 2)
-        col    = m[:, j]
-        finite = filter(isfinite, col)
-        fill_v = isempty(finite) ? 0.0 : Statistics.mean(finite)
-        for i in axes(m, 1)
-            isfinite(out[i, j]) || (out[i, j] = fill_v)
+# Linearly interpolate a curve (times_in, vals_in) onto a new time grid (times_out).
+# Only interpolates within [first_finite, last_finite] of the input; positions outside
+# that range are filled with NaN.
+function _interp1(times_in::Vector{Float64}, vals_in::Vector{Float64},
+                  times_out::Vector{Float64})::Vector{Float64}
+    n_in  = length(times_in)
+    n_out = length(times_out)
+    out   = fill(NaN, n_out)
+
+    # Find valid (finite) range of input
+    fi = findfirst(i -> isfinite(times_in[i]) && isfinite(vals_in[i]), 1:n_in)
+    li = findlast( i -> isfinite(times_in[i]) && isfinite(vals_in[i]), 1:n_in)
+    (fi === nothing || li === nothing) && return out
+
+    t_start = times_in[fi]; t_end = times_in[li]
+
+    for k in 1:n_out
+        t = times_out[k]
+        (t < t_start || t > t_end) && continue
+        # Binary search for bracketing interval
+        lo = fi; hi = li
+        while hi - lo > 1
+            mid = (lo + hi) ÷ 2
+            times_in[mid] <= t ? (lo = mid) : (hi = mid)
+        end
+        dt = times_in[hi] - times_in[lo]
+        if dt < 1e-12
+            out[k] = vals_in[lo]
+        else
+            α = (t - times_in[lo]) / dt
+            out[k] = (1 - α) * vals_in[lo] + α * vals_in[hi]
         end
     end
     return out
+end
+
+# Interpolate a matrix of gene mean curves (n_genes × n_tp_in) with the given time vector
+# to a common uniform grid covering the intersection of all curves' valid ranges.
+# n_grid: number of grid points.
+# Returns (grid_times, interpolated_matrix).
+function _interp_to_common_grid(
+    times::Vector{Float64},
+    mat::Matrix{Float64};
+    n_grid::Int = 100,
+)::Tuple{Vector{Float64}, Matrix{Float64}}
+    n_genes = size(mat, 1)
+
+    # Per-gene valid range
+    t_starts = Float64[]; t_ends = Float64[]
+    for i in 1:n_genes
+        row = mat[i, :]
+        fi = findfirst(j -> isfinite(row[j]), eachindex(row))
+        li = findlast( j -> isfinite(row[j]), eachindex(row))
+        (fi === nothing || li === nothing) && continue
+        push!(t_starts, times[fi]); push!(t_ends, times[li])
+    end
+    isempty(t_starts) && return (times, mat)
+
+    # Common intersection
+    t0 = maximum(t_starts); t1 = minimum(t_ends)
+    t0 >= t1 && return (times, mat)   # no overlap — fall back
+
+    grid = collect(range(t0, t1; length = n_grid))
+
+    out = Matrix{Float64}(undef, n_genes, n_grid)
+    for i in 1:n_genes
+        out[i, :] = _interp1(times, mat[i, :], grid)
+    end
+    return grid, out
 end
 
 function find_elbow(ks, wcss_vals)
@@ -255,33 +311,41 @@ function main()
     mat_lb  = reduce(vcat, [agg_lb[g].mean'  for g in genes_lb_sorted])   # n_genes_lb  × n_tp_lb
     mat_m63 = reduce(vcat, [agg_m63[g].mean' for g in genes_m63_sorted])  # n_genes_m63 × n_tp_m63
 
-    # Column-mean imputation for remaining NaN (timepoints where all replicates were missing).
-    # Using 0.0 would distort cluster shapes; column mean is the neutral choice.
-    mat_lb_cl  = _fill_nan_colmean(mat_lb)
-    mat_m63_cl = _fill_nan_colmean(mat_m63)
+    # Interpolate each gene mean curve to a common uniform time grid covering
+    # the intersection of all genes' valid (finite) time ranges.
+    # This replaces the old replace(NaN=>0) and fixes unequal effective curve lengths.
+    @info "Interpolating LB gene means to common grid..."
+    times_lb_grid, mat_lb_cl  = _interp_to_common_grid(times_lb,  mat_lb)
+    @info "  LB grid: $(times_lb_grid[1])–$(times_lb_grid[end]) h, $(length(times_lb_grid)) points"
 
-    # Cluster each medium with its own time vector
+    @info "Interpolating M63 gene means to common grid..."
+    times_m63_grid, mat_m63_cl = _interp_to_common_grid(times_m63, mat_m63)
+    @info "  M63 grid: $(times_m63_grid[1])–$(times_m63_grid[end]) h, $(length(times_m63_grid)) points"
+
+    # Cluster each medium with its interpolated grid
     @info "Clustering LB gene curves..."
-    cl_lb  = cluster_gene_curves(mat_lb_cl,  times_lb,  genes_lb_sorted)
+    cl_lb  = cluster_gene_curves(mat_lb_cl,  times_lb_grid,  genes_lb_sorted)
 
     @info "Clustering M63 gene curves..."
-    cl_m63 = cluster_gene_curves(mat_m63_cl, times_m63, genes_m63_sorted)
-
-    # Use the shorter time vector for JSON output (common denominator for display)
-    times  = length(times_lb) <= length(times_m63) ? times_lb : times_m63
-    n_tp   = length(times)
-
-    # Downsample time axis for JSON output (full resolution used for clustering above)
-    # Keep every 4th point → ~50 points: reduces JSON ~4x with negligible visual loss
-    ds       = 4
-    ds_idx   = 1:ds:n_tp
-    times_ds = times[ds_idx]
-    # NaN → nothing so JSON3 writes null (Plotly draws a gap, not a line to zero)
-    ds_vec(v) = Union{Float64,Nothing}[isnan(x) ? nothing : round(x; digits=6) for x in v[ds_idx]]
+    cl_m63 = cluster_gene_curves(mat_m63_cl, times_m63_grid, genes_m63_sorted)
 
     # Build per-gene JSON records
     lb_cluster_map  = Dict(zip(genes_lb_sorted,  cl_lb.clusters))
     m63_cluster_map = Dict(zip(genes_m63_sorted, cl_m63.clusters))
+    lb_row  = Dict(g => i for (i, g) in enumerate(genes_lb_sorted))
+    m63_row = Dict(g => i for (i, g) in enumerate(genes_m63_sorted))
+
+    # Interpolate std curves to the same grids
+    mat_lb_std  = reduce(vcat, [agg_lb[g].std'  for g in genes_lb_sorted])
+    mat_m63_std = reduce(vcat, [agg_m63[g].std' for g in genes_m63_sorted])
+    _, mat_lb_std_grid  = _interp_to_common_grid(times_lb,  mat_lb_std;  n_grid=length(times_lb_grid))
+    _, mat_m63_std_grid = _interp_to_common_grid(times_m63, mat_m63_std; n_grid=length(times_m63_grid))
+
+    # Use the shorter grid as the shared display time axis
+    times_out = length(times_lb_grid) <= length(times_m63_grid) ? times_lb_grid : times_m63_grid
+
+    # NaN → nothing so JSON3 writes null (Plotly draws a gap)
+    to_json_vec(v) = Union{Float64,Nothing}[isnan(x) ? nothing : round(x; digits=6) for x in v]
 
     # Collect unique jw_ids (prefer LB, fallback to M63)
     jw_ids = Dict{String, String}()
@@ -294,18 +358,20 @@ function main()
             "gene"  => gene,
             "jw_id" => get(jw_ids, gene, ""),
         )
-        if haskey(agg_lb, gene)
+        if haskey(lb_row, gene)
+            i = lb_row[gene]
             rec["LB"] = Dict(
-                "mean"         => ds_vec(agg_lb[gene].mean),
-                "std"          => ds_vec(agg_lb[gene].std),
+                "mean"         => to_json_vec(mat_lb_cl[i, :]),
+                "std"          => to_json_vec(mat_lb_std_grid[i, :]),
                 "n_replicates" => agg_lb[gene].n,
                 "cluster"      => lb_cluster_map[gene],
             )
         end
-        if haskey(agg_m63, gene)
+        if haskey(m63_row, gene)
+            i = m63_row[gene]
             rec["M63"] = Dict(
-                "mean"         => ds_vec(agg_m63[gene].mean),
-                "std"          => ds_vec(agg_m63[gene].std),
+                "mean"         => to_json_vec(mat_m63_cl[i, :]),
+                "std"          => to_json_vec(mat_m63_std_grid[i, :]),
                 "n_replicates" => agg_m63[gene].n,
                 "cluster"      => m63_cluster_map[gene],
             )
@@ -317,12 +383,12 @@ function main()
     out = Dict(
         "metadata" => Dict(
             "n_genes"      => length(all_genes),
-            "n_timepoints" => length(times_ds),
+            "n_timepoints" => length(times_out),
             "media"        => ["LB", "M63"],
             "source"       => "https://www.nature.com/articles/s41597-026-07075-9",
             "description"  => "E. coli Keio knockout collection growth curves (mean of replicates per gene)",
         ),
-        "times"     => round.(times_ds; digits=4),
+        "times"     => round.(times_out; digits=4),
         "wcss_sweep" => Dict(
             "LB"  => Dict("ks" => cl_lb.ks,  "wcss" => round.(cl_lb.wcss;  digits=4)),
             "M63" => Dict("ks" => cl_m63.ks, "wcss" => round.(cl_m63.wcss; digits=4)),
@@ -332,12 +398,12 @@ function main()
             "M63" => cl_m63.optimal_k,
         ),
         "centroids" => Dict(
-            "LB"  => [ds_vec(cl_lb.centroids_raw[k, :])  for k in 1:cl_lb.optimal_k],
-            "M63" => [ds_vec(cl_m63.centroids_raw[k, :]) for k in 1:cl_m63.optimal_k],
+            "LB"  => [to_json_vec(cl_lb.centroids_raw[k, :])  for k in 1:cl_lb.optimal_k],
+            "M63" => [to_json_vec(cl_m63.centroids_raw[k, :]) for k in 1:cl_m63.optimal_k],
         ),
         "centroids_z" => Dict(
-            "LB"  => [ds_vec(cl_lb.centroids_z[k, :])  for k in 1:cl_lb.optimal_k],
-            "M63" => [ds_vec(cl_m63.centroids_z[k, :]) for k in 1:cl_m63.optimal_k],
+            "LB"  => [to_json_vec(cl_lb.centroids_z[k, :])  for k in 1:cl_lb.optimal_k],
+            "M63" => [to_json_vec(cl_m63.centroids_z[k, :]) for k in 1:cl_m63.optimal_k],
         ),
         "genes" => gene_records,
         # With cluster_prescreen_constant=true, KinBiont always assigns

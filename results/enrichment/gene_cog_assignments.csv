@@ -8,9 +8,9 @@ aat,JW0868,1,1,False,O,O,"Post-translational modification, protein turnover, cha
 abgA,JW5205,1,1,False,R,R,General function prediction only
 abgB,JW1331,1,1,False,R,R,General function prediction only
 abgR,JW1333,2,2,False,K,K,Transcription
-abgT,JW5822,1,1,False,H,H,Coenzyme transport and metabolism
+abgT,JW5822,1,2,True,H,H,Coenzyme transport and metabolism
 abrB,JW5097,1,2,True,R,R,General function prediction only
-aceA,JW3975,2,1,True,C,C,Energy production and conversion
+aceA,JW3975,2,2,False,C,C,Energy production and conversion
 aceB,JW3974,2,1,True,C,C,Energy production and conversion
 aceE,JW0110,2,2,False,C,C,Energy production and conversion
 aceF,JW0111,2,1,True,C,C,Energy production and conversion
@@ -21,7 +21,7 @@ acnB,JW0114,2,2,False,C,C,Energy production and conversion
 acpT,JW3440,1,1,False,H,H,Coenzyme transport and metabolism
 acrA,JW0452,2,1,True,"M,V",M,Cell wall/membrane/envelope biogenesis
 acrB,JW0451,1,1,False,V,V,Defense mechanisms
-acrD,JW2454,1,1,False,V,V,Defense mechanisms
+acrD,JW2454,1,2,True,V,V,Defense mechanisms
 acrE,JW3233,1,1,False,"M,V",M,Cell wall/membrane/envelope biogenesis
 acrF,JW3234,1,1,False,V,V,Defense mechanisms
 acrR,JW0453,1,1,False,K,K,Transcription
@@ -30,22 +30,22 @@ actP,JW4028,1,1,False,C,C,Energy production and conversion
 ada,JW2201,2,2,False,L,L,"Replication, recombination and repair"
 add,JW1615,2,2,False,F,F,Nucleotide transport and metabolism
 ade,JW3640,2,2,False,S,S,Function unknown
-adhE,JW1228,2,1,True,"C,I",C,Energy production and conversion
+adhE,JW1228,2,1,True,"I,C",I,Lipid transport and metabolism
 adhP,JW1474,1,1,False,G,G,Carbohydrate transport and metabolism
 adiA,JW5731,2,1,True,E,E,Amino acid transport and metabolism
 adiC,JW4076,1,1,False,E,E,Amino acid transport and metabolism
 adiY,JW4077,2,2,False,K,K,Transcription
-aegA,JW2452,1,1,False,"E,R,C",E,Amino acid transport and metabolism
+aegA,JW2452,1,1,False,"C,R,E",C,Energy production and conversion
 aer,JW3043,2,2,False,T,T,Signal transduction mechanisms
 aes,JW0465,1,2,True,I,I,Lipid transport and metabolism
 afuB,JW0255,2,1,True,S,S,Function unknown
 afuC,JW0254,1,1,False,E,E,Amino acid transport and metabolism
-agaA,JW5527,1,1,False,S,S,Function unknown
+agaA,JW5527,1,2,True,S,S,Function unknown
 agaB,JW3107,1,1,False,G,G,Carbohydrate transport and metabolism
 agaC,JW3108,1,1,False,G,G,Carbohydrate transport and metabolism
 agaD,JW3109,1,2,True,G,G,Carbohydrate transport and metabolism
 agaI,JW3110,1,2,True,G,G,Carbohydrate transport and metabolism
-agaR,JW3100,2,1,True,"K,G",K,Transcription
+agaR,JW3100,2,1,True,"G,K",G,Carbohydrate transport and metabolism
 agaS,JW3105,1,2,True,M,M,Cell wall/membrane/envelope biogenesis
 agaV,JW3102,1,1,False,G,G,Carbohydrate transport and metabolism
 agaW,JW3103,1,1,False,S,S,Function unknown
@@ -53,7 +53,7 @@ agp,JW0987,1,1,False,S,S,Function unknown
 ahpC,JW0598,1,1,False,V,V,Defense mechanisms
 ahpF,JW0599,2,2,False,V,V,Defense mechanisms
 aidB,JW5867,2,1,True,I,I,Lipid transport and metabolism
-ais,JW2246,1,1,False,S,S,Function unknown
+ais,JW2246,1,2,True,S,S,Function unknown
 alaS,JW2667,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 aldA,JW1412,1,2,True,I,I,Lipid transport and metabolism
 aldB,JW3561,1,1,False,I,I,Lipid transport and metabolism
@@ -61,7 +61,7 @@ alkA,JW2053,1,1,False,L,L,"Replication, recombination and repair"
 alkB,JW2200,1,1,False,L,L,"Replication, recombination and repair"
 allA,JW0493,2,1,True,F,F,Nucleotide transport and metabolism
 allB,JW0500,1,1,False,F,F,Nucleotide transport and metabolism
-allC,JW0504,1,1,False,E,E,Amino acid transport and metabolism
+allC,JW0504,1,2,True,E,E,Amino acid transport and metabolism
 allD,JW0505,2,2,False,C,C,Energy production and conversion
 allR,JW0494,1,1,False,K,K,Transcription
 alpA,JW2604,1,1,False,"X,K",X,"Mobilome: prophages, transposons"
@@ -74,7 +74,7 @@ alx,JW5515,1,1,False,P,P,Inorganic ion transport and metabolism
 amiA,JW2428,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
 amiB,JW4127,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 amiC,JW5449,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
-amn,JW1963,1,2,True,"H,F",H,Coenzyme transport and metabolism
+amn,JW1963,1,2,True,"F,H",F,Nucleotide transport and metabolism
 ampC,JW4111,1,1,False,V,V,Defense mechanisms
 ampD,JW0106,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 ampE,JW0107,1,1,False,V,V,Defense mechanisms
@@ -82,8 +82,8 @@ ampG,JW0423,1,1,False,S,S,Function unknown
 ampH,JW5052,1,1,False,V,V,Defense mechanisms
 amtB,JW0441,1,1,False,P,P,Inorganic ion transport and metabolism
 amyA,JW1912,1,2,True,G,G,Carbohydrate transport and metabolism
-ansA,JW1756,1,2,True,"J,E",J,"Translation, ribosomal structure and biogenesis"
-ansB,JW2924,1,1,False,"J,E",J,"Translation, ribosomal structure and biogenesis"
+ansA,JW1756,1,1,False,"J,E",J,"Translation, ribosomal structure and biogenesis"
+ansB,JW2924,1,2,True,"J,E",J,"Translation, ribosomal structure and biogenesis"
 ansP,JW5234,2,1,True,E,E,Amino acid transport and metabolism
 apaG,JW0049,1,1,False,P,P,Inorganic ion transport and metabolism
 apaH,JW0048,1,1,False,T,T,Signal transduction mechanisms
@@ -101,16 +101,16 @@ araG,JW1888,2,1,True,G,G,Carbohydrate transport and metabolism
 araH,JW1887,1,1,False,G,G,Carbohydrate transport and metabolism
 araJ,JW0386,1,1,False,G,G,Carbohydrate transport and metabolism
 arcA,JW4364,2,1,True,"T,K",T,Signal transduction mechanisms
-arcB,JW5536,2,1,True,T,T,Signal transduction mechanisms
+arcB,JW5536,2,2,False,T,T,Signal transduction mechanisms
 argA,JW2786,2,3,True,E,E,Amino acid transport and metabolism
 argB,JW5553,1,3,True,E,E,Amino acid transport and metabolism
 argC,JW3930,2,3,True,E,E,Amino acid transport and metabolism
-argD,JW3322,1,1,False,E,E,Amino acid transport and metabolism
+argD,JW3322,1,2,True,E,E,Amino acid transport and metabolism
 argE,JW3929,1,3,True,E,E,Amino acid transport and metabolism
 argF,JW0266,2,1,True,E,E,Amino acid transport and metabolism
 argG,JW3140,2,3,True,E,E,Amino acid transport and metabolism
 argH,JW3932,1,3,True,E,E,Amino acid transport and metabolism
-argI,JW4211,1,1,False,E,E,Amino acid transport and metabolism
+argI,JW4211,1,2,True,E,E,Amino acid transport and metabolism
 argK,JW2885,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 argO,JW2890,2,1,True,E,E,Amino acid transport and metabolism
 argP,JW2883,2,1,True,K,K,Transcription
@@ -122,14 +122,14 @@ aroB,JW3352,1,1,False,E,E,Amino acid transport and metabolism
 aroC,JW2326,1,3,True,E,E,Amino acid transport and metabolism
 aroD,JW1683,2,3,True,E,E,Amino acid transport and metabolism
 aroE,JW3242,1,3,True,E,E,Amino acid transport and metabolism
-aroF,JW2582,1,1,False,E,E,Amino acid transport and metabolism
+aroF,JW2582,2,1,True,E,E,Amino acid transport and metabolism
 aroG,JW0737,1,2,True,E,E,Amino acid transport and metabolism
 aroH,JW1694,2,1,True,E,E,Amino acid transport and metabolism
 aroK,JW5947,2,2,False,E,E,Amino acid transport and metabolism
 aroL,JW0379,2,1,True,E,E,Amino acid transport and metabolism
 aroM,JW0381,2,1,True,S,S,Function unknown
 aroP,JW0108,1,1,False,E,E,Amino acid transport and metabolism
-arpA,JW3977,1,2,True,S,S,Function unknown
+arpA,JW3977,1,1,False,S,S,Function unknown
 arpB,JW1710,1,1,False,S,S,Function unknown
 arsB,JW3469,1,1,False,P,P,Inorganic ion transport and metabolism
 arsC,JW3470,1,1,False,P,P,Inorganic ion transport and metabolism
@@ -147,16 +147,16 @@ aslB,JW5594,2,1,True,O,O,"Post-translational modification, protein turnover, cha
 asmA,JW2049,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
 asnA,JW3722,1,1,False,E,E,Amino acid transport and metabolism
 asnB,JW0660,1,2,True,E,E,Amino acid transport and metabolism
-asnC,JW3721,2,1,True,K,K,Transcription
+asnC,JW3721,2,2,False,K,K,Transcription
 aspA,JW4099,1,2,True,E,E,Amino acid transport and metabolism
 aspC,JW0911,2,2,False,E,E,Amino acid transport and metabolism
 asr,JW5826,1,2,True,S,S,Function unknown
 astA,JW1736,1,1,False,E,E,Amino acid transport and metabolism
-astB,JW1734,1,1,False,E,E,Amino acid transport and metabolism
+astB,JW1734,1,2,True,E,E,Amino acid transport and metabolism
 astC,JW1737,1,1,False,E,E,Amino acid transport and metabolism
 astD,JW5282,1,1,False,I,I,Lipid transport and metabolism
 astE,JW1733,2,1,True,E,E,Amino acid transport and metabolism
-atoA,JW2216,1,1,False,I,I,Lipid transport and metabolism
+atoA,JW2216,1,2,True,I,I,Lipid transport and metabolism
 atoB,JW2218,1,2,True,I,I,Lipid transport and metabolism
 atoC,JW2214,2,1,True,T,T,Signal transduction mechanisms
 atoD,JW2215,1,1,False,I,I,Lipid transport and metabolism
@@ -170,26 +170,26 @@ atpE,JW3715,2,2,False,S,S,Function unknown
 atpF,JW3714,2,3,True,C,C,Energy production and conversion
 atpG,JW3711,1,2,True,C,C,Energy production and conversion
 atpH,JW3713,2,2,False,C,C,Energy production and conversion
-atpI,JW5611,2,2,False,C,C,Energy production and conversion
-avtA,JW5652,1,1,False,E,E,Amino acid transport and metabolism
+atpI,JW5611,2,1,True,C,C,Energy production and conversion
+avtA,JW5652,2,1,True,E,E,Amino acid transport and metabolism
 azoR,JW1409,2,1,True,C,C,Energy production and conversion
 bacA,JW3029,1,1,False,I,I,Lipid transport and metabolism
 baeR,JW2064,1,1,False,"T,K",T,Signal transduction mechanisms
 baeS,JW2063,2,2,False,T,T,Signal transduction mechanisms
-barA,JW2757,2,1,True,T,T,Signal transduction mechanisms
-basR,JW4074,2,2,False,"T,K",T,Signal transduction mechanisms
+barA,JW2757,2,2,False,T,T,Signal transduction mechanisms
+basR,JW4074,2,1,True,"T,K",T,Signal transduction mechanisms
 basS,JW4073,2,1,True,T,T,Signal transduction mechanisms
 bax,JW5653,1,1,False,R,R,General function prediction only
 bcp,JW2465,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 bcr,JW5363,2,2,False,G,G,Carbohydrate transport and metabolism
 bcsA,JW5665,2,1,True,N,N,Cell motility
-bcsC,JW5942,1,1,False,"O,U,W",O,"Post-translational modification, protein turnover, chaperones"
-bcsE,JW3504,2,1,True,S,S,Function unknown
+bcsC,JW5942,1,1,False,"W,U,O",W,Extracellular structures
+bcsE,JW3504,1,1,False,S,S,Function unknown
 bcsF,JW5663,1,1,False,S,S,Function unknown
 bcsG,JW3506,1,1,False,S,S,Function unknown
 bcsZ,JW3499,1,1,False,G,G,Carbohydrate transport and metabolism
 bdm,JW5239,1,2,True,S,S,Function unknown
-betA,JW0303,2,1,True,"R,I",R,General function prediction only
+betA,JW0303,2,1,True,"I,R",I,Lipid transport and metabolism
 betB,JW0304,2,2,False,I,I,Lipid transport and metabolism
 betI,JW0305,2,1,True,K,K,Transcription
 betT,JW0306,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
@@ -207,7 +207,7 @@ bioB,JW0758,1,3,True,H,H,Coenzyme transport and metabolism
 bioC,JW0760,2,3,True,H,H,Coenzyme transport and metabolism
 bioD,JW0761,2,3,True,H,H,Coenzyme transport and metabolism
 bioF,JW0759,1,3,True,H,H,Coenzyme transport and metabolism
-bioH,JW3375,1,3,True,"H,R",H,Coenzyme transport and metabolism
+bioH,JW3375,1,3,True,"R,H",R,General function prediction only
 bipA,JW5571,2,2,False,T,T,Signal transduction mechanisms
 bisC,JW5940,2,1,True,C,C,Energy production and conversion
 blc,JW4110,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
@@ -218,7 +218,7 @@ brnQ,JW0391,1,1,False,E,E,Amino acid transport and metabolism
 btuB,JW3938,2,2,False,H,H,Coenzyme transport and metabolism
 btuC,JW1701,1,1,False,H,H,Coenzyme transport and metabolism
 btuD,JW1699,2,1,True,H,H,Coenzyme transport and metabolism
-btuE,JW1700,1,1,False,"V,I",V,Defense mechanisms
+btuE,JW1700,1,1,False,"I,V",I,Lipid transport and metabolism
 btuF,JW0154,1,1,False,P,P,Inorganic ion transport and metabolism
 btuR,JW1262,2,1,True,H,H,Coenzyme transport and metabolism
 cadA,JW4092,1,1,False,E,E,Amino acid transport and metabolism
@@ -235,25 +235,25 @@ carA,JW0030,2,3,True,"F,E",F,Nucleotide transport and metabolism
 carB,JW0031,1,1,False,"F,E",F,Nucleotide transport and metabolism
 cbl,JW1966,2,1,True,K,K,Transcription
 cbpA,JW0985,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
-cbpM,JW0984,2,2,False,S,S,Function unknown
+cbpM,JW0984,2,1,True,S,S,Function unknown
 cbrA,JW5631,1,1,False,C,C,Energy production and conversion
 cbrC,JW3695,1,1,False,R,R,General function prediction only
-cchA,JW2441,2,1,True,S,S,Function unknown
+cchA,JW2441,2,2,False,S,S,Function unknown
 cchB,JW2440,2,1,True,S,S,Function unknown
 ccmA,JW5366,1,2,True,O,O,"Post-translational modification, protein turnover, chaperones"
 ccmB,JW2188,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 ccmC,JW2187,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 ccmD,JW2186,2,1,True,U,U,"Intracellular trafficking, secretion, and vesicular transport"
-ccmE,JW2185,1,2,True,"O,C",O,"Post-translational modification, protein turnover, chaperones"
-ccmF,JW2184,1,2,True,"O,C",O,"Post-translational modification, protein turnover, chaperones"
-ccmG,JW2183,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
-ccmH,JW2182,1,1,False,"O,C",O,"Post-translational modification, protein turnover, chaperones"
+ccmE,JW2185,1,2,True,"C,O",C,Energy production and conversion
+ccmF,JW2184,1,2,True,"C,O",C,Energy production and conversion
+ccmG,JW2183,1,2,True,O,O,"Post-translational modification, protein turnover, chaperones"
+ccmH,JW2182,1,2,True,"C,O",C,Energy production and conversion
 cdaR,JW5013,1,1,False,"T,K",T,Signal transduction mechanisms
-cdd,JW2131,1,2,True,F,F,Nucleotide transport and metabolism
+cdd,JW2131,1,1,False,F,F,Nucleotide transport and metabolism
 cdh,JW3889,1,1,False,I,I,Lipid transport and metabolism
 cedA,JW1720,1,1,False,S,S,Function unknown
 cfa,JW1653,1,1,False,I,I,Lipid transport and metabolism
-chaA,JW1207,1,1,False,P,P,Inorganic ion transport and metabolism
+chaA,JW1207,1,2,True,P,P,Inorganic ion transport and metabolism
 chaB,JW1208,2,1,True,P,P,Inorganic ion transport and metabolism
 chaC,JW1209,1,1,False,P,P,Inorganic ion transport and metabolism
 chbA,JW1725,2,1,True,G,G,Carbohydrate transport and metabolism
@@ -261,12 +261,12 @@ chbB,JW1727,1,1,False,G,G,Carbohydrate transport and metabolism
 chbC,JW1726,2,1,True,G,G,Carbohydrate transport and metabolism
 chbF,JW1723,2,1,True,G,G,Carbohydrate transport and metabolism
 chbG,JW1722,2,1,True,G,G,Carbohydrate transport and metabolism
-chbR,JW1724,2,1,True,"K,G",K,Transcription
+chbR,JW1724,2,2,False,"G,K",G,Carbohydrate transport and metabolism
 cheA,JW1877,2,2,False,T,T,Signal transduction mechanisms
 cheB,JW1872,2,2,False,T,T,Signal transduction mechanisms
 cheR,JW1873,1,1,False,T,T,Signal transduction mechanisms
 cheW,JW1876,1,1,False,T,T,Signal transduction mechanisms
-cheY,JW1871,2,1,True,T,T,Signal transduction mechanisms
+cheY,JW1871,2,2,False,T,T,Signal transduction mechanisms
 cheZ,JW1870,1,2,True,"T,N",T,Signal transduction mechanisms
 chiA,JW3300,1,1,False,S,S,Function unknown
 chpA,JW2753,1,1,False,S,S,Function unknown
@@ -280,7 +280,7 @@ citE,JW0608,1,2,True,G,G,Carbohydrate transport and metabolism
 citF,JW5087,1,1,False,C,C,Energy production and conversion
 citG,JW0605,2,1,True,H,H,Coenzyme transport and metabolism
 citT,JW0604,1,1,False,G,G,Carbohydrate transport and metabolism
-citX,JW0606,1,1,False,"H,I",H,Coenzyme transport and metabolism
+citX,JW0606,1,1,False,"I,H",I,Lipid transport and metabolism
 clcA,JW5012,1,1,False,P,P,Inorganic ion transport and metabolism
 clcB,JW5263,1,1,False,P,P,Inorganic ion transport and metabolism
 cld,JW5836,1,2,True,S,S,Function unknown
@@ -291,10 +291,10 @@ clpS,JW0865,2,2,False,O,O,"Post-translational modification, protein turnover, ch
 clpX,JW0428,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 cls,JW1241,2,2,False,S,S,Function unknown
 cmk,JW0893,2,2,False,F,F,Nucleotide transport and metabolism
-cmr,JW0826,2,2,False,S,S,Function unknown
+cmr,JW0826,2,1,True,S,S,Function unknown
 cmtA,JW2900,1,1,False,G,G,Carbohydrate transport and metabolism
 cmtB,JW2901,1,1,False,"T,G",T,Signal transduction mechanisms
-coaA,JW3942,1,2,True,H,H,Coenzyme transport and metabolism
+coaA,JW3942,1,1,False,H,H,Coenzyme transport and metabolism
 coaE,JW0100,2,2,False,H,H,Coenzyme transport and metabolism
 cobB,JW1106,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 cobC,JW0633,2,1,True,G,G,Carbohydrate transport and metabolism
@@ -303,13 +303,13 @@ cobT,JW1969,1,1,False,H,H,Coenzyme transport and metabolism
 cobU,JW1971,2,1,True,H,H,Coenzyme transport and metabolism
 codA,JW0328,1,1,False,"F,R",F,Nucleotide transport and metabolism
 codB,JW0327,1,1,False,F,F,Nucleotide transport and metabolism
-cof,JW0436,2,1,True,"H,R",H,Coenzyme transport and metabolism
+cof,JW0436,2,1,True,"R,H",R,General function prediction only
 copA,JW0473,1,2,True,P,P,Inorganic ion transport and metabolism
 corA,JW3789,1,1,False,P,P,Inorganic ion transport and metabolism
 cpdA,JW3000,1,1,False,T,T,Signal transduction mechanisms
-cpdB,JW4171,1,1,False,"F,V",F,Nucleotide transport and metabolism
+cpdB,JW4171,1,1,False,"V,F",V,Defense mechanisms
 cpsB,JW2034,2,1,True,"M,G",M,Cell wall/membrane/envelope biogenesis
-cpsG,JW2033,1,2,True,G,G,Carbohydrate transport and metabolism
+cpsG,JW2033,1,1,False,G,G,Carbohydrate transport and metabolism
 cpxA,JW3882,2,2,False,T,T,Signal transduction mechanisms
 cpxP,JW5558,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 cpxR,JW3883,2,1,True,"T,K",T,Signal transduction mechanisms
@@ -325,7 +325,7 @@ crr,JW2410,1,2,True,G,G,Carbohydrate transport and metabolism
 csdA,JW2781,2,2,False,E,E,Amino acid transport and metabolism
 csgA,JW1025,1,1,False,S,S,Function unknown
 csgB,JW1024,2,1,True,S,S,Function unknown
-csgC,JW1026,2,1,True,S,S,Function unknown
+csgC,JW1026,1,1,False,S,S,Function unknown
 csgD,JW1023,2,1,True,"T,K",T,Signal transduction mechanisms
 csgE,JW1022,1,1,False,S,S,Function unknown
 csgF,JW1021,2,1,True,S,S,Function unknown
@@ -337,12 +337,12 @@ cspB,JW1549,1,1,False,K,K,Transcription
 cspC,JW1812,1,1,False,K,K,Transcription
 cspD,JW0864,1,1,False,K,K,Transcription
 cspE,JW0618,1,1,False,K,K,Transcription
-cspF,JW1550,1,2,True,K,K,Transcription
+cspF,JW1550,1,1,False,K,K,Transcription
 cspG,JW0974,1,1,False,K,K,Transcription
 cspH,JW5134,1,1,False,K,K,Transcription
 cspI,JW1544,1,1,False,K,K,Transcription
-cstA,JW0590,1,1,False,"E,C",E,Amino acid transport and metabolism
-cueO,JW0119,1,2,True,"D,M,P",D,"Cell cycle control, cell division, chromosome partitioning"
+cstA,JW0590,1,1,False,"C,E",C,Energy production and conversion
+cueO,JW0119,1,2,True,"M,D,P",M,Cell wall/membrane/envelope biogenesis
 cueR,JW0476,1,1,False,K,K,Transcription
 cusA,JW0564,2,1,True,P,P,Inorganic ion transport and metabolism
 cusB,JW0563,2,1,True,"M,V",M,Cell wall/membrane/envelope biogenesis
@@ -353,14 +353,14 @@ cusS,JW5082,1,1,False,T,T,Signal transduction mechanisms
 cutA,JW4097,2,1,True,P,P,Inorganic ion transport and metabolism
 cutC,JW1863,1,1,False,P,P,Inorganic ion transport and metabolism
 cvpA,JW2310,1,1,False,"M,F",M,Cell wall/membrane/envelope biogenesis
-cvrA,JW5184,1,1,False,"P,C",P,Inorganic ion transport and metabolism
+cvrA,JW5184,1,1,False,"C,P",C,Energy production and conversion
 cyaA,JW3778,2,2,False,T,T,Signal transduction mechanisms
-cyaY,JW3779,2,1,True,P,P,Inorganic ion transport and metabolism
+cyaY,JW3779,2,2,False,P,P,Inorganic ion transport and metabolism
 cybB,JW5224,1,1,False,C,C,Energy production and conversion
 cybC,JW4195,2,1,True,S,S,Function unknown
-cycA,JW4166,2,2,False,E,E,Amino acid transport and metabolism
+cycA,JW4166,1,2,True,E,E,Amino acid transport and metabolism
 cydB,JW0723,2,2,False,C,C,Energy production and conversion
-cydD,JW0870,2,3,True,"O,C",O,"Post-translational modification, protein turnover, chaperones"
+cydD,JW0870,2,2,False,"C,O",C,Energy production and conversion
 cynR,JW5894,2,1,True,K,K,Transcription
 cynS,JW0331,1,2,True,P,P,Inorganic ion transport and metabolism
 cynT,JW0330,2,2,False,P,P,Inorganic ion transport and metabolism
@@ -369,19 +369,19 @@ cyoA,JW0422,2,1,True,C,C,Energy production and conversion
 cyoB,JW0421,2,1,True,C,C,Energy production and conversion
 cyoC,JW0420,2,1,True,C,C,Energy production and conversion
 cyoD,JW0419,2,1,True,C,C,Energy production and conversion
-cyoE,JW0418,1,1,False,"H,I",H,Coenzyme transport and metabolism
+cyoE,JW0418,1,1,False,"I,H",I,Lipid transport and metabolism
 cysA,JW2415,1,3,True,P,P,Inorganic ion transport and metabolism
-cysB,JW1267,2,3,True,K,K,Transcription
+cysB,JW1267,2,2,False,K,K,Transcription
 cysC,JW2720,2,3,True,P,P,Inorganic ion transport and metabolism
-cysD,JW2722,1,3,True,"H,E",H,Coenzyme transport and metabolism
+cysD,JW2722,1,2,True,"H,E",H,Coenzyme transport and metabolism
 cysE,JW3582,2,3,True,E,E,Amino acid transport and metabolism
 cysG,JW3331,2,3,True,H,H,Coenzyme transport and metabolism
 cysH,JW2732,1,3,True,"H,E",H,Coenzyme transport and metabolism
 cysI,JW2733,1,3,True,P,P,Inorganic ion transport and metabolism
-cysJ,JW2734,1,3,True,"F,P",F,Nucleotide transport and metabolism
+cysJ,JW2734,1,3,True,"P,F",P,Inorganic ion transport and metabolism
 cysK,JW2407,1,3,True,E,E,Amino acid transport and metabolism
 cysM,JW2414,1,1,False,E,E,Amino acid transport and metabolism
-cysN,JW2721,1,1,False,P,P,Inorganic ion transport and metabolism
+cysN,JW2721,1,2,True,P,P,Inorganic ion transport and metabolism
 cysP,JW2418,1,2,True,P,P,Inorganic ion transport and metabolism
 cysQ,JW4172,1,2,True,P,P,Inorganic ion transport and metabolism
 cysU,JW2417,1,3,True,P,P,Inorganic ion transport and metabolism
@@ -408,7 +408,7 @@ dcuB,JW4084,1,2,True,G,G,Carbohydrate transport and metabolism
 dcuC,JW0613,1,1,False,C,C,Energy production and conversion
 dcuD,JW3196,2,2,False,C,C,Energy production and conversion
 dcuR,JW4085,2,1,True,"T,K",T,Signal transduction mechanisms
-dcuS,JW4086,2,2,False,T,T,Signal transduction mechanisms
+dcuS,JW4086,2,1,True,T,T,Signal transduction mechanisms
 ddg,JW2375,1,1,False,S,S,Function unknown
 ddlA,JW0372,1,1,False,"M,R",M,Cell wall/membrane/envelope biogenesis
 ddlB,JW0090,1,1,False,"M,R",M,Cell wall/membrane/envelope biogenesis
@@ -420,14 +420,14 @@ ddpF,JW1478,1,1,False,O,O,"Post-translational modification, protein turnover, ch
 ddpX,JW1483,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
 deaD,JW5531,1,1,False,L,L,"Replication, recombination and repair"
 dedA,JW2314,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
-dedD,JW5378,2,1,True,D,D,"Cell cycle control, cell division, chromosome partitioning"
+dedD,JW5378,2,2,False,D,D,"Cell cycle control, cell division, chromosome partitioning"
 degP,JW0157,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 degQ,JW3203,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 deoA,JW4345,1,1,False,F,F,Nucleotide transport and metabolism
 deoB,JW4346,2,1,True,G,G,Carbohydrate transport and metabolism
 deoC,JW4344,1,1,False,F,F,Nucleotide transport and metabolism
 deoD,JW4347,1,1,False,F,F,Nucleotide transport and metabolism
-deoR,JW0824,2,1,True,"K,G",K,Transcription
+deoR,JW0824,2,1,True,"G,K",G,Carbohydrate transport and metabolism
 dgkA,JW4002,1,2,True,I,I,Lipid transport and metabolism
 dgoA,JW5628,1,1,False,G,G,Carbohydrate transport and metabolism
 dgoD,JW5629,1,1,False,"M,R",M,Cell wall/membrane/envelope biogenesis
@@ -435,7 +435,7 @@ dgoK,JW3670,2,1,True,G,G,Carbohydrate transport and metabolism
 dgoR,JW5627,1,1,False,K,K,Transcription
 dgoT,JW5859,1,2,True,G,G,Carbohydrate transport and metabolism
 dgsA,JW1586,1,1,False,S,S,Function unknown
-dgt,JW0156,1,1,False,F,F,Nucleotide transport and metabolism
+dgt,JW0156,1,2,True,F,F,Nucleotide transport and metabolism
 dhaH,JW5185,1,1,False,S,S,Function unknown
 dhaK,JW5187,1,1,False,G,G,Carbohydrate transport and metabolism
 dhaL,JW5186,1,1,False,G,G,Carbohydrate transport and metabolism
@@ -447,7 +447,7 @@ dinD,JW3620,1,1,False,S,S,Function unknown
 dinF,JW4004,1,1,False,V,V,Defense mechanisms
 dinG,JW0784,1,1,False,L,L,"Replication, recombination and repair"
 dinI,JW1048,1,1,False,S,S,Function unknown
-dinJ,JW0216,2,2,False,V,V,Defense mechanisms
+dinJ,JW0216,2,1,True,V,V,Defense mechanisms
 dipZ,JW5734,1,1,False,S,S,Function unknown
 djlA,JW0054,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 djlB,JW0641,2,1,True,S,S,Function unknown
@@ -471,24 +471,24 @@ dppB,JW3512,1,1,False,"P,E",P,Inorganic ion transport and metabolism
 dppC,JW3511,1,1,False,"P,E",P,Inorganic ion transport and metabolism
 dppD,JW3510,1,1,False,"P,E",P,Inorganic ion transport and metabolism
 dppF,JW3509,1,2,True,E,E,Amino acid transport and metabolism
-dps,JW0797,2,1,True,"V,P",V,Defense mechanisms
+dps,JW0797,2,1,True,"P,V",P,Inorganic ion transport and metabolism
 dsbA,JW3832,1,2,True,O,O,"Post-translational modification, protein turnover, chaperones"
 dsbB,JW5182,1,2,True,O,O,"Post-translational modification, protein turnover, chaperones"
-dsbC,JW2861,1,2,True,O,O,"Post-translational modification, protein turnover, chaperones"
+dsbC,JW2861,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 dsbG,JW0597,1,2,True,O,O,"Post-translational modification, protein turnover, chaperones"
 dsdA,JW2363,1,1,False,E,E,Amino acid transport and metabolism
 dsdC,JW2361,2,1,True,K,K,Transcription
-dsdX,JW2362,2,2,False,G,G,Carbohydrate transport and metabolism
+dsdX,JW2362,2,1,True,G,G,Carbohydrate transport and metabolism
 dsrB,JW1936,2,1,True,S,S,Function unknown
 dtd,JW3858,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 dusB,JW3228,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
 dusC,JW2128,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 eaeH,JW0291,1,2,True,S,S,Function unknown
-eamA,JW5250,1,2,True,"G,R,E",G,Carbohydrate transport and metabolism
+eamA,JW5250,1,2,True,"R,G,E",R,General function prediction only
 ebgA,JW5511,1,1,False,G,G,Carbohydrate transport and metabolism
 ebgC,JW3048,1,1,False,G,G,Carbohydrate transport and metabolism
 ebgR,JW3046,2,1,True,K,K,Transcription
-ecnA,JW5737,1,2,True,S,S,Function unknown
+ecnA,JW5737,1,1,False,S,S,Function unknown
 ecnB,JW4108,1,1,False,S,S,Function unknown
 eco,JW2197,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 ecpD,JW0136,1,1,False,S,S,Function unknown
@@ -498,13 +498,13 @@ efp,JW4107,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
 ego,JW1506,2,1,True,S,S,Function unknown
 elaA,JW2262,1,2,True,R,R,General function prediction only
 elaB,JW2261,2,2,False,J,J,"Translation, ribosomal structure and biogenesis"
-elaC,JW2263,2,1,True,S,S,Function unknown
+elaC,JW2263,1,1,False,S,S,Function unknown
 elaD,JW5840,1,2,True,S,S,Function unknown
 elbA,JW1147,2,1,True,S,S,Function unknown
 elbB,JW3176,1,1,False,V,V,Defense mechanisms
 emrA,JW2660,1,1,False,V,V,Defense mechanisms
 emrB,JW2661,1,1,False,G,G,Carbohydrate transport and metabolism
-emrD,JW5634,1,2,True,G,G,Carbohydrate transport and metabolism
+emrD,JW5634,1,1,False,G,G,Carbohydrate transport and metabolism
 emrE,JW0531,1,1,False,V,V,Defense mechanisms
 emrK,JW2365,1,1,False,V,V,Defense mechanisms
 emrY,JW2364,1,1,False,G,G,Carbohydrate transport and metabolism
@@ -512,15 +512,15 @@ emtA,JW5821,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 endA,JW2912,1,1,False,L,L,"Replication, recombination and repair"
 entA,JW0588,1,1,False,I,I,Lipid transport and metabolism
 entB,JW0587,2,2,False,"Q,I",Q,"Secondary metabolites biosynthesis, transport and catabolism"
-entC,JW0585,1,2,True,"H,Q",H,Coenzyme transport and metabolism
+entC,JW0585,1,2,True,"Q,H",Q,"Secondary metabolites biosynthesis, transport and catabolism"
 entE,JW0586,2,2,False,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
 entF,JW0578,2,2,False,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
 envC,JW5646,2,2,False,D,D,"Cell cycle control, cell division, chromosome partitioning"
 envR,JW3232,2,1,True,K,K,Transcription
 envY,JW0555,2,1,True,K,K,Transcription
-envZ,JW3367,2,2,False,T,T,Signal transduction mechanisms
+envZ,JW3367,2,1,True,T,T,Signal transduction mechanisms
 epd,JW2894,2,2,False,G,G,Carbohydrate transport and metabolism
-eptA,JW5730,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
+eptA,JW5730,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 eptB,JW5660,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 erfK,JW1968,1,2,True,S,S,Function unknown
 essD,JW0543,2,1,True,S,S,Function unknown
@@ -530,7 +530,7 @@ eutA,JW2435,2,2,False,E,E,Amino acid transport and metabolism
 eutB,JW2434,1,1,False,E,E,Amino acid transport and metabolism
 eutC,JW2433,1,2,True,E,E,Amino acid transport and metabolism
 eutE,JW2439,1,1,False,I,I,Lipid transport and metabolism
-eutG,JW2437,1,2,True,C,C,Energy production and conversion
+eutG,JW2437,1,1,False,C,C,Energy production and conversion
 eutH,JW2436,1,1,False,E,E,Amino acid transport and metabolism
 eutI,JW2442,1,2,True,S,S,Function unknown
 eutJ,JW2438,2,1,True,E,E,Amino acid transport and metabolism
@@ -541,49 +541,49 @@ eutT,JW2443,1,2,True,E,E,Amino acid transport and metabolism
 evgA,JW2366,2,2,False,"T,K",T,Signal transduction mechanisms
 evgS,JW2367,2,2,False,"T,E",T,Signal transduction mechanisms
 exbB,JW2974,1,1,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
-exbD,JW2973,1,2,True,U,U,"Intracellular trafficking, secretion, and vesicular transport"
+exbD,JW2973,1,1,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 exo,JW5446,1,1,False,S,S,Function unknown
 exoX,JW1833,1,2,True,L,L,"Replication, recombination and repair"
 exuR,JW3065,2,1,True,K,K,Transcription
 exuT,JW3064,1,1,False,G,G,Carbohydrate transport and metabolism
-fabF,JW1081,1,2,True,"Q,I",Q,"Secondary metabolites biosynthesis, transport and catabolism"
+fabF,JW1081,1,2,True,"I,Q",I,Lipid transport and metabolism
 fabH,JW1077,2,2,False,I,I,Lipid transport and metabolism
 fabR,JW3935,1,1,False,K,K,Transcription
 fadA,JW5578,2,2,False,I,I,Lipid transport and metabolism
 fadB,JW3822,2,1,True,I,I,Lipid transport and metabolism
 fadD,JW1794,2,2,False,I,I,Lipid transport and metabolism
 fadE,JW5020,1,1,False,I,I,Lipid transport and metabolism
-fadH,JW3052,1,1,False,"E,R,C",E,Amino acid transport and metabolism
+fadH,JW3052,1,1,False,"C,R,E",C,Energy production and conversion
 fadL,JW2341,2,1,True,I,I,Lipid transport and metabolism
 fadR,JW1176,2,1,True,K,K,Transcription
 fbaB,JW5344,1,1,False,G,G,Carbohydrate transport and metabolism
 fbp,JW4191,2,1,True,G,G,Carbohydrate transport and metabolism
 fcl,JW2037,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 fdhD,JW3866,1,2,True,C,C,Energy production and conversion
-fdhE,JW3862,2,1,True,"O,C",O,"Post-translational modification, protein turnover, chaperones"
+fdhE,JW3862,2,1,True,"C,O",C,Energy production and conversion
 fdhF,JW4040,1,2,True,R,R,General function prediction only
-fdnG,JW1470,2,2,False,C,C,Energy production and conversion
+fdnG,JW1470,1,2,True,C,C,Energy production and conversion
 fdnH,JW1471,1,1,False,C,C,Energy production and conversion
 fdnI,JW1472,2,2,False,C,C,Energy production and conversion
 fdoG,JW3865,1,1,False,C,C,Energy production and conversion
 fdoH,JW3864,1,1,False,C,C,Energy production and conversion
 fdoI,JW3863,1,1,False,C,C,Energy production and conversion
 fdrA,JW0506,2,2,False,C,C,Energy production and conversion
-fdx,JW2509,1,2,True,C,C,Energy production and conversion
+fdx,JW2509,1,1,False,C,C,Energy production and conversion
 feaB,JW1380,1,1,False,I,I,Lipid transport and metabolism
 feaR,JW1379,1,1,False,K,K,Transcription
 fecA,JW4251,1,2,True,P,P,Inorganic ion transport and metabolism
 fecB,JW4250,1,1,False,P,P,Inorganic ion transport and metabolism
-fecC,JW4249,1,2,True,P,P,Inorganic ion transport and metabolism
+fecC,JW4249,1,1,False,P,P,Inorganic ion transport and metabolism
 fecD,JW4248,1,1,False,P,P,Inorganic ion transport and metabolism
-fecE,JW4247,1,1,False,"H,P",H,Coenzyme transport and metabolism
+fecE,JW4247,1,1,False,"P,H",P,Inorganic ion transport and metabolism
 fecI,JW4253,2,2,False,K,K,Transcription
-fecR,JW4252,2,2,False,"T,P",T,Signal transduction mechanisms
+fecR,JW4252,2,2,False,"P,T",P,Inorganic ion transport and metabolism
 feoA,JW3371,1,2,True,P,P,Inorganic ion transport and metabolism
 feoB,JW3372,1,2,True,P,P,Inorganic ion transport and metabolism
-fepA,JW5086,1,1,False,P,P,Inorganic ion transport and metabolism
+fepA,JW5086,1,2,True,P,P,Inorganic ion transport and metabolism
 fepB,JW0584,1,1,False,P,P,Inorganic ion transport and metabolism
-fepC,JW0580,2,1,True,"H,P",H,Coenzyme transport and metabolism
+fepC,JW0580,2,2,False,"P,H",P,Inorganic ion transport and metabolism
 fepD,JW0582,1,1,False,P,P,Inorganic ion transport and metabolism
 fepE,JW0579,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 fepG,JW0581,1,1,False,P,P,Inorganic ion transport and metabolism
@@ -592,16 +592,16 @@ fhiA,JW5811,1,1,False,S,S,Function unknown
 fhlA,JW2701,2,1,True,"T,K",T,Signal transduction mechanisms
 fhuA,JW0146,2,1,True,P,P,Inorganic ion transport and metabolism
 fhuB,JW0149,1,1,False,P,P,Inorganic ion transport and metabolism
-fhuC,JW0147,1,1,False,"H,P",H,Coenzyme transport and metabolism
+fhuC,JW0147,1,1,False,"P,H",P,Inorganic ion transport and metabolism
 fhuD,JW0148,1,1,False,P,P,Inorganic ion transport and metabolism
 fhuE,JW1088,2,1,True,P,P,Inorganic ion transport and metabolism
-fhuF,JW4331,1,2,True,P,P,Inorganic ion transport and metabolism
+fhuF,JW4331,1,1,False,P,P,Inorganic ion transport and metabolism
 fic,JW3324,1,2,True,T,T,Signal transduction mechanisms
 fieF,JW3886,1,1,False,P,P,Inorganic ion transport and metabolism
 fimA,JW4277,1,2,True,N,N,Cell motility
 fimB,JW4275,2,1,True,L,L,"Replication, recombination and repair"
 fimC,JW4279,1,1,False,W,W,Extracellular structures
-fimD,JW5780,2,1,True,"N,W",N,Cell motility
+fimD,JW5780,2,1,True,"W,N",W,Extracellular structures
 fimE,JW4276,2,1,True,L,L,"Replication, recombination and repair"
 fimF,JW4281,2,1,True,N,N,Cell motility
 fimG,JW4282,1,1,False,N,N,Cell motility
@@ -623,39 +623,39 @@ flgB,JW1060,1,1,False,N,N,Cell motility
 flgC,JW1061,2,1,True,N,N,Cell motility
 flgD,JW1062,2,2,False,N,N,Cell motility
 flgE,JW1063,1,1,False,N,N,Cell motility
-flgF,JW1064,1,1,False,N,N,Cell motility
-flgG,JW1065,1,2,True,N,N,Cell motility
-flgH,JW5153,1,1,False,N,N,Cell motility
+flgF,JW1064,1,2,True,N,N,Cell motility
+flgG,JW1065,1,1,False,N,N,Cell motility
+flgH,JW5153,1,2,True,N,N,Cell motility
 flgI,JW1067,1,2,True,N,N,Cell motility
 flgJ,JW1068,1,2,True,"N,R",N,Cell motility
 flgK,JW1069,2,2,False,N,N,Cell motility
 flgL,JW1070,1,1,False,N,N,Cell motility
 flgM,JW1058,1,1,False,"N,K",N,Cell motility
-flgN,JW1057,1,1,False,"N,U",N,Cell motility
+flgN,JW1057,1,1,False,"U,N",U,"Intracellular trafficking, secretion, and vesicular transport"
 flhA,JW1868,1,2,True,N,N,Cell motility
-flhB,JW1869,1,2,True,N,N,Cell motility
-flhC,JW1880,2,2,False,S,S,Function unknown
+flhB,JW1869,1,1,False,N,N,Cell motility
+flhC,JW1880,2,1,True,S,S,Function unknown
 flhD,JW1881,1,1,False,S,S,Function unknown
 flhE,JW1867,1,1,False,S,S,Function unknown
 fliA,JW1907,2,2,False,K,K,Transcription
 fliC,JW1908,2,2,False,N,N,Cell motility
 fliD,JW1909,2,2,False,N,N,Cell motility
 fliE,JW1921,2,1,True,N,N,Cell motility
-fliF,JW1922,1,1,False,"N,U",N,Cell motility
+fliF,JW1922,1,1,False,"U,N",U,"Intracellular trafficking, secretion, and vesicular transport"
 fliG,JW1923,2,1,True,N,N,Cell motility
-fliH,JW1924,1,1,False,"N,U",N,Cell motility
-fliI,JW1925,2,2,False,"N,U",N,Cell motility
-fliJ,JW1926,1,2,True,N,N,Cell motility
-fliK,JW1927,2,2,False,N,N,Cell motility
+fliH,JW1924,1,1,False,"U,N",U,"Intracellular trafficking, secretion, and vesicular transport"
+fliI,JW1925,2,2,False,"U,N",U,"Intracellular trafficking, secretion, and vesicular transport"
+fliJ,JW1926,1,1,False,N,N,Cell motility
+fliK,JW1927,2,1,True,N,N,Cell motility
 fliL,JW1928,1,1,False,N,N,Cell motility
-fliM,JW1929,2,2,False,N,N,Cell motility
-fliN,JW1930,2,1,True,"N,U",N,Cell motility
+fliM,JW1929,2,1,True,N,N,Cell motility
+fliN,JW1930,2,1,True,"U,N",U,"Intracellular trafficking, secretion, and vesicular transport"
 fliO,JW5316,2,2,False,N,N,Cell motility
 fliP,JW1932,2,1,True,N,N,Cell motility
 fliQ,JW1933,1,1,False,N,N,Cell motility
 fliR,JW1934,2,1,True,N,N,Cell motility
-fliS,JW1910,2,2,False,"N,U",N,Cell motility
-fliT,JW1911,1,2,True,S,S,Function unknown
+fliS,JW1910,2,2,False,"U,N",U,"Intracellular trafficking, secretion, and vesicular transport"
+fliT,JW1911,1,1,False,S,S,Function unknown
 fliY,JW1905,2,2,False,S,S,Function unknown
 fliZ,JW1906,1,1,False,S,S,Function unknown
 flk,JW2318,2,1,True,S,S,Function unknown
@@ -672,25 +672,25 @@ fpr,JW3895,1,1,False,C,C,Energy production and conversion
 frc,JW2371,2,2,False,I,I,Lipid transport and metabolism
 frdA,JW4115,2,1,True,C,C,Energy production and conversion
 frdB,JW4114,1,1,False,C,C,Energy production and conversion
-frdC,JW4113,2,1,True,C,C,Energy production and conversion
+frdC,JW4113,2,2,False,C,C,Energy production and conversion
 frdD,JW4112,2,1,True,C,C,Energy production and conversion
-fre,JW3820,1,1,False,"H,C",H,Coenzyme transport and metabolism
+fre,JW3820,1,1,False,"C,H",C,Energy production and conversion
 frlA,JW3333,1,1,False,E,E,Amino acid transport and metabolism
-frlB,JW5700,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
+frlB,JW5700,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 frlC,JW5699,1,1,False,G,G,Carbohydrate transport and metabolism
 frlD,JW3337,1,1,False,G,G,Carbohydrate transport and metabolism
 frlR,JW5698,1,1,False,K,K,Transcription
-frmA,JW0347,1,1,False,C,C,Energy production and conversion
+frmA,JW0347,1,2,True,C,C,Energy production and conversion
 frmB,JW0346,1,1,False,V,V,Defense mechanisms
 frmR,JW0348,2,1,True,K,K,Transcription
 frsA,JW0229,2,1,True,E,E,Amino acid transport and metabolism
 fruA,JW2154,1,1,False,"T,G",T,Signal transduction mechanisms
-fruB,JW2156,1,2,True,"T,G",T,Signal transduction mechanisms
-fruK,JW2155,1,1,False,G,G,Carbohydrate transport and metabolism
+fruB,JW2156,1,1,False,"G,T",G,Carbohydrate transport and metabolism
+fruK,JW2155,1,2,True,G,G,Carbohydrate transport and metabolism
 fruR,JW0078,2,1,True,S,S,Function unknown
 frvA,JW3871,2,1,True,"T,G",T,Signal transduction mechanisms
 frvB,JW5562,1,1,False,G,G,Carbohydrate transport and metabolism
-frvR,JW3868,1,1,False,"T,K,G",T,Signal transduction mechanisms
+frvR,JW3868,1,1,False,"T,G,K",T,Signal transduction mechanisms
 frvX,JW3869,2,1,True,"G,E",G,Carbohydrate transport and metabolism
 frwB,JW3922,2,2,False,G,G,Carbohydrate transport and metabolism
 frwC,JW3921,1,1,False,G,G,Carbohydrate transport and metabolism
@@ -703,17 +703,17 @@ fucA,JW2771,2,2,False,"G,E",G,Carbohydrate transport and metabolism
 fucI,JW2773,2,2,False,G,G,Carbohydrate transport and metabolism
 fucK,JW2774,1,1,False,G,G,Carbohydrate transport and metabolism
 fucO,JW2770,2,2,False,C,C,Energy production and conversion
-fucP,JW2772,1,2,True,G,G,Carbohydrate transport and metabolism
-fucR,JW2776,2,1,True,"K,G",K,Transcription
+fucP,JW2772,1,1,False,G,G,Carbohydrate transport and metabolism
+fucR,JW2776,2,1,True,"G,K",G,Carbohydrate transport and metabolism
 fucU,JW2775,2,2,False,G,G,Carbohydrate transport and metabolism
 fumA,JW1604,2,1,True,C,C,Energy production and conversion
-fumB,JW4083,2,1,True,C,C,Energy production and conversion
+fumB,JW4083,2,2,False,C,C,Energy production and conversion
 fumC,JW1603,2,1,True,C,C,Energy production and conversion
 fur,JW0669,2,2,False,P,P,Inorganic ion transport and metabolism
 fxsA,JW4100,1,1,False,R,R,General function prediction only
-gabD,JW2636,1,2,True,I,I,Lipid transport and metabolism
+gabD,JW2636,1,1,False,I,I,Lipid transport and metabolism
 gabP,JW2638,1,1,False,E,E,Amino acid transport and metabolism
-gabT,JW2637,2,1,True,E,E,Amino acid transport and metabolism
+gabT,JW2637,1,1,False,E,E,Amino acid transport and metabolism
 gadA,JW3485,2,1,True,E,E,Amino acid transport and metabolism
 gadB,JW1488,2,1,True,E,E,Amino acid transport and metabolism
 gadC,JW1487,1,1,False,E,E,Amino acid transport and metabolism
@@ -733,11 +733,11 @@ gapC,JW5906,2,1,True,S,S,Function unknown
 garD,JW3097,1,1,False,G,G,Carbohydrate transport and metabolism
 garK,JW3093,1,1,False,G,G,Carbohydrate transport and metabolism
 garL,JW3095,1,1,False,G,G,Carbohydrate transport and metabolism
-garP,JW3096,1,1,False,G,G,Carbohydrate transport and metabolism
+garP,JW3096,1,2,True,G,G,Carbohydrate transport and metabolism
 garR,JW5526,1,1,False,I,I,Lipid transport and metabolism
 gatB,JW2077,1,1,False,G,G,Carbohydrate transport and metabolism
 gatC,JW2076,1,1,False,S,S,Function unknown
-gatD,JW2075,1,1,False,"E,R",E,Amino acid transport and metabolism
+gatD,JW2075,1,1,False,"R,E",R,General function prediction only
 gatR,JW5340,1,1,False,S,S,Function unknown
 gatY,JW5343,1,2,True,G,G,Carbohydrate transport and metabolism
 gatZ,JW2082,2,2,False,G,G,Carbohydrate transport and metabolism
@@ -756,7 +756,7 @@ glcB,JW2943,2,1,True,C,C,Energy production and conversion
 glcC,JW2947,1,1,False,K,K,Transcription
 glcD,JW2946,1,1,False,C,C,Energy production and conversion
 glcE,JW5487,1,1,False,C,C,Energy production and conversion
-glcF,JW5486,1,1,False,C,C,Energy production and conversion
+glcF,JW5486,1,2,True,C,C,Energy production and conversion
 glcG,JW2944,1,1,False,T,T,Signal transduction mechanisms
 gldA,JW5556,2,2,False,C,C,Energy production and conversion
 glf,JW2021,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
@@ -772,10 +772,10 @@ glnA,JW3841,2,2,False,E,E,Amino acid transport and metabolism
 glnB,JW2537,2,1,True,"T,E",T,Signal transduction mechanisms
 glnD,JW0162,2,2,False,"T,O",T,Signal transduction mechanisms
 glnE,JW3025,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
-glnG,JW3839,2,1,True,T,T,Signal transduction mechanisms
+glnG,JW3839,2,2,False,T,T,Signal transduction mechanisms
 glnH,JW0796,2,2,False,"T,E",T,Signal transduction mechanisms
 glnK,JW0440,1,1,False,"T,E",T,Signal transduction mechanisms
-glnL,JW3840,2,1,True,T,T,Signal transduction mechanisms
+glnL,JW3840,2,2,False,T,T,Signal transduction mechanisms
 glnP,JW0795,2,2,False,E,E,Amino acid transport and metabolism
 glnQ,JW0794,2,2,False,E,E,Amino acid transport and metabolism
 gloA,JW1643,1,2,True,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
@@ -785,7 +785,7 @@ glpB,JW2236,1,2,True,E,E,Amino acid transport and metabolism
 glpC,JW2237,1,1,False,C,C,Energy production and conversion
 glpD,JW3389,1,1,False,C,C,Energy production and conversion
 glpE,JW3388,1,1,False,P,P,Inorganic ion transport and metabolism
-glpF,JW3898,2,1,True,G,G,Carbohydrate transport and metabolism
+glpF,JW3898,1,1,False,G,G,Carbohydrate transport and metabolism
 glpG,JW5687,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 glpK,JW3897,1,1,False,C,C,Energy production and conversion
 glpQ,JW2233,1,1,False,I,I,Lipid transport and metabolism
@@ -794,7 +794,7 @@ glpT,JW2234,1,1,False,G,G,Carbohydrate transport and metabolism
 glpX,JW3896,2,1,True,G,G,Carbohydrate transport and metabolism
 gltA,JW0710,2,2,False,C,C,Energy production and conversion
 gltB,JW3179,1,1,False,E,E,Amino acid transport and metabolism
-gltD,JW3180,1,1,False,"E,R",E,Amino acid transport and metabolism
+gltD,JW3180,1,1,False,"R,E",R,General function prediction only
 gltF,JW3181,1,1,False,S,S,Function unknown
 gltI,JW5092,1,1,False,"T,E",T,Signal transduction mechanisms
 gltJ,JW0649,1,1,False,E,E,Amino acid transport and metabolism
@@ -803,24 +803,24 @@ gltL,JW0647,1,1,False,E,E,Amino acid transport and metabolism
 gltP,JW4038,2,2,False,C,C,Energy production and conversion
 gltS,JW3628,1,1,False,E,E,Amino acid transport and metabolism
 glvB,JW3659,1,1,False,G,G,Carbohydrate transport and metabolism
-glvC,JW3660,1,1,False,G,G,Carbohydrate transport and metabolism
+glvC,JW3660,1,2,True,G,G,Carbohydrate transport and metabolism
 glvG,JW3658,1,1,False,S,S,Function unknown
 glxK,JW0502,1,1,False,G,G,Carbohydrate transport and metabolism
-glxR,JW0497,2,1,True,I,I,Lipid transport and metabolism
-glyA,JW2535,1,3,True,E,E,Amino acid transport and metabolism
+glxR,JW0497,2,2,False,I,I,Lipid transport and metabolism
+glyA,JW2535,1,2,True,E,E,Amino acid transport and metabolism
 glyS,JW3530,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
-gmd,JW2038,1,2,True,M,M,Cell wall/membrane/envelope biogenesis
+gmd,JW2038,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 gmhB,JW0196,1,2,True,E,E,Amino acid transport and metabolism
 gmr,JW1278,2,1,True,S,S,Function unknown
 gnd,JW2011,2,2,False,G,G,Carbohydrate transport and metabolism
-gnsA,JW0976,2,2,False,S,S,Function unknown
+gnsA,JW0976,2,1,True,S,S,Function unknown
 gnsB,JW5253,2,2,False,S,S,Function unknown
 gntK,JW3400,1,2,True,G,G,Carbohydrate transport and metabolism
 gntP,JW4284,1,1,False,G,G,Carbohydrate transport and metabolism
 gntR,JW5946,1,1,False,K,K,Transcription
 gntT,JW5690,1,1,False,G,G,Carbohydrate transport and metabolism
 gntU,JW5686,1,1,False,G,G,Carbohydrate transport and metabolism
-gntX,JW5691,2,1,True,S,S,Function unknown
+gntX,JW5691,1,1,False,S,S,Function unknown
 gntY,JW3377,2,1,True,S,S,Function unknown
 gor,JW3467,2,2,False,C,C,Energy production and conversion
 gph,JW3348,1,1,False,C,C,Energy production and conversion
@@ -835,32 +835,32 @@ grxA,JW0833,2,2,False,O,O,"Post-translational modification, protein turnover, ch
 grxB,JW1051,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 grxC,JW3585,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 gshA,JW2663,1,1,False,H,H,Coenzyme transport and metabolism
-gshB,JW2914,2,1,True,"J,H,Q,E",J,"Translation, ribosomal structure and biogenesis"
+gshB,JW2914,2,1,True,"Q,H,J,E",Q,"Secondary metabolites biosynthesis, transport and catabolism"
 gsk,JW0466,1,1,False,G,G,Carbohydrate transport and metabolism
 gspA,JW3285,2,1,True,S,S,Function unknown
 gspC,JW3286,1,2,True,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 gspD,JW5707,1,1,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
-gspE,JW3288,1,1,False,"N,W,U",N,Cell motility
-gspF,JW3289,1,2,True,"N,W,U",N,Cell motility
-gspG,JW3290,2,2,False,"N,W,U",N,Cell motility
-gspH,JW3291,2,2,False,"N,W,U",N,Cell motility
-gspI,JW5706,1,1,False,"N,W,U",N,Cell motility
+gspE,JW3288,1,1,False,"W,U,N",W,Extracellular structures
+gspF,JW3289,1,1,False,"W,U,N",W,Extracellular structures
+gspG,JW3290,2,2,False,"W,U,N",W,Extracellular structures
+gspH,JW3291,2,1,True,"W,U,N",W,Extracellular structures
+gspI,JW5706,1,1,False,"W,U,N",W,Extracellular structures
 gspJ,JW3293,2,2,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 gspK,JW3294,2,2,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 gspL,JW5705,1,1,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 gspM,JW5704,1,1,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
-gspO,JW3297,2,1,True,"N,U",N,Cell motility
+gspO,JW3297,2,1,True,"U,N",U,"Intracellular trafficking, secretion, and vesicular transport"
 gss,JW2956,1,1,False,E,E,Amino acid transport and metabolism
 gst,JW1627,2,2,False,S,S,Function unknown
 guaA,JW2491,2,3,True,F,F,Nucleotide transport and metabolism
-guaB,JW5401,2,2,False,F,F,Nucleotide transport and metabolism
+guaB,JW5401,2,3,True,F,F,Nucleotide transport and metabolism
 guaC,JW0101,1,1,False,F,F,Nucleotide transport and metabolism
 guaD,JW5466,1,1,False,"F,R",F,Nucleotide transport and metabolism
 gudD,JW2758,1,1,False,"M,R",M,Cell wall/membrane/envelope biogenesis
 gudP,JW2760,1,1,False,G,G,Carbohydrate transport and metabolism
 gudX,JW2759,1,1,False,"M,R",M,Cell wall/membrane/envelope biogenesis
 gutM,JW2675,1,1,False,K,K,Transcription
-gutQ,JW5431,1,2,True,"T,M,G",T,Signal transduction mechanisms
+gutQ,JW5431,1,1,False,"G,M,T",G,Carbohydrate transport and metabolism
 hcaB,JW2525,1,1,False,I,I,Lipid transport and metabolism
 hcaC,JW2524,1,1,False,"Q,P",Q,"Secondary metabolites biosynthesis, transport and catabolism"
 hcaD,JW2526,1,1,False,I,I,Lipid transport and metabolism
@@ -871,21 +871,21 @@ hcaT,JW2520,2,2,False,S,S,Function unknown
 hchA,JW1950,2,1,True,V,V,Defense mechanisms
 hcp,JW0857,1,1,False,C,C,Energy production and conversion
 hcr,JW5117,1,1,False,C,C,Energy production and conversion
-hda,JW5397,1,2,True,L,L,"Replication, recombination and repair"
+hda,JW5397,1,1,False,L,L,"Replication, recombination and repair"
 hdeA,JW3478,2,2,False,S,S,Function unknown
 hdeB,JW5669,1,1,False,S,S,Function unknown
 hdeD,JW3479,2,1,True,R,R,General function prediction only
 hdfR,JW5607,1,1,False,K,K,Transcription
 hdhA,JW1611,1,1,False,I,I,Lipid transport and metabolism
 helD,JW0945,2,1,True,L,L,"Replication, recombination and repair"
-hemE,JW3961,1,2,True,H,H,Coenzyme transport and metabolism
+hemE,JW3961,1,1,False,H,H,Coenzyme transport and metabolism
 hemF,JW2429,2,1,True,H,H,Coenzyme transport and metabolism
 hemN,JW3838,1,1,False,H,H,Coenzyme transport and metabolism
 hemX,JW3775,1,1,False,R,R,General function prediction only
 hemY,JW3774,2,1,True,S,S,Function unknown
 hepA,JW0058,2,1,True,S,S,Function unknown
 hflC,JW4133,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
-hflD,JW5165,1,1,False,"X,T",X,"Mobilome: prophages, transposons"
+hflD,JW5165,1,1,False,"T,X",T,Signal transduction mechanisms
 hflK,JW4132,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 hflX,JW4131,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
 hfq,JW4130,2,2,False,T,T,Signal transduction mechanisms
@@ -899,7 +899,7 @@ hisC,JW2003,1,3,True,E,E,Amino acid transport and metabolism
 hisD,JW2002,1,3,True,E,E,Amino acid transport and metabolism
 hisF,JW2007,1,3,True,E,E,Amino acid transport and metabolism
 hisG,JW2001,1,3,True,E,E,Amino acid transport and metabolism
-hisH,JW2005,2,3,True,E,E,Amino acid transport and metabolism
+hisH,JW2005,2,2,False,E,E,Amino acid transport and metabolism
 hisI,JW2008,1,3,True,E,E,Amino acid transport and metabolism
 hisJ,JW2306,1,1,False,"T,E",T,Signal transduction mechanisms
 hisL,JW2000,1,1,False,S,S,Function unknown
@@ -910,8 +910,8 @@ hlpA,JW0173,2,1,True,S,S,Function unknown
 hlyE,JW5181,1,1,False,S,S,Function unknown
 hmp,JW2536,1,1,False,C,C,Energy production and conversion
 hns,JW1225,2,2,False,K,K,Transcription
-hofB,JW0103,1,1,False,"N,W,U",N,Cell motility
-hofC,JW0102,1,1,False,"N,W,U",N,Cell motility
+hofB,JW0103,1,1,False,"W,U,N",W,Extracellular structures
+hofC,JW0102,1,1,False,"W,U,N",W,Extracellular structures
 hofQ,JW3354,2,1,True,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 hokA,JW3526,1,1,False,S,S,Function unknown
 hokB,JW5225,1,1,False,S,S,Function unknown
@@ -919,16 +919,16 @@ hokC,JW5002,1,1,False,S,S,Function unknown
 hokD,JW1554,1,1,False,S,S,Function unknown
 hokE,JW5084,1,1,False,S,S,Function unknown
 holC,JW4216,1,2,True,L,L,"Replication, recombination and repair"
-holD,JW4334,2,2,False,L,L,"Replication, recombination and repair"
+holD,JW4334,2,1,True,L,L,"Replication, recombination and repair"
 holE,JW1831,1,1,False,S,S,Function unknown
 hpt,JW5009,1,2,True,F,F,Nucleotide transport and metabolism
 hrpA,JW5905,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
 hrpB,JW0144,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
-hscA,JW2510,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
+hscA,JW2510,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 hscB,JW2511,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 hscC,JW0645,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
 hsdM,JW4312,1,1,False,V,V,Defense mechanisms
-hsdR,JW4313,1,1,False,"V,C",V,Defense mechanisms
+hsdR,JW4313,1,1,False,"C,V",C,Energy production and conversion
 hsdS,JW4311,2,1,True,V,V,Defense mechanisms
 hslJ,JW1374,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 hslO,JW5692,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
@@ -940,7 +940,7 @@ htgA,JW5001,1,1,False,S,S,Function unknown
 htpG,JW0462,1,2,True,O,O,"Post-translational modification, protein turnover, chaperones"
 htpX,JW1818,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
 htrC,JW3952,1,1,False,S,S,Function unknown
-htrE,JW0135,2,1,True,"N,W",N,Cell motility
+htrE,JW0135,2,1,True,"W,N",W,Extracellular structures
 htrG,JW3027,2,1,True,S,S,Function unknown
 htrL,JW5644,1,1,False,S,S,Function unknown
 hupA,JW3964,2,1,True,L,L,"Replication, recombination and repair"
@@ -955,13 +955,13 @@ hybA,JW2964,2,2,False,C,C,Energy production and conversion
 hybB,JW5494,1,1,False,C,C,Energy production and conversion
 hybC,JW2962,1,1,False,C,C,Energy production and conversion
 hybD,JW2961,2,1,True,C,C,Energy production and conversion
-hybE,JW2960,1,1,False,S,S,Function unknown
+hybE,JW2960,1,2,True,S,S,Function unknown
 hybF,JW5493,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 hybG,JW2958,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 hybO,JW2965,1,1,False,C,C,Energy production and conversion
 hycA,JW2695,2,2,False,S,S,Function unknown
 hycB,JW2694,2,2,False,C,C,Energy production and conversion
-hycC,JW2693,2,2,False,"P,C",P,Inorganic ion transport and metabolism
+hycC,JW2693,2,2,False,"C,P",C,Energy production and conversion
 hycD,JW2692,2,2,False,C,C,Energy production and conversion
 hycE,JW2691,1,1,False,C,C,Energy production and conversion
 hycF,JW2690,1,1,False,C,C,Energy production and conversion
@@ -970,11 +970,11 @@ hycH,JW2688,2,2,False,S,S,Function unknown
 hycI,JW2687,2,1,True,C,C,Energy production and conversion
 hydN,JW2683,1,1,False,C,C,Energy production and conversion
 hyfA,JW2466,1,1,False,C,C,Energy production and conversion
-hyfB,JW2467,1,1,False,"P,C",P,Inorganic ion transport and metabolism
-hyfC,JW2468,1,2,True,C,C,Energy production and conversion
+hyfB,JW2467,1,1,False,"C,P",C,Energy production and conversion
+hyfC,JW2468,1,1,False,C,C,Energy production and conversion
 hyfD,JW2469,1,1,False,C,C,Energy production and conversion
-hyfE,JW2470,1,1,False,C,C,Energy production and conversion
-hyfF,JW2471,1,1,False,"P,C",P,Inorganic ion transport and metabolism
+hyfE,JW2470,1,2,True,C,C,Energy production and conversion
+hyfF,JW2471,1,1,False,"C,P",C,Energy production and conversion
 hyfG,JW2472,1,1,False,C,C,Energy production and conversion
 hyfH,JW2473,1,1,False,C,C,Energy production and conversion
 hyfI,JW5805,1,2,True,C,C,Energy production and conversion
@@ -987,28 +987,28 @@ hypC,JW2698,1,1,False,O,O,"Post-translational modification, protein turnover, ch
 hypD,JW2699,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 hypE,JW2700,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
 hypF,JW5433,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
-hyuA,JW2841,1,2,True,F,F,Nucleotide transport and metabolism
+hyuA,JW2841,1,1,False,F,F,Nucleotide transport and metabolism
 iaaA,JW0812,1,1,False,E,E,Amino acid transport and metabolism
 iadA,JW4291,2,1,True,G,G,Carbohydrate transport and metabolism
-iap,JW2723,2,1,True,"O,E",O,"Post-translational modification, protein turnover, chaperones"
+iap,JW2723,2,1,True,"E,O",E,Amino acid transport and metabolism
 ibpA,JW3664,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 ibpB,JW3663,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 icd,JW1122,2,2,False,C,C,Energy production and conversion
 icdC,JW5173,1,1,False,S,S,Function unknown
 iclR,JW3978,1,1,False,K,K,Transcription
 idi,JW2857,2,1,True,I,I,Lipid transport and metabolism
-idnD,JW4224,1,2,True,"E,R",E,Amino acid transport and metabolism
+idnD,JW4224,1,2,True,"R,E",R,General function prediction only
 idnK,JW4225,1,2,True,G,G,Carbohydrate transport and metabolism
 idnO,JW4223,1,1,False,I,I,Lipid transport and metabolism
 idnR,JW4221,2,1,True,K,K,Transcription
-idnT,JW4222,1,1,False,G,G,Carbohydrate transport and metabolism
+idnT,JW4222,1,2,True,G,G,Carbohydrate transport and metabolism
 ihfA,JW1702,2,1,True,L,L,"Replication, recombination and repair"
 ihfB,JW0895,2,1,True,L,L,"Replication, recombination and repair"
-ileS,JW0024,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
+ileS,JW0024,1,2,True,J,J,"Translation, ribosomal structure and biogenesis"
 ilvA,JW3745,1,3,True,E,E,Amino acid transport and metabolism
 ilvB,JW3646,1,1,False,"H,E",H,Coenzyme transport and metabolism
 ilvC,JW3747,1,3,True,"H,E",H,Coenzyme transport and metabolism
-ilvD,JW5605,2,2,False,"G,E",G,Carbohydrate transport and metabolism
+ilvD,JW5605,2,3,True,"G,E",G,Carbohydrate transport and metabolism
 ilvE,JW5606,2,3,True,"H,E",H,Coenzyme transport and metabolism
 ilvG,JW3740,1,1,False,S,S,Function unknown
 ilvH,JW0077,1,1,False,E,E,Amino acid transport and metabolism
@@ -1019,30 +1019,30 @@ ilvN,JW3645,1,2,True,E,E,Amino acid transport and metabolism
 ilvY,JW3746,2,2,False,K,K,Transcription
 inaA,JW2231,1,1,False,S,S,Function unknown
 insO,JW0247,2,1,True,S,S,Function unknown
-intA,JW2602,1,1,False,"X,L",X,"Mobilome: prophages, transposons"
-intB,JW4227,1,1,False,S,S,Function unknown
+intA,JW2602,1,1,False,"L,X",L,"Replication, recombination and repair"
+intB,JW4227,1,2,True,S,S,Function unknown
 intD,JW0525,1,1,False,L,L,"Replication, recombination and repair"
 intE,JW1126,2,2,False,S,S,Function unknown
 intF,JW0275,1,1,False,L,L,"Replication, recombination and repair"
-intG,JW5913,1,1,False,S,S,Function unknown
+intG,JW5913,1,2,True,S,S,Function unknown
 intQ,JW1571,1,1,False,S,S,Function unknown
-intR,JW1339,1,2,True,"X,L",X,"Mobilome: prophages, transposons"
-intS,JW2345,1,1,False,"X,L",X,"Mobilome: prophages, transposons"
+intR,JW1339,1,1,False,"L,X",L,"Replication, recombination and repair"
+intS,JW2345,1,1,False,"L,X",L,"Replication, recombination and repair"
 iscA,JW2512,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 iscR,JW2515,1,1,False,K,K,Transcription
-iscS,JW2514,1,1,False,E,E,Amino acid transport and metabolism
+iscS,JW2514,1,2,True,E,E,Amino acid transport and metabolism
 iscU,JW2513,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
 ivbL,JW3647,1,1,False,S,S,Function unknown
 ivy,JW0210,2,1,True,S,S,Function unknown
 katE,JW1721,2,1,True,P,P,Inorganic ion transport and metabolism
 katG,JW3914,2,2,False,P,P,Inorganic ion transport and metabolism
-kbaY,JW3106,1,2,True,G,G,Carbohydrate transport and metabolism
+kbaY,JW3106,1,1,False,G,G,Carbohydrate transport and metabolism
 kbaZ,JW3101,1,2,True,G,G,Carbohydrate transport and metabolism
 kbl,JW3592,1,1,False,H,H,Coenzyme transport and metabolism
-kch,JW1242,1,1,False,"T,P",T,Signal transduction mechanisms
+kch,JW1242,1,1,False,"P,T",P,Inorganic ion transport and metabolism
 kdgK,JW5668,1,1,False,G,G,Carbohydrate transport and metabolism
 kdgR,JW1816,1,2,True,K,K,Transcription
-kdgT,JW5560,1,1,False,S,S,Function unknown
+kdgT,JW5560,1,2,True,S,S,Function unknown
 kdpA,JW0686,1,1,False,P,P,Inorganic ion transport and metabolism
 kdpB,JW0685,1,1,False,P,P,Inorganic ion transport and metabolism
 kdpC,JW0684,1,1,False,P,P,Inorganic ion transport and metabolism
@@ -1057,22 +1057,22 @@ kefA,JW0454,2,1,True,S,S,Function unknown
 kefB,JW3313,1,2,True,P,P,Inorganic ion transport and metabolism
 kefC,JW0046,1,1,False,P,P,Inorganic ion transport and metabolism
 kefF,JW0045,1,1,False,R,R,General function prediction only
-kefG,JW3314,1,1,False,R,R,General function prediction only
+kefG,JW3314,1,2,True,R,R,General function prediction only
 kgtP,JW2571,1,1,False,G,G,Carbohydrate transport and metabolism
 kil,JW1347,1,1,False,S,S,Function unknown
 kptA,JW5784,1,2,True,J,J,"Translation, ribosomal structure and biogenesis"
 ksgA,JW0050,1,1,False,S,S,Function unknown
 lacA,JW0333,1,1,False,R,R,General function prediction only
 lacI,JW0336,1,2,True,K,K,Transcription
-lacY,JW0334,1,1,False,S,S,Function unknown
+lacY,JW0334,1,2,True,S,S,Function unknown
 lamB,JW3996,2,1,True,G,G,Carbohydrate transport and metabolism
-lar,JW5208,1,1,False,S,S,Function unknown
+lar,JW5208,1,2,True,S,S,Function unknown
 ldcA,JW1181,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 ldcC,JW0181,2,2,False,E,E,Amino acid transport and metabolism
-ldhA,JW1375,2,1,True,"H,R,C",H,Coenzyme transport and metabolism
+ldhA,JW1375,2,1,True,"C,R,H",C,Energy production and conversion
 lepA,JW2553,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 leuA,JW0073,2,3,True,E,E,Amino acid transport and metabolism
-leuB,JW5807,1,3,True,"E,C",E,Amino acid transport and metabolism
+leuB,JW5807,1,3,True,"C,E",C,Energy production and conversion
 leuC,JW0071,1,3,True,E,E,Amino acid transport and metabolism
 leuD,JW0070,2,3,True,E,E,Amino acid transport and metabolism
 leuL,JW0074,2,3,True,S,S,Function unknown
@@ -1081,7 +1081,7 @@ lhr,JW1645,2,1,True,L,L,"Replication, recombination and repair"
 ligB,JW3622,1,1,False,L,L,"Replication, recombination and repair"
 ligT,JW5011,1,1,False,S,S,Function unknown
 lipA,JW0623,2,3,True,H,H,Coenzyme transport and metabolism
-lipB,JW5089,1,1,False,H,H,Coenzyme transport and metabolism
+lipB,JW5089,1,2,True,H,H,Coenzyme transport and metabolism
 lit,JW1125,1,2,True,S,S,Function unknown
 livF,JW3419,1,1,False,E,E,Amino acid transport and metabolism
 livG,JW3420,1,1,False,E,E,Amino acid transport and metabolism
@@ -1089,19 +1089,19 @@ livH,JW3422,1,2,True,E,E,Amino acid transport and metabolism
 livJ,JW3425,1,1,False,E,E,Amino acid transport and metabolism
 livK,JW3423,1,1,False,E,E,Amino acid transport and metabolism
 livM,JW3421,1,2,True,E,E,Amino acid transport and metabolism
-lldD,JW3580,2,1,True,"I,R,C",I,Lipid transport and metabolism
+lldD,JW3580,2,1,True,"I,C,R",I,Lipid transport and metabolism
 lldP,JW3578,1,1,False,C,C,Energy production and conversion
-lldR,JW3579,1,1,False,K,K,Transcription
+lldR,JW3579,1,2,True,K,K,Transcription
 lomR,JW5904,2,1,True,S,S,Function unknown
 lon,JW0429,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 lpcA,JW0212,1,2,True,S,S,Function unknown
-lpd,JW0112,2,1,True,C,C,Energy production and conversion
+lpd,JW0112,2,2,False,C,C,Energy production and conversion
 lplA,JW4349,1,1,False,H,H,Coenzyme transport and metabolism
 lpp,JW1667,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
 lpxL,JW1041,2,2,False,I,I,Lipid transport and metabolism
 lpxM,JW1844,1,2,True,I,I,Lipid transport and metabolism
 lrhA,JW2284,1,1,False,K,K,Transcription
-lrp,JW0872,2,1,True,K,K,Transcription
+lrp,JW0872,2,2,False,K,K,Transcription
 lsrB,JW1509,2,1,True,G,G,Carbohydrate transport and metabolism
 lsrC,JW1507,2,1,True,G,G,Carbohydrate transport and metabolism
 lsrD,JW1508,2,1,True,G,G,Carbohydrate transport and metabolism
@@ -1110,7 +1110,7 @@ lsrG,JW1511,1,1,False,C,C,Energy production and conversion
 ltaE,JW0854,1,1,False,E,E,Amino acid transport and metabolism
 luxS,JW2662,2,1,True,T,T,Signal transduction mechanisms
 lysA,JW2806,1,3,True,E,E,Amino acid transport and metabolism
-lysC,JW3984,1,2,True,E,E,Amino acid transport and metabolism
+lysC,JW3984,1,1,False,E,E,Amino acid transport and metabolism
 lysP,JW2143,1,1,False,E,E,Amino acid transport and metabolism
 lysR,JW2807,2,2,False,K,K,Transcription
 lysS,JW2858,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
@@ -1120,20 +1120,20 @@ maa,JW0448,1,1,False,R,R,General function prediction only
 macA,JW0862,2,2,False,"M,V",M,Cell wall/membrane/envelope biogenesis
 macB,JW0863,2,2,False,"M,V",M,Cell wall/membrane/envelope biogenesis
 maeB,JW2447,2,1,True,C,C,Energy production and conversion
-mak,JW0385,2,2,False,"K,G",K,Transcription
+mak,JW0385,2,2,False,"G,K",G,Carbohydrate transport and metabolism
 malE,JW3994,1,2,True,G,G,Carbohydrate transport and metabolism
-malF,JW3993,1,2,True,G,G,Carbohydrate transport and metabolism
+malF,JW3993,1,1,False,G,G,Carbohydrate transport and metabolism
 malG,JW3992,2,1,True,G,G,Carbohydrate transport and metabolism
 malI,JW1612,2,1,True,K,K,Transcription
 malK,JW3995,2,2,False,G,G,Carbohydrate transport and metabolism
 malM,JW3997,1,1,False,S,S,Function unknown
-malP,JW5689,2,2,False,G,G,Carbohydrate transport and metabolism
+malP,JW5689,1,2,True,G,G,Carbohydrate transport and metabolism
 malQ,JW3379,1,1,False,G,G,Carbohydrate transport and metabolism
 malS,JW3543,1,1,False,G,G,Carbohydrate transport and metabolism
 malT,JW3381,1,1,False,K,K,Transcription
 malX,JW1613,1,1,False,G,G,Carbohydrate transport and metabolism
-malY,JW1614,1,2,True,"E,R",E,Amino acid transport and metabolism
-malZ,JW0393,1,1,False,G,G,Carbohydrate transport and metabolism
+malY,JW1614,1,2,True,"R,E",R,General function prediction only
+malZ,JW0393,1,2,True,G,G,Carbohydrate transport and metabolism
 manA,JW1605,1,2,True,G,G,Carbohydrate transport and metabolism
 manX,JW1806,1,1,False,G,G,Carbohydrate transport and metabolism
 manY,JW1807,2,1,True,G,G,Carbohydrate transport and metabolism
@@ -1147,7 +1147,7 @@ mazG,JW2752,1,1,False,R,R,General function prediction only
 mbhA,JW5812,1,1,False,S,S,Function unknown
 mcrA,JW1145,1,1,False,V,V,Defense mechanisms
 mcrB,JW5871,1,2,True,V,V,Defense mechanisms
-mcrC,JW5789,1,1,False,V,V,Defense mechanisms
+mcrC,JW5789,1,2,True,V,V,Defense mechanisms
 mdaB,JW2996,2,1,True,R,R,General function prediction only
 mdh,JW3205,2,1,True,C,C,Energy production and conversion
 mdlA,JW0438,1,2,True,V,V,Defense mechanisms
@@ -1160,7 +1160,7 @@ mdoH,JW1037,1,2,True,S,S,Function unknown
 mdtA,JW5338,1,1,False,"M,V",M,Cell wall/membrane/envelope biogenesis
 mdtB,JW2060,1,1,False,V,V,Defense mechanisms
 mdtC,JW2061,2,1,True,V,V,Defense mechanisms
-mdtD,JW2062,2,1,True,G,G,Carbohydrate transport and metabolism
+mdtD,JW2062,2,2,False,G,G,Carbohydrate transport and metabolism
 mdtE,JW3481,1,1,False,"M,V",M,Cell wall/membrane/envelope biogenesis
 mdtF,JW3482,1,1,False,V,V,Defense mechanisms
 mdtG,JW1040,2,1,True,G,G,Carbohydrate transport and metabolism
@@ -1175,31 +1175,31 @@ melR,JW4079,2,1,True,K,K,Transcription
 menA,JW3901,2,2,False,H,H,Coenzyme transport and metabolism
 menB,JW2257,1,1,False,H,H,Coenzyme transport and metabolism
 menC,JW2256,2,1,True,H,H,Coenzyme transport and metabolism
-menD,JW5374,1,2,True,H,H,Coenzyme transport and metabolism
+menD,JW5374,1,1,False,H,H,Coenzyme transport and metabolism
 menE,JW2255,1,1,False,I,I,Lipid transport and metabolism
-menF,JW2260,1,1,False,"H,Q",H,Coenzyme transport and metabolism
+menF,JW2260,1,1,False,"Q,H",Q,"Secondary metabolites biosynthesis, transport and catabolism"
 mepA,JW2325,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 metA,JW3973,1,3,True,E,E,Amino acid transport and metabolism
 metB,JW3910,1,3,True,E,E,Amino acid transport and metabolism
-metC,JW2975,1,1,False,E,E,Amino acid transport and metabolism
+metC,JW2975,1,2,True,E,E,Amino acid transport and metabolism
 metE,JW3805,1,3,True,E,E,Amino acid transport and metabolism
 metF,JW3913,1,3,True,E,E,Amino acid transport and metabolism
 metH,JW3979,1,1,False,E,E,Amino acid transport and metabolism
 metI,JW0194,1,1,False,E,E,Amino acid transport and metabolism
-metJ,JW3909,2,1,True,"K,E",K,Transcription
+metJ,JW3909,2,1,True,"E,K",E,Amino acid transport and metabolism
 metL,JW3911,1,2,True,E,E,Amino acid transport and metabolism
 metN,JW0195,1,1,False,E,E,Amino acid transport and metabolism
 metQ,JW0193,2,1,True,P,P,Inorganic ion transport and metabolism
 metR,JW3804,2,3,True,K,K,Transcription
-mfd,JW1100,2,1,True,"K,L",K,Transcription
+mfd,JW1100,2,1,True,"L,K",L,"Replication, recombination and repair"
 mglA,JW2136,1,1,False,G,G,Carbohydrate transport and metabolism
 mglB,JW2137,1,1,False,G,G,Carbohydrate transport and metabolism
 mglC,JW2135,1,1,False,G,G,Carbohydrate transport and metabolism
 mgsA,JW5129,1,2,True,G,G,Carbohydrate transport and metabolism
 mgtA,JW4201,1,2,True,P,P,Inorganic ion transport and metabolism
-mhpA,JW0338,1,1,False,"H,C",H,Coenzyme transport and metabolism
+mhpA,JW0338,1,1,False,"C,H",C,Energy production and conversion
 mhpB,JW0339,1,1,False,S,S,Function unknown
-mhpC,JW0340,1,1,False,"H,R",H,Coenzyme transport and metabolism
+mhpC,JW0340,1,1,False,"R,H",R,General function prediction only
 mhpD,JW0341,1,1,False,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
 mhpE,JW0343,1,1,False,E,E,Amino acid transport and metabolism
 mhpF,JW0342,1,1,False,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
@@ -1211,7 +1211,7 @@ minC,JW1165,1,1,False,D,D,"Cell cycle control, cell division, chromosome partiti
 mioC,JW3720,2,1,True,C,C,Energy production and conversion
 mipA,JW1771,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
 mlrA,JW2115,1,1,False,K,K,Transcription
-mltA,JW2784,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
+mltA,JW2784,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 mltB,JW2671,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
 mltC,JW5481,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 mltD,JW5018,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
@@ -1223,9 +1223,9 @@ mngR,JW0719,1,1,False,K,K,Transcription
 mntH,JW2388,1,1,False,P,P,Inorganic ion transport and metabolism
 mntR,JW0801,2,1,True,K,K,Transcription
 moaA,JW0764,2,1,True,H,H,Coenzyme transport and metabolism
-moaB,JW0765,2,2,False,H,H,Coenzyme transport and metabolism
+moaB,JW0765,2,1,True,H,H,Coenzyme transport and metabolism
 moaC,JW0766,2,1,True,H,H,Coenzyme transport and metabolism
-moaD,JW0767,2,2,False,H,H,Coenzyme transport and metabolism
+moaD,JW0767,2,1,True,H,H,Coenzyme transport and metabolism
 moaE,JW0768,2,1,True,H,H,Coenzyme transport and metabolism
 mobA,JW3829,1,1,False,H,H,Coenzyme transport and metabolism
 mobB,JW5575,1,2,True,H,H,Coenzyme transport and metabolism
@@ -1238,14 +1238,14 @@ moeA,JW0811,2,1,True,H,H,Coenzyme transport and metabolism
 moeB,JW0810,1,1,False,H,H,Coenzyme transport and metabolism
 mog,JW0008,2,2,False,H,H,Coenzyme transport and metabolism
 molR,JW5915,1,1,False,S,S,Function unknown
-motA,JW1879,1,2,True,N,N,Cell motility
+motA,JW1879,1,1,False,N,N,Cell motility
 motB,JW1878,1,1,False,N,N,Cell motility
 mpaA,JW1319,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 mpl,JW4192,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 mppA,JW1322,1,1,False,E,E,Amino acid transport and metabolism
-mprA,JW2659,2,2,False,K,K,Transcription
-mqo,JW2198,2,1,True,G,G,Carbohydrate transport and metabolism
-mraW,JW0080,1,2,True,S,S,Function unknown
+mprA,JW2659,2,1,True,K,K,Transcription
+mqo,JW2198,2,2,False,G,G,Carbohydrate transport and metabolism
+mraW,JW0080,1,1,False,S,S,Function unknown
 mraZ,JW0079,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 mrcA,JW3359,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 mrcB,JW0145,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
@@ -1264,47 +1264,47 @@ murP,JW2422,2,1,True,G,G,Carbohydrate transport and metabolism
 mutH,JW2799,1,1,False,L,L,"Replication, recombination and repair"
 mutL,JW4128,1,1,False,L,L,"Replication, recombination and repair"
 mutM,JW3610,1,2,True,L,L,"Replication, recombination and repair"
-mutS,JW2703,1,1,False,L,L,"Replication, recombination and repair"
+mutS,JW2703,1,2,True,L,L,"Replication, recombination and repair"
 mutT,JW0097,1,1,False,F,F,Nucleotide transport and metabolism
 mutY,JW2928,1,2,True,L,L,"Replication, recombination and repair"
 mviM,JW1055,1,1,False,S,S,Function unknown
 nac,JW1967,2,1,True,K,K,Transcription
 nadA,JW0733,2,3,True,H,H,Coenzyme transport and metabolism
-nadB,JW2558,1,3,True,H,H,Coenzyme transport and metabolism
-nadC,JW0105,1,3,True,H,H,Coenzyme transport and metabolism
+nadB,JW2558,2,3,True,H,H,Coenzyme transport and metabolism
+nadC,JW0105,1,1,False,H,H,Coenzyme transport and metabolism
 nadR,JW5800,1,1,False,"H,K",H,Coenzyme transport and metabolism
-nagA,JW0663,2,2,False,G,G,Carbohydrate transport and metabolism
+nagA,JW0663,2,1,True,G,G,Carbohydrate transport and metabolism
 nagB,JW0664,1,2,True,G,G,Carbohydrate transport and metabolism
-nagC,JW0662,2,2,False,"K,G",K,Transcription
-nagD,JW0661,1,2,True,S,S,Function unknown
-nagE,JW0665,1,2,True,G,G,Carbohydrate transport and metabolism
+nagC,JW0662,2,1,True,"G,K",G,Carbohydrate transport and metabolism
+nagD,JW0661,1,1,False,S,S,Function unknown
+nagE,JW0665,1,1,False,G,G,Carbohydrate transport and metabolism
 nagZ,JW1093,2,2,False,G,G,Carbohydrate transport and metabolism
 nanA,JW3194,1,1,False,"M,E",M,Cell wall/membrane/envelope biogenesis
 nanE,JW3192,1,1,False,G,G,Carbohydrate transport and metabolism
-nanK,JW5538,1,1,False,"K,G",K,Transcription
-nanR,JW3195,2,2,False,K,K,Transcription
+nanK,JW5538,1,1,False,"G,K",G,Carbohydrate transport and metabolism
+nanR,JW3195,2,1,True,K,K,Transcription
 nanT,JW3193,1,1,False,G,G,Carbohydrate transport and metabolism
 napA,JW2194,1,1,False,C,C,Energy production and conversion
-napB,JW5367,1,1,False,"P,C",P,Inorganic ion transport and metabolism
+napB,JW5367,1,1,False,"C,P",C,Energy production and conversion
 napC,JW2190,1,1,False,C,C,Energy production and conversion
 napD,JW2195,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
-napF,JW2196,1,1,False,"R,C",R,General function prediction only
+napF,JW2196,1,1,False,"C,R",C,Energy production and conversion
 napG,JW2193,1,1,False,C,C,Energy production and conversion
-napH,JW2192,1,2,True,C,C,Energy production and conversion
-narG,JW1215,1,1,False,"P,C",P,Inorganic ion transport and metabolism
-narH,JW1216,1,2,True,"P,C",P,Inorganic ion transport and metabolism
-narI,JW1218,1,1,False,"P,C",P,Inorganic ion transport and metabolism
-narJ,JW1217,1,1,False,"O,P,C",O,"Post-translational modification, protein turnover, chaperones"
+napH,JW2192,1,1,False,C,C,Energy production and conversion
+narG,JW1215,1,1,False,"C,P",C,Energy production and conversion
+narH,JW1216,1,2,True,"C,P",C,Energy production and conversion
+narI,JW1218,1,1,False,"C,P",C,Energy production and conversion
+narJ,JW1217,1,1,False,"C,P,O",C,Energy production and conversion
 narK,JW1214,2,1,True,P,P,Inorganic ion transport and metabolism
 narL,JW1212,2,1,True,"T,K",T,Signal transduction mechanisms
 narP,JW2181,2,1,True,"T,K",T,Signal transduction mechanisms
 narQ,JW2453,2,2,False,T,T,Signal transduction mechanisms
 narU,JW1464,1,1,False,P,P,Inorganic ion transport and metabolism
-narV,JW1460,1,1,False,"P,C",P,Inorganic ion transport and metabolism
-narW,JW1461,1,1,False,"O,P,C",O,"Post-translational modification, protein turnover, chaperones"
+narV,JW1460,1,1,False,"C,P",C,Energy production and conversion
+narW,JW1461,1,1,False,"C,P,O",C,Energy production and conversion
 narX,JW1213,2,1,True,T,T,Signal transduction mechanisms
-narY,JW1462,1,2,True,"P,C",P,Inorganic ion transport and metabolism
-narZ,JW1463,1,2,True,"P,C",P,Inorganic ion transport and metabolism
+narY,JW1462,1,2,True,"C,P",C,Energy production and conversion
+narZ,JW1463,1,2,True,"C,P",C,Energy production and conversion
 ndh,JW1095,2,2,False,C,C,Energy production and conversion
 ndk,JW2502,1,1,False,F,F,Nucleotide transport and metabolism
 nei,JW0704,1,1,False,L,L,"Replication, recombination and repair"
@@ -1312,11 +1312,11 @@ nemA,JW1642,1,2,True,C,C,Energy production and conversion
 nfi,JW5547,1,1,False,L,L,"Replication, recombination and repair"
 nfnB,JW0567,1,1,False,S,S,Function unknown
 nfo,JW2146,1,1,False,L,L,"Replication, recombination and repair"
-nfrA,JW0557,1,1,False,"U,W",U,"Intracellular trafficking, secretion, and vesicular transport"
+nfrA,JW0557,1,1,False,"W,U",W,Extracellular structures
 nfrB,JW0558,1,1,False,N,N,Cell motility
 nfsA,JW0835,2,2,False,C,C,Energy production and conversion
-nhaA,JW0018,1,1,False,"P,C",P,Inorganic ion transport and metabolism
-nhaB,JW1175,2,1,True,"P,C",P,Inorganic ion transport and metabolism
+nhaA,JW0018,1,1,False,"C,P",C,Energy production and conversion
+nhaB,JW1175,2,1,True,"C,P",C,Energy production and conversion
 nhaR,JW0019,2,1,True,K,K,Transcription
 nhoA,JW1458,1,2,True,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
 nikA,JW3441,1,1,False,E,E,Amino acid transport and metabolism
@@ -1339,9 +1339,9 @@ nmpC,JW5078,1,1,False,S,S,Function unknown
 nohA,JW1541,2,1,True,X,X,"Mobilome: prophages, transposons"
 nohB,JW0549,2,1,True,S,S,Function unknown
 norR,JW5843,1,1,False,"T,K",T,Signal transduction mechanisms
-norV,JW2680,2,2,False,"P,C",P,Inorganic ion transport and metabolism
+norV,JW2680,2,2,False,"C,P",C,Energy production and conversion
 norW,JW2681,2,2,False,C,C,Energy production and conversion
-npr,JW3173,2,2,False,"T,G",T,Signal transduction mechanisms
+npr,JW3173,2,2,False,"G,T",G,Carbohydrate transport and metabolism
 nrdD,JW4197,1,1,False,F,F,Nucleotide transport and metabolism
 nrdE,JW2650,1,1,False,F,F,Nucleotide transport and metabolism
 nrdF,JW2651,1,1,False,F,F,Nucleotide transport and metabolism
@@ -1351,10 +1351,10 @@ nrdI,JW2649,2,2,False,F,F,Nucleotide transport and metabolism
 nrfA,JW4031,1,1,False,P,P,Inorganic ion transport and metabolism
 nrfB,JW4032,1,1,False,S,S,Function unknown
 nrfC,JW4033,1,1,False,C,C,Energy production and conversion
-nrfD,JW4034,2,2,False,P,P,Inorganic ion transport and metabolism
-nrfE,JW4035,1,1,False,"O,C",O,"Post-translational modification, protein turnover, chaperones"
-nrfF,JW4036,1,2,True,"O,C",O,"Post-translational modification, protein turnover, chaperones"
-nrfG,JW4037,1,2,True,"O,C",O,"Post-translational modification, protein turnover, chaperones"
+nrfD,JW4034,1,2,True,P,P,Inorganic ion transport and metabolism
+nrfE,JW4035,1,1,False,"C,O",C,Energy production and conversion
+nrfF,JW4036,1,2,True,"C,O",C,Energy production and conversion
+nrfG,JW4037,1,1,False,"C,O",C,Energy production and conversion
 nth,JW1625,1,2,True,L,L,"Replication, recombination and repair"
 nudB,JW1854,1,2,True,V,V,Defense mechanisms
 nudC,JW5548,2,1,True,F,F,Nucleotide transport and metabolism
@@ -1362,7 +1362,7 @@ nudD,JW5335,1,1,False,S,S,Function unknown
 nudE,JW3360,1,1,False,V,V,Defense mechanisms
 nudF,JW3002,1,1,False,V,V,Defense mechanisms
 nudG,JW1748,1,1,False,F,F,Nucleotide transport and metabolism
-nudH,JW2798,2,1,True,S,S,Function unknown
+nudH,JW2798,2,2,False,S,S,Function unknown
 nuoA,JW2283,2,1,True,C,C,Energy production and conversion
 nuoB,JW5875,2,1,True,C,C,Energy production and conversion
 nuoC,JW5375,1,1,False,C,C,Energy production and conversion
@@ -1379,13 +1379,13 @@ nuoN,JW2271,1,2,True,C,C,Energy production and conversion
 nupC,JW2389,1,1,False,F,F,Nucleotide transport and metabolism
 nupG,JW2932,1,2,True,S,S,Function unknown
 nusB,JW0406,2,1,True,K,K,Transcription
-ogrK,JW2067,1,1,False,S,S,Function unknown
+ogrK,JW2067,1,2,True,S,S,Function unknown
 ogt,JW1329,2,2,False,L,L,"Replication, recombination and repair"
 ompA,JW0940,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
-ompC,JW2203,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
+ompC,JW2203,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 ompF,JW0912,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 ompG,JW1312,1,1,False,S,S,Function unknown
-ompL,JW3846,2,2,False,S,S,Function unknown
+ompL,JW3846,2,1,True,S,S,Function unknown
 ompN,JW1371,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 ompR,JW3368,2,2,False,"T,K",T,Signal transduction mechanisms
 ompT,JW0554,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
@@ -1397,11 +1397,11 @@ oppC,JW1237,1,2,True,"P,E",P,Inorganic ion transport and metabolism
 oppD,JW1238,2,1,True,"P,E",P,Inorganic ion transport and metabolism
 oppF,JW1239,2,1,True,"P,E",P,Inorganic ion transport and metabolism
 osmB,JW1275,2,1,True,S,S,Function unknown
-osmC,JW1477,1,2,True,V,V,Defense mechanisms
+osmC,JW1477,1,1,False,V,V,Defense mechanisms
 osmE,JW1728,2,2,False,S,S,Function unknown
 osmY,JW4338,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 otsA,JW5312,1,1,False,G,G,Carbohydrate transport and metabolism
-otsB,JW1886,1,1,False,G,G,Carbohydrate transport and metabolism
+otsB,JW1886,1,2,True,G,G,Carbohydrate transport and metabolism
 oxc,JW2370,1,1,False,"H,E",H,Coenzyme transport and metabolism
 oxyR,JW3933,2,2,False,K,K,Transcription
 paaA,JW1383,2,1,True,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
@@ -1418,7 +1418,7 @@ paaK,JW5218,1,1,False,H,H,Coenzyme transport and metabolism
 paaX,JW1394,1,1,False,K,K,Transcription
 paaY,JW1395,2,2,False,R,R,General function prediction only
 pabA,JW3323,1,1,False,"H,E",H,Coenzyme transport and metabolism
-pabB,JW1801,2,3,True,"H,E",H,Coenzyme transport and metabolism
+pabB,JW1801,2,1,True,"H,E",H,Coenzyme transport and metabolism
 pabC,JW1082,1,2,True,"H,E",H,Coenzyme transport and metabolism
 pal,JW0731,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
 panB,JW0130,2,3,True,H,H,Coenzyme transport and metabolism
@@ -1441,7 +1441,7 @@ pdxJ,JW2548,2,3,True,H,H,Coenzyme transport and metabolism
 pdxK,JW2411,2,2,False,H,H,Coenzyme transport and metabolism
 pdxY,JW1628,2,1,True,H,H,Coenzyme transport and metabolism
 pepA,JW4217,2,2,False,E,E,Amino acid transport and metabolism
-pepB,JW2507,2,2,False,E,E,Amino acid transport and metabolism
+pepB,JW2507,2,1,True,E,E,Amino acid transport and metabolism
 pepD,JW0227,2,1,True,E,E,Amino acid transport and metabolism
 pepE,JW3981,2,1,True,E,E,Amino acid transport and metabolism
 pepN,JW0915,2,1,True,E,E,Amino acid transport and metabolism
@@ -1449,23 +1449,23 @@ pepP,JW2876,2,1,True,E,E,Amino acid transport and metabolism
 pepQ,JW3823,2,2,False,E,E,Amino acid transport and metabolism
 pepT,JW1113,2,2,False,E,E,Amino acid transport and metabolism
 perR,JW0244,2,1,True,K,K,Transcription
-pfkA,JW3887,2,3,True,G,G,Carbohydrate transport and metabolism
+pfkA,JW3887,2,2,False,G,G,Carbohydrate transport and metabolism
 pfkB,JW5280,1,1,False,G,G,Carbohydrate transport and metabolism
 pflA,JW0885,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
 pflB,JW0886,2,2,False,C,C,Energy production and conversion
 pflC,JW3924,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
 pflD,JW3923,2,2,False,C,C,Energy production and conversion
 pfs,JW0155,2,2,False,S,S,Function unknown
-pgi,JW3985,2,1,True,G,G,Carbohydrate transport and metabolism
+pgi,JW3985,2,2,False,G,G,Carbohydrate transport and metabolism
 pgm,JW0675,2,2,False,G,G,Carbohydrate transport and metabolism
 pgpA,JW0408,2,2,False,I,I,Lipid transport and metabolism
-pgpB,JW1270,2,1,True,I,I,Lipid transport and metabolism
+pgpB,JW1270,2,2,False,I,I,Lipid transport and metabolism
 pheA,JW2580,2,3,True,E,E,Amino acid transport and metabolism
 pheL,JW2579,1,1,False,S,S,Function unknown
 pheM,JW1705,1,2,True,S,S,Function unknown
 pheP,JW0565,1,1,False,E,E,Amino acid transport and metabolism
 phnA,JW4069,1,1,False,S,S,Function unknown
-phnB,JW4068,1,1,False,S,S,Function unknown
+phnB,JW4068,1,2,True,S,S,Function unknown
 phnC,JW4067,2,1,True,P,P,Inorganic ion transport and metabolism
 phnD,JW4066,1,2,True,P,P,Inorganic ion transport and metabolism
 phnE,JW4065,1,1,False,S,S,Function unknown
@@ -1484,7 +1484,7 @@ phoA,JW0374,1,1,False,"P,R",P,Inorganic ion transport and metabolism
 phoB,JW0389,2,1,True,"T,K",T,Signal transduction mechanisms
 phoE,JW0231,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 phoH,JW1005,1,1,False,T,T,Signal transduction mechanisms
-phoP,JW1116,2,1,True,"T,K",T,Signal transduction mechanisms
+phoP,JW1116,2,2,False,"T,K",T,Signal transduction mechanisms
 phoQ,JW1115,2,2,False,T,T,Signal transduction mechanisms
 phoR,JW0390,2,1,True,T,T,Signal transduction mechanisms
 phoU,JW3702,1,1,False,P,P,Inorganic ion transport and metabolism
@@ -1497,19 +1497,19 @@ pinR,JW1368,1,1,False,L,L,"Replication, recombination and repair"
 pioO,JW3284,2,2,False,S,S,Function unknown
 pitA,JW3460,2,1,True,P,P,Inorganic ion transport and metabolism
 pitB,JW2955,1,1,False,P,P,Inorganic ion transport and metabolism
-pldA,JW3794,1,2,True,M,M,Cell wall/membrane/envelope biogenesis
+pldA,JW3794,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 pldB,JW5584,1,1,False,I,I,Lipid transport and metabolism
 plsX,JW5156,1,1,False,I,I,Lipid transport and metabolism
 pmbA,JW4194,1,1,False,S,S,Function unknown
 pmrD,JW2254,1,1,False,S,S,Function unknown
-pncA,JW1757,2,2,False,"H,R",H,Coenzyme transport and metabolism
-pncB,JW0914,2,1,True,H,H,Coenzyme transport and metabolism
-pnp,JW5851,2,2,False,J,J,"Translation, ribosomal structure and biogenesis"
+pncA,JW1757,2,2,False,"R,H",R,General function prediction only
+pncB,JW0914,2,2,False,H,H,Coenzyme transport and metabolism
+pnp,JW5851,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
 pntA,JW1595,1,1,False,C,C,Energy production and conversion
 pntB,JW1594,1,1,False,C,C,Energy production and conversion
 pnuC,JW0734,1,1,False,H,H,Coenzyme transport and metabolism
-polA,JW3835,1,2,True,L,L,"Replication, recombination and repair"
-polB,JW0059,2,1,True,L,L,"Replication, recombination and repair"
+polA,JW3835,1,1,False,L,L,"Replication, recombination and repair"
+polB,JW0059,1,2,True,L,L,"Replication, recombination and repair"
 potA,JW1112,1,1,False,E,E,Amino acid transport and metabolism
 potB,JW1111,1,1,False,E,E,Amino acid transport and metabolism
 potC,JW1110,1,1,False,E,E,Amino acid transport and metabolism
@@ -1522,18 +1522,18 @@ potI,JW0841,2,2,False,E,E,Amino acid transport and metabolism
 poxA,JW4116,1,2,True,S,S,Function unknown
 poxB,JW0855,2,1,True,"H,E",H,Coenzyme transport and metabolism
 ppc,JW3928,2,3,True,C,C,Energy production and conversion
-ppdA,JW2794,1,1,False,"N,W,U",N,Cell motility
+ppdA,JW2794,1,1,False,"W,U,N",W,Extracellular structures
 ppdB,JW5451,1,1,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
-ppdC,JW2791,2,1,True,"N,W",N,Cell motility
-ppdD,JW0104,2,1,True,"N,W",N,Cell motility
+ppdC,JW2791,2,1,True,"W,N",W,Extracellular structures
+ppdD,JW0104,2,1,True,"W,N",W,Extracellular structures
 pphA,JW1827,2,2,False,S,S,Function unknown
 pphB,JW2704,2,2,False,S,S,Function unknown
 ppiA,JW3326,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 ppiB,JW0514,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 ppiC,JW3748,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 ppiD,JW0431,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
-ppk,JW2486,2,1,True,P,P,Inorganic ion transport and metabolism
-pppA,JW2939,2,1,True,"N,U",N,Cell motility
+ppk,JW2486,2,2,False,P,P,Inorganic ion transport and metabolism
+pppA,JW2939,2,1,True,"U,N",U,"Intracellular trafficking, secretion, and vesicular transport"
 pps,JW1692,2,2,False,S,S,Function unknown
 ppx,JW2487,1,1,False,"T,F",T,Signal transduction mechanisms
 pqiA,JW0933,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
@@ -1544,8 +1544,8 @@ prfB,JW5847,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 prfC,JW5873,1,2,True,J,J,"Translation, ribosomal structure and biogenesis"
 prfH,JW0226,1,1,False,S,S,Function unknown
 priA,JW3906,2,2,False,L,L,"Replication, recombination and repair"
-priB,JW4159,1,1,False,L,L,"Replication, recombination and repair"
-priC,JW0456,1,1,False,L,L,"Replication, recombination and repair"
+priB,JW4159,1,2,True,L,L,"Replication, recombination and repair"
+priC,JW0456,2,1,True,L,L,"Replication, recombination and repair"
 prkB,JW3318,2,2,False,G,G,Carbohydrate transport and metabolism
 prlC,JW3465,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 prmA,JW3227,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
@@ -1571,16 +1571,16 @@ pspC,JW1299,2,2,False,"T,K",T,Signal transduction mechanisms
 pspD,JW1300,2,2,False,S,S,Function unknown
 pspE,JW1301,1,2,True,P,P,Inorganic ion transport and metabolism
 pspF,JW1296,1,1,False,"T,K",T,Signal transduction mechanisms
-pstA,JW3704,1,1,False,P,P,Inorganic ion transport and metabolism
+pstA,JW3704,1,2,True,P,P,Inorganic ion transport and metabolism
 pstB,JW3703,2,1,True,P,P,Inorganic ion transport and metabolism
 pstC,JW3705,1,1,False,P,P,Inorganic ion transport and metabolism
 pstS,JW3706,1,1,False,P,P,Inorganic ion transport and metabolism
-pta,JW2294,2,1,True,"R,C",R,General function prediction only
+pta,JW2294,2,1,True,"C,R",C,Energy production and conversion
 ptr,JW2789,2,1,True,S,S,Function unknown
 ptrB,JW1834,2,1,True,E,E,Amino acid transport and metabolism
 ptsA,JW5555,1,1,False,"T,G",T,Signal transduction mechanisms
 ptsG,JW1087,2,2,False,G,G,Carbohydrate transport and metabolism
-ptsH,JW2408,1,2,True,"T,G",T,Signal transduction mechanisms
+ptsH,JW2408,1,2,True,"G,T",G,Carbohydrate transport and metabolism
 ptsI,JW2409,1,3,True,G,G,Carbohydrate transport and metabolism
 ptsN,JW3171,2,2,False,"T,G",T,Signal transduction mechanisms
 ptsP,JW2797,1,1,False,T,T,Signal transduction mechanisms
@@ -1591,21 +1591,21 @@ purE,JW0512,1,1,False,F,F,Nucleotide transport and metabolism
 purF,JW2309,2,1,True,F,F,Nucleotide transport and metabolism
 purH,JW3970,2,2,False,F,F,Nucleotide transport and metabolism
 purK,JW0511,1,3,True,F,F,Nucleotide transport and metabolism
-purL,JW2541,1,2,True,F,F,Nucleotide transport and metabolism
-purM,JW2484,1,2,True,F,F,Nucleotide transport and metabolism
-purN,JW2485,1,1,False,F,F,Nucleotide transport and metabolism
+purL,JW2541,1,1,False,F,F,Nucleotide transport and metabolism
+purM,JW2484,1,1,False,F,F,Nucleotide transport and metabolism
+purN,JW2485,1,2,True,F,F,Nucleotide transport and metabolism
 purR,JW1650,2,1,True,K,K,Transcription
 purT,JW1838,2,1,True,F,F,Nucleotide transport and metabolism
 purU,JW1220,1,2,True,F,F,Nucleotide transport and metabolism
-putA,JW0999,1,1,False,"K,E",K,Transcription
+putA,JW0999,1,1,False,"E,K",E,Amino acid transport and metabolism
 putP,JW1001,2,2,False,E,E,Amino acid transport and metabolism
 puuA,JW5201,1,1,False,E,E,Amino acid transport and metabolism
 puuB,JW1294,1,1,False,E,E,Amino acid transport and metabolism
 puuC,JW1293,2,2,False,I,I,Lipid transport and metabolism
 puuD,JW1291,2,2,False,E,E,Amino acid transport and metabolism
-puuE,JW1295,1,1,False,E,E,Amino acid transport and metabolism
+puuE,JW1295,2,1,True,E,E,Amino acid transport and metabolism
 puuP,JW1289,1,1,False,E,E,Amino acid transport and metabolism
-puuR,JW1292,2,1,True,"K,R",K,Transcription
+puuR,JW1292,2,1,True,"R,K",R,General function prediction only
 pykA,JW1843,2,1,True,G,G,Carbohydrate transport and metabolism
 pykF,JW1666,2,1,True,G,G,Carbohydrate transport and metabolism
 pyrB,JW4204,1,1,False,F,F,Nucleotide transport and metabolism
@@ -1614,17 +1614,17 @@ pyrD,JW0928,2,3,True,F,F,Nucleotide transport and metabolism
 pyrE,JW3617,2,2,False,F,F,Nucleotide transport and metabolism
 pyrF,JW1273,2,3,True,F,F,Nucleotide transport and metabolism
 pyrI,JW4203,1,1,False,F,F,Nucleotide transport and metabolism
-pyrL,JW4205,1,2,True,S,S,Function unknown
+pyrL,JW4205,1,1,False,S,S,Function unknown
 qor,JW4011,2,2,False,S,S,Function unknown
 qseB,JW2993,1,1,False,"T,K",T,Signal transduction mechanisms
-qseC,JW2994,2,1,True,T,T,Signal transduction mechanisms
+qseC,JW2994,2,2,False,T,T,Signal transduction mechanisms
 queA,JW0395,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 racC,JW1345,1,2,True,S,S,Function unknown
 radA,JW4352,2,1,True,L,L,"Replication, recombination and repair"
 rarA,JW0994,2,1,True,L,L,"Replication, recombination and repair"
-rarD,JW5589,2,2,False,R,R,General function prediction only
+rarD,JW5589,2,1,True,R,R,General function prediction only
 rbbA,JW5676,1,1,False,V,V,Defense mechanisms
-rbfA,JW3136,2,2,False,J,J,"Translation, ribosomal structure and biogenesis"
+rbfA,JW3136,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
 rbn,JW3857,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 rbsA,JW3728,1,1,False,G,G,Carbohydrate transport and metabolism
 rbsB,JW3730,2,1,True,G,G,Carbohydrate transport and metabolism
@@ -1643,17 +1643,17 @@ recB,JW2788,2,2,False,L,L,"Replication, recombination and repair"
 recC,JW2790,2,2,False,L,L,"Replication, recombination and repair"
 recD,JW2787,1,1,False,L,L,"Replication, recombination and repair"
 recE,JW1344,2,2,False,S,S,Function unknown
-recF,JW3677,1,2,True,L,L,"Replication, recombination and repair"
+recF,JW3677,1,1,False,L,L,"Replication, recombination and repair"
 recG,JW3627,1,1,False,L,L,"Replication, recombination and repair"
 recJ,JW2860,1,1,False,L,L,"Replication, recombination and repair"
 recN,JW5416,1,1,False,L,L,"Replication, recombination and repair"
-recO,JW2549,1,1,False,L,L,"Replication, recombination and repair"
+recO,JW2549,1,2,True,L,L,"Replication, recombination and repair"
 recQ,JW5855,1,1,False,L,L,"Replication, recombination and repair"
 recR,JW0461,1,1,False,L,L,"Replication, recombination and repair"
 recT,JW1343,2,1,True,L,L,"Replication, recombination and repair"
 recX,JW2668,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 relA,JW2755,1,1,False,"T,K",T,Signal transduction mechanisms
-relB,JW1556,1,2,True,V,V,Defense mechanisms
+relB,JW1556,1,1,False,V,V,Defense mechanisms
 relE,JW1555,1,2,True,V,V,Defense mechanisms
 rem,JW1553,1,1,False,S,S,Function unknown
 renD,JW0530,2,1,True,S,S,Function unknown
@@ -1663,7 +1663,7 @@ rfaC,JW3596,1,2,True,S,S,Function unknown
 rfaD,JW3594,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 rfaE,JW3024,1,1,False,S,S,Function unknown
 rfaF,JW3595,1,1,False,S,S,Function unknown
-rfaG,JW3606,1,2,True,S,S,Function unknown
+rfaG,JW3606,1,1,False,S,S,Function unknown
 rfaH,JW3818,2,1,True,K,K,Transcription
 rfaI,JW3602,2,1,True,S,S,Function unknown
 rfaJ,JW3601,2,1,True,S,S,Function unknown
@@ -1680,14 +1680,14 @@ rfbD,JW2025,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 rfbX,JW2022,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 rfe,JW3758,2,1,True,S,S,Function unknown
 rffA,JW3765,1,2,True,S,S,Function unknown
-rffC,JW5597,2,3,True,S,S,Function unknown
-rffD,JW5599,1,2,True,S,S,Function unknown
+rffC,JW5597,2,2,False,S,S,Function unknown
+rffD,JW5599,1,1,False,S,S,Function unknown
 rffE,JW5600,1,1,False,S,S,Function unknown
 rffG,JW5598,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
-rffH,JW3763,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
+rffH,JW3763,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 rffM,JW3770,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 rffT,JW5596,1,2,True,S,S,Function unknown
-rhaR,JW3877,2,1,True,"K,R",K,Transcription
+rhaR,JW3877,2,1,True,"R,K",R,General function prediction only
 rhaS,JW3876,1,2,True,K,K,Transcription
 rhaT,JW3878,2,1,True,S,S,Function unknown
 rhlB,JW3753,2,1,True,L,L,"Replication, recombination and repair"
@@ -1707,7 +1707,7 @@ rihB,JW2149,1,1,False,F,F,Nucleotide transport and metabolism
 rihC,JW0028,1,2,True,F,F,Nucleotide transport and metabolism
 rimI,JW4335,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 rimJ,JW1053,1,1,False,"J,O",J,"Translation, ribosomal structure and biogenesis"
-rimK,JW0836,2,2,False,"J,H,Q,E",J,"Translation, ribosomal structure and biogenesis"
+rimK,JW0836,2,2,False,"Q,H,J,E",Q,"Secondary metabolites biosynthesis, transport and catabolism"
 rimL,JW1423,1,1,False,"J,O",J,"Translation, ribosomal structure and biogenesis"
 rimM,JW5413,2,2,False,J,J,"Translation, ribosomal structure and biogenesis"
 rlmB,JW4138,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
@@ -1732,19 +1732,19 @@ rof,JW0184,2,1,True,K,K,Transcription
 rpe,JW3349,2,2,False,G,G,Carbohydrate transport and metabolism
 rph,JW3618,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 rpiA,JW5475,1,2,True,G,G,Carbohydrate transport and metabolism
-rpiB,JW4051,2,1,True,G,G,Carbohydrate transport and metabolism
+rpiB,JW4051,2,2,False,G,G,Carbohydrate transport and metabolism
 rpiR,JW4050,1,1,False,S,S,Function unknown
 rplA,JW3947,2,2,False,J,J,"Translation, ribosomal structure and biogenesis"
 rplI,JW4161,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 rplK,JW3946,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
-rplY,JW2173,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
+rplY,JW2173,1,2,True,J,J,"Translation, ribosomal structure and biogenesis"
 rpmE,JW3907,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
-rpmF,JW1075,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
+rpmF,JW1075,2,2,False,J,J,"Translation, ribosomal structure and biogenesis"
 rpmG,JW3611,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 rpmI,JW1707,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 rpmJ,JW3261,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
 rpoD,JW3039,2,2,False,K,K,Transcription
-rpoN,JW3169,2,3,True,K,K,Transcription
+rpoN,JW3169,2,2,False,K,K,Transcription
 rpoS,JW5437,1,1,False,K,K,Transcription
 rpoZ,JW3624,1,1,False,K,K,Transcription
 rpsF,JW4158,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
@@ -1762,8 +1762,8 @@ rsgA,JW4122,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
 rsmB,JW3250,2,2,False,"J,K",J,"Translation, ribosomal structure and biogenesis"
 rsmC,JW4333,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 rspA,JW1573,1,2,True,"M,R",M,Cell wall/membrane/envelope biogenesis
-rspB,JW1572,1,1,False,"E,R",E,Amino acid transport and metabolism
-rssA,JW1222,1,2,True,R,R,General function prediction only
+rspB,JW1572,1,1,False,"R,E",R,General function prediction only
+rssA,JW1222,1,1,False,R,R,General function prediction only
 rssB,JW1223,2,2,False,T,T,Signal transduction mechanisms
 rstA,JW1600,2,1,True,"T,K",T,Signal transduction mechanisms
 rstB,JW1601,2,1,True,T,T,Signal transduction mechanisms
@@ -1784,7 +1784,7 @@ rusA,JW0538,1,1,False,L,L,"Replication, recombination and repair"
 ruvA,JW1850,1,1,False,L,L,"Replication, recombination and repair"
 ruvB,JW1849,2,1,True,L,L,"Replication, recombination and repair"
 ruvC,JW1852,1,1,False,L,L,"Replication, recombination and repair"
-rzoD,JW5080,1,1,False,S,S,Function unknown
+rzoD,JW5080,1,2,True,S,S,Function unknown
 rzoR,JW5213,1,1,False,S,S,Function unknown
 rzpD,JW5079,1,2,True,S,S,Function unknown
 rzpR,JW5212,2,2,False,S,S,Function unknown
@@ -1801,29 +1801,29 @@ sbmA,JW0368,1,1,False,V,V,Defense mechanisms
 sbmC,JW1991,2,2,False,L,L,"Replication, recombination and repair"
 sbp,JW3888,2,1,True,P,P,Inorganic ion transport and metabolism
 sdaA,JW1803,1,1,False,E,E,Amino acid transport and metabolism
-sdaB,JW2768,1,1,False,E,E,Amino acid transport and metabolism
+sdaB,JW2768,1,2,True,E,E,Amino acid transport and metabolism
 sdaC,JW2767,1,2,True,E,E,Amino acid transport and metabolism
-sdhA,JW0713,2,1,True,C,C,Energy production and conversion
+sdhA,JW0713,2,2,False,C,C,Energy production and conversion
 sdhB,JW0714,2,2,False,C,C,Energy production and conversion
-sdhC,JW0711,2,1,True,C,C,Energy production and conversion
+sdhC,JW0711,2,2,False,C,C,Energy production and conversion
 sdhD,JW0712,2,2,False,C,C,Energy production and conversion
 sdiA,JW1901,2,1,True,"T,K",T,Signal transduction mechanisms
 secB,JW3584,2,1,True,U,U,"Intracellular trafficking, secretion, and vesicular transport"
-secG,JW3142,1,2,True,U,U,"Intracellular trafficking, secretion, and vesicular transport"
+secG,JW3142,1,1,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 selA,JW3564,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 selB,JW3563,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 selD,JW1753,1,1,False,E,E,Amino acid transport and metabolism
 seqA,JW0674,1,1,False,L,L,"Replication, recombination and repair"
 serA,JW2880,1,3,True,H,H,Coenzyme transport and metabolism
 serB,JW4351,2,3,True,E,E,Amino acid transport and metabolism
-serC,JW0890,2,3,True,"H,E",H,Coenzyme transport and metabolism
-setA,JW0069,2,1,True,G,G,Carbohydrate transport and metabolism
+serC,JW0890,2,1,True,"E,H",E,Amino acid transport and metabolism
+setA,JW0069,1,1,False,G,G,Carbohydrate transport and metabolism
 setB,JW2157,1,2,True,G,G,Carbohydrate transport and metabolism
-setC,JW3633,2,2,False,G,G,Carbohydrate transport and metabolism
+setC,JW3633,2,1,True,G,G,Carbohydrate transport and metabolism
 sfcA,JW5238,1,2,True,S,S,Function unknown
 sfmA,JW0519,1,1,False,N,N,Cell motility
 sfmC,JW0520,1,1,False,W,W,Extracellular structures
-sfmD,JW0521,2,1,True,"N,W",N,Cell motility
+sfmD,JW0521,2,1,True,"W,N",W,Extracellular structures
 sfmF,JW5072,1,1,False,N,N,Cell motility
 sfmH,JW5071,1,1,False,N,N,Cell motility
 sfsA,JW0142,1,1,False,"T,G",T,Signal transduction mechanisms
@@ -1836,7 +1836,7 @@ sgcB,JW5967,1,1,False,G,G,Carbohydrate transport and metabolism
 sgcC,JW4266,2,2,False,G,G,Carbohydrate transport and metabolism
 sgcE,JW4263,1,1,False,G,G,Carbohydrate transport and metabolism
 sgcQ,JW4265,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
-sgcR,JW4262,1,1,False,"K,G",K,Transcription
+sgcR,JW4262,1,1,False,"G,K",G,Carbohydrate transport and metabolism
 sgcX,JW5776,1,1,False,"G,E",G,Carbohydrate transport and metabolism
 sgrR,JW0068,2,1,True,K,K,Transcription
 shiA,JW1962,1,1,False,G,G,Carbohydrate transport and metabolism
@@ -1863,21 +1863,21 @@ soxR,JW4024,2,1,True,K,K,Transcription
 soxS,JW4023,2,1,True,K,K,Transcription
 speA,JW2905,1,1,False,E,E,Amino acid transport and metabolism
 speB,JW2904,1,1,False,E,E,Amino acid transport and metabolism
-speC,JW5482,1,2,True,E,E,Amino acid transport and metabolism
-speD,JW0116,2,2,False,E,E,Amino acid transport and metabolism
+speC,JW5482,1,1,False,E,E,Amino acid transport and metabolism
+speD,JW0116,1,2,True,E,E,Amino acid transport and metabolism
 speE,JW0117,2,1,True,E,E,Amino acid transport and metabolism
-speF,JW0680,1,2,True,E,E,Amino acid transport and metabolism
+speF,JW0680,1,1,False,E,E,Amino acid transport and metabolism
 speG,JW1576,1,2,True,"J,O",J,"Translation, ribosomal structure and biogenesis"
 sppA,JW1755,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 spr,JW2163,1,1,False,S,S,Function unknown
 sprT,JW2911,2,1,True,S,S,Function unknown
 spy,JW1732,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
-sra,JW5962,1,1,False,S,S,Function unknown
+sra,JW5962,1,2,True,S,S,Function unknown
 srlA,JW5429,1,1,False,G,G,Carbohydrate transport and metabolism
 srlB,JW2673,1,1,False,G,G,Carbohydrate transport and metabolism
 srlD,JW2674,1,1,False,I,I,Lipid transport and metabolism
 srlE,JW5430,1,1,False,G,G,Carbohydrate transport and metabolism
-srlR,JW2676,2,1,True,"K,G",K,Transcription
+srlR,JW2676,2,1,True,"G,K",G,Carbohydrate transport and metabolism
 srmB,JW2560,2,1,True,L,L,"Replication, recombination and repair"
 sseA,JW2505,1,1,False,P,P,Inorganic ion transport and metabolism
 sseB,JW5404,1,1,False,S,S,Function unknown
@@ -1888,7 +1888,7 @@ sstT,JW3060,1,1,False,E,E,Amino acid transport and metabolism
 ssuA,JW0919,1,1,False,P,P,Inorganic ion transport and metabolism
 ssuB,JW0916,2,2,False,P,P,Inorganic ion transport and metabolism
 ssuC,JW5121,1,1,False,P,P,Inorganic ion transport and metabolism
-ssuD,JW0918,1,1,False,"H,R",H,Coenzyme transport and metabolism
+ssuD,JW0918,1,1,False,"R,H",R,General function prediction only
 ssuE,JW0920,1,1,False,C,C,Energy production and conversion
 stfE,JW5172,1,1,False,S,S,Function unknown
 stfQ,JW1540,2,1,True,S,S,Function unknown
@@ -1897,9 +1897,9 @@ sthA,JW5551,1,1,False,C,C,Energy production and conversion
 stpA,JW2644,2,1,True,K,K,Transcription
 sucA,JW0715,2,2,False,C,C,Energy production and conversion
 sucB,JW0716,2,2,False,C,C,Energy production and conversion
-sucC,JW0717,2,1,True,C,C,Energy production and conversion
+sucC,JW0717,2,2,False,C,C,Energy production and conversion
 sucD,JW0718,2,2,False,C,C,Energy production and conversion
-sufA,JW1674,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
+sufA,JW1674,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 sufB,JW5273,1,2,True,O,O,"Post-translational modification, protein turnover, chaperones"
 sufC,JW1672,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
 sufD,JW1671,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
@@ -1917,12 +1917,12 @@ talB,JW0007,2,1,True,G,G,Carbohydrate transport and metabolism
 tam,JW1512,2,2,False,C,C,Energy production and conversion
 tap,JW1874,2,1,True,T,T,Signal transduction mechanisms
 tar,JW1875,2,1,True,T,T,Signal transduction mechanisms
-tas,JW2802,1,2,True,"H,R",H,Coenzyme transport and metabolism
+tas,JW2802,1,2,True,"R,H",R,General function prediction only
 tatA,JW3813,1,1,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 tatB,JW5580,2,2,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 tatC,JW3815,1,1,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 tatD,JW5931,1,1,False,N,N,Cell motility
-tatE,JW0622,1,1,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
+tatE,JW0622,1,2,True,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 tauA,JW0357,1,1,False,P,P,Inorganic ion transport and metabolism
 tauB,JW0358,1,1,False,P,P,Inorganic ion transport and metabolism
 tauC,JW0359,1,1,False,P,P,Inorganic ion transport and metabolism
@@ -1935,12 +1935,12 @@ tdcD,JW5806,1,1,False,C,C,Energy production and conversion
 tdcE,JW5522,1,1,False,C,C,Energy production and conversion
 tdcG,JW5520,1,1,False,E,E,Amino acid transport and metabolism
 tdcR,JW5525,1,1,False,S,S,Function unknown
-tdh,JW3591,1,1,False,"E,R",E,Amino acid transport and metabolism
+tdh,JW3591,1,1,False,"R,E",R,General function prediction only
 tdk,JW1226,1,1,False,F,F,Nucleotide transport and metabolism
 tehA,JW1425,2,2,False,V,V,Defense mechanisms
 tehB,JW1426,2,2,False,I,I,Lipid transport and metabolism
-tesA,JW0483,2,2,False,"D,I",D,"Cell cycle control, cell division, chromosome partitioning"
-tesB,JW0442,1,2,True,I,I,Lipid transport and metabolism
+tesA,JW0483,2,2,False,"I,D",I,Lipid transport and metabolism
+tesB,JW0442,1,1,False,I,I,Lipid transport and metabolism
 tfaD,JW5815,1,1,False,X,X,"Mobilome: prophages, transposons"
 tfaE,JW1142,1,2,True,S,S,Function unknown
 tfaQ,JW1539,2,2,False,X,X,"Mobilome: prophages, transposons"
@@ -1953,7 +1953,7 @@ thiE,JW3957,1,1,False,H,H,Coenzyme transport and metabolism
 thiF,JW3956,1,1,False,H,H,Coenzyme transport and metabolism
 thiG,JW5549,1,1,False,H,H,Coenzyme transport and metabolism
 thiH,JW3953,1,1,False,H,H,Coenzyme transport and metabolism
-thiI,JW0413,2,1,True,"J,H,P",J,"Translation, ribosomal structure and biogenesis"
+thiI,JW0413,2,1,True,"J,P,H",J,"Translation, ribosomal structure and biogenesis"
 thiM,JW2091,2,1,True,H,H,Coenzyme transport and metabolism
 thiP,JW0066,2,1,True,P,P,Inorganic ion transport and metabolism
 thiQ,JW0065,1,1,False,H,H,Coenzyme transport and metabolism
@@ -1963,16 +1963,16 @@ thrB,JW0002,2,3,True,E,E,Amino acid transport and metabolism
 thrC,JW0003,1,2,True,E,E,Amino acid transport and metabolism
 thrL,JW4367,1,1,False,S,S,Function unknown
 thyA,JW2795,1,2,True,F,F,Nucleotide transport and metabolism
-tiaE,JW5656,1,1,False,S,S,Function unknown
+tiaE,JW5656,1,2,True,S,S,Function unknown
 tig,JW0426,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
-tktA,JW5478,2,2,False,G,G,Carbohydrate transport and metabolism
+tktA,JW5478,2,1,True,G,G,Carbohydrate transport and metabolism
 tktB,JW2449,2,1,True,G,G,Carbohydrate transport and metabolism
 tldD,JW3213,1,1,False,R,R,General function prediction only
 tnaA,JW3686,1,1,False,E,E,Amino acid transport and metabolism
 tnaB,JW5619,1,2,True,E,E,Amino acid transport and metabolism
-tnaC,JW3685,1,1,False,S,S,Function unknown
-tolA,JW0729,2,3,True,M,M,Cell wall/membrane/envelope biogenesis
-tolB,JW5100,2,3,True,U,U,"Intracellular trafficking, secretion, and vesicular transport"
+tnaC,JW3685,1,2,True,S,S,Function unknown
+tolA,JW0729,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
+tolB,JW5100,2,2,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 tolC,JW5503,1,2,True,M,M,Cell wall/membrane/envelope biogenesis
 tolQ,JW0727,1,2,True,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 tolR,JW0728,1,2,True,U,U,"Intracellular trafficking, secretion, and vesicular transport"
@@ -1988,15 +1988,15 @@ torT,JW0979,1,1,False,G,G,Carbohydrate transport and metabolism
 torY,JW1862,1,1,False,C,C,Energy production and conversion
 torZ,JW1861,1,1,False,C,C,Energy production and conversion
 tpiA,JW3890,2,3,True,G,G,Carbohydrate transport and metabolism
-tpr,JW1219,2,2,False,S,S,Function unknown
-tpx,JW1317,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
+tpr,JW1219,2,1,True,S,S,Function unknown
+tpx,JW1317,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
 treA,JW1186,2,1,True,G,G,Carbohydrate transport and metabolism
 treB,JW4199,1,2,True,G,G,Carbohydrate transport and metabolism
 treC,JW4198,1,2,True,G,G,Carbohydrate transport and metabolism
 treF,JW3487,1,1,False,G,G,Carbohydrate transport and metabolism
 treR,JW4200,2,1,True,K,K,Transcription
 trg,JW1417,1,1,False,T,T,Signal transduction mechanisms
-trkA,JW3251,1,2,True,"T,P",T,Signal transduction mechanisms
+trkA,JW3251,1,1,False,"P,T",P,Inorganic ion transport and metabolism
 trkD,JW5609,2,2,False,S,S,Function unknown
 trkG,JW1358,1,1,False,P,P,Inorganic ion transport and metabolism
 trkH,JW5576,1,1,False,P,P,Inorganic ion transport and metabolism
@@ -2012,8 +2012,8 @@ trpD,JW1255,1,3,True,"H,E",H,Coenzyme transport and metabolism
 trpE,JW1256,1,3,True,"H,E",H,Coenzyme transport and metabolism
 trpL,JW1257,1,2,True,S,S,Function unknown
 trpR,JW4356,2,1,True,K,K,Transcription
-truA,JW2315,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
-truB,JW3135,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
+truA,JW2315,1,2,True,J,J,"Translation, ribosomal structure and biogenesis"
+truB,JW3135,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 truD,JW2715,2,2,False,J,J,"Translation, ribosomal structure and biogenesis"
 trxA,JW5856,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 trxB,JW0871,1,2,True,O,O,"Post-translational modification, protein turnover, chaperones"
@@ -2031,14 +2031,14 @@ tynA,JW1381,1,2,True,Q,Q,"Secondary metabolites biosynthesis, transport and cata
 tyrA,JW2581,2,3,True,E,E,Amino acid transport and metabolism
 tyrB,JW4014,1,1,False,E,E,Amino acid transport and metabolism
 tyrP,JW1895,1,1,False,E,E,Amino acid transport and metabolism
-tyrR,JW1316,2,3,True,"K,E",K,Transcription
+tyrR,JW1316,2,3,True,"E,K",E,Amino acid transport and metabolism
 ubiC,JW5713,2,1,True,H,H,Coenzyme transport and metabolism
 ubiE,JW5581,2,2,False,H,H,Coenzyme transport and metabolism
-ubiF,JW0659,2,1,True,"H,C",H,Coenzyme transport and metabolism
+ubiF,JW0659,2,1,True,"C,H",C,Energy production and conversion
 ubiG,JW2226,2,2,False,H,H,Coenzyme transport and metabolism
-ubiH,JW2875,2,1,True,"H,C",H,Coenzyme transport and metabolism
+ubiH,JW2875,2,1,True,"C,H",C,Energy production and conversion
 ubiX,JW2308,2,2,False,H,H,Coenzyme transport and metabolism
-ucpA,JW5394,1,2,True,I,I,Lipid transport and metabolism
+ucpA,JW5394,1,1,False,I,I,Lipid transport and metabolism
 udk,JW2051,1,1,False,F,F,Nucleotide transport and metabolism
 udp,JW3808,1,1,False,F,F,Nucleotide transport and metabolism
 ugd,JW2010,1,2,True,M,M,Cell wall/membrane/envelope biogenesis
@@ -2062,17 +2062,17 @@ ulaD,JW4154,1,2,True,G,G,Carbohydrate transport and metabolism
 ulaE,JW4155,2,2,False,G,G,Carbohydrate transport and metabolism
 ulaF,JW4156,2,2,False,"G,E",G,Carbohydrate transport and metabolism
 ulaG,JW5868,2,2,False,G,G,Carbohydrate transport and metabolism
-ulaR,JW4149,1,1,False,"K,G",K,Transcription
+ulaR,JW4149,1,1,False,"G,K",G,Carbohydrate transport and metabolism
 umuC,JW1173,1,1,False,L,L,"Replication, recombination and repair"
 umuD,JW1172,1,2,True,"T,K",T,Signal transduction mechanisms
 ung,JW2564,1,1,False,L,L,"Replication, recombination and repair"
 upp,JW2483,2,2,False,F,F,Nucleotide transport and metabolism
 uraA,JW2482,1,1,False,F,F,Nucleotide transport and metabolism
-usg,JW2316,2,1,True,E,E,Amino acid transport and metabolism
-ushA,JW0469,1,1,False,"F,V",F,Nucleotide transport and metabolism
+usg,JW2316,2,2,False,E,E,Amino acid transport and metabolism
+ushA,JW0469,1,1,False,"V,F",V,Defense mechanisms
 uspA,JW3462,1,1,False,T,T,Signal transduction mechanisms
 uspE,JW1327,2,2,False,T,T,Signal transduction mechanisms
-uspF,JW1370,1,2,True,T,T,Signal transduction mechanisms
+uspF,JW1370,1,1,False,T,T,Signal transduction mechanisms
 uspG,JW0600,2,1,True,T,T,Signal transduction mechanisms
 uup,JW0932,2,1,True,R,R,General function prediction only
 uvrA,JW4019,1,1,False,L,L,"Replication, recombination and repair"
@@ -2093,18 +2093,18 @@ wbbH,JW2020,1,1,False,S,S,Function unknown
 wbbI,JW2019,1,1,False,S,S,Function unknown
 wbbJ,JW2018,1,1,False,R,R,General function prediction only
 wbbK,JW2017,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
-wbbL,JW2012,1,1,False,S,S,Function unknown
+wbbL,JW2012,1,2,True,S,S,Function unknown
 wcaA,JW2044,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
-wcaB,JW2043,2,1,True,E,E,Amino acid transport and metabolism
+wcaB,JW2043,2,2,False,E,E,Amino acid transport and metabolism
 wcaC,JW2042,1,2,True,M,M,Cell wall/membrane/envelope biogenesis
 wcaD,JW2041,2,1,True,S,S,Function unknown
-wcaE,JW2040,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
+wcaE,JW2040,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
 wcaF,JW2039,1,2,True,R,R,General function prediction only
-wcaI,JW2035,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
+wcaI,JW2035,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
 wcaJ,JW2032,2,1,True,"M,O",M,Cell wall/membrane/envelope biogenesis
 wcaK,JW2030,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 wcaL,JW2029,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
-wcaM,JW2028,1,1,False,S,S,Function unknown
+wcaM,JW2028,1,2,True,S,S,Function unknown
 wrbA,JW0989,2,1,True,C,C,Energy production and conversion
 wza,JW2047,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 wzb,JW2046,1,1,False,T,T,Signal transduction mechanisms
@@ -2118,12 +2118,12 @@ xapR,JW2396,2,1,True,K,K,Transcription
 xdhA,JW5462,1,1,False,C,C,Energy production and conversion
 xdhB,JW2835,2,2,False,C,C,Energy production and conversion
 xdhC,JW2836,1,1,False,C,C,Energy production and conversion
-xdhD,JW2849,1,2,True,C,C,Energy production and conversion
+xdhD,JW2849,1,1,False,C,C,Energy production and conversion
 xerC,JW3784,2,2,False,L,L,"Replication, recombination and repair"
 xerD,JW2862,2,1,True,L,L,"Replication, recombination and repair"
 xseA,JW2493,1,1,False,L,L,"Replication, recombination and repair"
-xseB,JW0412,1,2,True,L,L,"Replication, recombination and repair"
-xthA,JW1738,2,2,False,L,L,"Replication, recombination and repair"
+xseB,JW0412,1,1,False,L,L,"Replication, recombination and repair"
+xthA,JW1738,2,1,True,L,L,"Replication, recombination and repair"
 xylA,JW3537,1,1,False,G,G,Carbohydrate transport and metabolism
 xylB,JW3536,1,1,False,G,G,Carbohydrate transport and metabolism
 xylE,JW3991,2,1,True,S,S,Function unknown
@@ -2158,7 +2158,7 @@ yadL,JW0133,2,1,True,N,N,Cell motility
 yadM,JW0134,1,1,False,N,N,Cell motility
 yadN,JW0137,2,1,True,N,N,Cell motility
 yadS,JW0153,2,2,False,S,S,Function unknown
-yaeB,JW0191,2,2,False,S,S,Function unknown
+yaeB,JW0191,2,1,True,S,S,Function unknown
 yaeF,JW5016,1,1,False,S,S,Function unknown
 yaeH,JW0159,2,1,True,S,S,Function unknown
 yaeI,JW5014,1,1,False,R,R,General function prediction only
@@ -2229,7 +2229,7 @@ yaiE,JW0382,2,1,True,S,S,Function unknown
 yaiF,JW5814,1,1,False,S,S,Function unknown
 yaiI,JW0378,2,1,True,S,S,Function unknown
 yaiL,JW0345,1,1,False,S,S,Function unknown
-yaiO,JW0349,1,1,False,S,S,Function unknown
+yaiO,JW0349,2,1,True,S,S,Function unknown
 yaiP,JW0355,2,1,True,N,N,Cell motility
 yaiS,JW0356,2,1,True,G,G,Carbohydrate transport and metabolism
 yaiT,JW0362,1,1,False,S,S,Function unknown
@@ -2245,7 +2245,7 @@ yajD,JW0400,2,1,True,S,S,Function unknown
 yajG,JW0424,2,1,True,S,S,Function unknown
 yajI,JW5056,2,2,False,S,S,Function unknown
 yajL,JW5057,1,1,False,V,V,Defense mechanisms
-yajO,JW0409,2,1,True,"H,R",H,Coenzyme transport and metabolism
+yajO,JW0409,2,1,True,"R,H",R,General function prediction only
 yajQ,JW5058,2,1,True,T,T,Signal transduction mechanisms
 yajR,JW5059,1,1,False,G,G,Carbohydrate transport and metabolism
 ybaA,JW0445,1,1,False,S,S,Function unknown
@@ -2260,7 +2260,7 @@ ybaN,JW0457,2,1,True,S,S,Function unknown
 ybaO,JW0437,1,1,False,S,S,Function unknown
 ybaP,JW0471,2,1,True,S,S,Function unknown
 ybaQ,JW0472,2,1,True,V,V,Defense mechanisms
-ybaS,JW0474,2,2,False,S,S,Function unknown
+ybaS,JW0474,2,1,True,S,S,Function unknown
 ybaT,JW0475,2,1,True,E,E,Amino acid transport and metabolism
 ybaV,JW0432,1,1,False,L,L,"Replication, recombination and repair"
 ybaW,JW0433,2,2,False,S,S,Function unknown
@@ -2272,8 +2272,8 @@ ybbB,JW0491,2,1,True,S,S,Function unknown
 ybbC,JW0487,1,1,False,S,S,Function unknown
 ybbD,JW0489,1,1,False,S,S,Function unknown
 ybbJ,JW5065,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
-ybbK,JW0478,1,2,True,S,S,Function unknown
-ybbL,JW0479,1,1,False,S,S,Function unknown
+ybbK,JW0478,1,1,False,S,S,Function unknown
+ybbL,JW0479,1,2,True,S,S,Function unknown
 ybbM,JW5066,2,2,False,S,S,Function unknown
 ybbN,JW5067,1,1,False,S,S,Function unknown
 ybbO,JW0482,1,2,True,R,R,General function prediction only
@@ -2290,7 +2290,7 @@ ybcI,JW0516,2,1,True,R,R,General function prediction only
 ybcJ,JW5070,2,2,False,J,J,"Translation, ribosomal structure and biogenesis"
 ybcK,JW0532,2,2,False,L,L,"Replication, recombination and repair"
 ybcL,JW0533,1,1,False,R,R,General function prediction only
-ybcM,JW0534,1,1,False,K,K,Transcription
+ybcM,JW0534,1,2,True,K,K,Transcription
 ybcN,JW0535,2,1,True,S,S,Function unknown
 ybcO,JW0537,2,1,True,S,S,Function unknown
 ybcQ,JW0539,2,1,True,S,S,Function unknown
@@ -2310,7 +2310,7 @@ ybdL,JW0593,1,1,False,E,E,Amino acid transport and metabolism
 ybdM,JW0594,2,1,True,D,D,"Cell cycle control, cell division, chromosome partitioning"
 ybdN,JW0595,2,1,True,R,R,General function prediction only
 ybdO,JW0596,2,1,True,S,S,Function unknown
-ybdR,JW0601,1,2,True,"E,R",E,Amino acid transport and metabolism
+ybdR,JW0601,1,2,True,"R,E",R,General function prediction only
 ybdZ,JW0577,2,1,True,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
 ybeA,JW0631,2,1,True,S,S,Function unknown
 ybeB,JW5090,2,2,False,S,S,Function unknown
@@ -2331,9 +2331,9 @@ ybfB,JW0691,1,1,False,S,S,Function unknown
 ybfC,JW0693,2,1,True,S,S,Function unknown
 ybfD,JW0696,1,1,False,X,X,"Mobilome: prophages, transposons"
 ybfE,JW5816,1,1,False,S,S,Function unknown
-ybfF,JW0673,2,2,False,"H,R",H,Coenzyme transport and metabolism
+ybfF,JW0673,2,2,False,"R,H",R,General function prediction only
 ybfG,JW5094,2,1,True,S,S,Function unknown
-ybfH,JW5095,1,1,False,S,S,Function unknown
+ybfH,JW5095,1,2,True,S,S,Function unknown
 ybfL,JW0695,1,1,False,S,S,Function unknown
 ybfM,JW0667,2,1,True,S,S,Function unknown
 ybfN,JW0668,1,1,False,S,S,Function unknown
@@ -2348,24 +2348,24 @@ ybgF,JW0732,2,2,False,S,S,Function unknown
 ybgH,JW0699,2,2,False,S,S,Function unknown
 ybgI,JW0700,1,1,False,H,H,Coenzyme transport and metabolism
 ybgJ,JW0701,2,1,True,S,S,Function unknown
-ybgK,JW0702,1,1,False,S,S,Function unknown
+ybgK,JW0702,2,1,True,S,S,Function unknown
 ybgL,JW0703,1,1,False,S,S,Function unknown
 ybgO,JW5098,1,1,False,S,S,Function unknown
 ybgP,JW0707,1,1,False,W,W,Extracellular structures
-ybgQ,JW5099,1,1,False,"N,W",N,Cell motility
+ybgQ,JW5099,1,1,False,"W,N",W,Extracellular structures
 ybgS,JW0736,2,1,True,S,S,Function unknown
 ybgT,JW0724,1,1,False,S,S,Function unknown
-ybhA,JW0749,2,2,False,"H,R",H,Coenzyme transport and metabolism
+ybhA,JW0749,2,2,False,"R,H",R,General function prediction only
 ybhB,JW0756,2,1,True,R,R,General function prediction only
-ybhC,JW0755,2,1,True,"G,I",G,Carbohydrate transport and metabolism
+ybhC,JW0755,2,1,True,"I,G",I,Lipid transport and metabolism
 ybhD,JW5896,2,3,True,K,K,Transcription
 ybhE,JW0750,2,2,False,S,S,Function unknown
-ybhF,JW5104,1,1,False,V,V,Defense mechanisms
+ybhF,JW5104,1,2,True,V,V,Defense mechanisms
 ybhG,JW0779,2,2,False,V,V,Defense mechanisms
 ybhH,JW0752,2,1,True,C,C,Energy production and conversion
 ybhI,JW0753,2,1,True,G,G,Carbohydrate transport and metabolism
 ybhJ,JW5103,2,1,True,C,C,Energy production and conversion
-ybhK,JW0763,1,2,True,"H,G",H,Coenzyme transport and metabolism
+ybhK,JW0763,1,1,False,"G,H",G,Carbohydrate transport and metabolism
 ybhL,JW0769,2,2,False,P,P,Inorganic ion transport and metabolism
 ybhM,JW0770,2,3,True,P,P,Inorganic ion transport and metabolism
 ybhN,JW0771,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
@@ -2375,21 +2375,21 @@ ybhQ,JW0774,1,1,False,S,S,Function unknown
 ybhR,JW5803,1,1,False,V,V,Defense mechanisms
 ybhS,JW0777,1,1,False,V,V,Defense mechanisms
 ybhT,JW5102,2,1,True,S,S,Function unknown
-ybiA,JW0783,1,1,False,"H,V",H,Coenzyme transport and metabolism
+ybiA,JW0783,2,1,True,"V,H",V,Defense mechanisms
 ybiB,JW0785,2,1,True,E,E,Amino acid transport and metabolism
 ybiC,JW0786,2,1,True,S,S,Function unknown
 ybiH,JW0780,1,1,False,S,S,Function unknown
 ybiI,JW0788,2,2,False,K,K,Transcription
 ybiJ,JW0787,2,1,True,S,S,Function unknown
 ybiM,JW5106,1,1,False,S,S,Function unknown
-ybiN,JW5107,1,1,False,S,S,Function unknown
+ybiN,JW5107,1,2,True,S,S,Function unknown
 ybiO,JW5108,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 ybiP,JW0800,2,1,True,S,S,Function unknown
 ybiR,JW0802,1,1,False,P,P,Inorganic ion transport and metabolism
 ybiS,JW0803,2,1,True,S,S,Function unknown
 ybiT,JW0804,2,2,False,R,R,General function prediction only
 ybiU,JW0805,2,1,True,S,S,Function unknown
-ybiV,JW0806,2,1,True,"H,R",H,Coenzyme transport and metabolism
+ybiV,JW0806,2,1,True,"R,H",R,General function prediction only
 ybiW,JW0807,2,1,True,C,C,Energy production and conversion
 ybiX,JW5105,2,1,True,R,R,General function prediction only
 ybiY,JW0808,1,2,True,O,O,"Post-translational modification, protein turnover, chaperones"
@@ -2398,25 +2398,25 @@ ybjD,JW0860,2,1,True,L,L,"Replication, recombination and repair"
 ybjE,JW0858,2,1,True,S,S,Function unknown
 ybjG,JW5112,1,2,True,I,I,Lipid transport and metabolism
 ybjH,JW0827,2,1,True,S,S,Function unknown
-ybjI,JW5113,1,1,False,"H,R",H,Coenzyme transport and metabolism
+ybjI,JW5113,1,1,False,"R,H",R,General function prediction only
 ybjJ,JW0829,2,2,False,G,G,Carbohydrate transport and metabolism
 ybjK,JW5114,2,1,True,S,S,Function unknown
 ybjL,JW0831,2,1,True,R,R,General function prediction only
 ybjM,JW0832,2,1,True,S,S,Function unknown
 ybjN,JW0837,2,1,True,S,S,Function unknown
 ybjO,JW0842,2,1,True,S,S,Function unknown
-ybjP,JW0849,1,1,False,S,S,Function unknown
+ybjP,JW0849,1,2,True,S,S,Function unknown
 ybjQ,JW0850,2,1,True,S,S,Function unknown
 ybjR,JW0851,2,1,True,S,S,Function unknown
 ybjS,JW5819,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
-ybjT,JW5116,2,1,True,R,R,General function prediction only
+ybjT,JW5116,2,2,False,R,R,General function prediction only
 ybjX,JW0861,2,1,True,S,S,Function unknown
-ycaC,JW0880,2,1,True,"H,R",H,Coenzyme transport and metabolism
+ycaC,JW0880,2,1,True,"R,H",R,General function prediction only
 ycaD,JW0881,1,1,False,G,G,Carbohydrate transport and metabolism
 ycaI,JW5120,1,1,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 ycaJ,JW0875,1,2,True,S,S,Function unknown
 ycaK,JW0884,2,2,False,R,R,General function prediction only
-ycaL,JW0892,1,3,True,O,O,"Post-translational modification, protein turnover, chaperones"
+ycaL,JW0892,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 ycaM,JW5119,2,1,True,E,E,Amino acid transport and metabolism
 ycaN,JW0883,2,1,True,K,K,Transcription
 ycaO,JW0888,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
@@ -2437,13 +2437,13 @@ ycbT,JW0924,2,1,True,S,S,Function unknown
 ycbU,JW0925,2,1,True,N,N,Cell motility
 ycbV,JW5123,1,1,False,N,N,Cell motility
 ycbW,JW5125,1,1,False,S,S,Function unknown
-ycbX,JW5126,1,1,False,"F,V,C",F,Nucleotide transport and metabolism
+ycbX,JW5126,1,1,False,"C,V,F",C,Energy production and conversion
 ycbY,JW0931,2,1,True,S,S,Function unknown
 ycbZ,JW0938,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
 yccA,JW0953,2,2,False,P,P,Inorganic ion transport and metabolism
 yccC,JW0964,1,1,False,S,S,Function unknown
-yccE,JW0986,1,3,True,S,S,Function unknown
-yccF,JW0944,2,2,False,S,S,Function unknown
+yccE,JW0986,1,2,True,S,S,Function unknown
+yccF,JW0944,2,1,True,S,S,Function unknown
 yccJ,JW0988,2,1,True,S,S,Function unknown
 yccK,JW0952,2,1,True,S,S,Function unknown
 yccM,JW0977,2,1,True,C,C,Energy production and conversion
@@ -2455,7 +2455,7 @@ yccV,JW5970,2,1,True,S,S,Function unknown
 yccW,JW5898,1,1,False,S,S,Function unknown
 yccX,JW5131,1,1,False,C,C,Energy production and conversion
 yccZ,JW0966,2,1,True,S,S,Function unknown
-ycdB,JW1004,2,1,True,S,S,Function unknown
+ycdB,JW1004,2,2,False,S,S,Function unknown
 ycdC,JW0998,2,1,True,S,S,Function unknown
 ycdG,JW5137,1,1,False,S,S,Function unknown
 ycdH,JW5138,1,2,True,S,S,Function unknown
@@ -2463,16 +2463,16 @@ ycdI,JW0993,2,2,False,S,S,Function unknown
 ycdK,JW0995,1,1,False,S,S,Function unknown
 ycdL,JW5139,1,1,False,S,S,Function unknown
 ycdM,JW0997,2,1,True,S,S,Function unknown
-ycdN,JW5141,1,1,False,S,S,Function unknown
+ycdN,JW5141,1,2,True,S,S,Function unknown
 ycdO,JW1003,2,1,True,S,S,Function unknown
-ycdP,JW1006,2,1,True,S,S,Function unknown
+ycdP,JW1006,2,2,False,S,S,Function unknown
 ycdQ,JW1007,2,1,True,S,S,Function unknown
 ycdR,JW5142,1,1,False,S,S,Function unknown
 ycdS,JW1010,2,2,False,S,S,Function unknown
-ycdT,JW5143,1,1,False,S,S,Function unknown
+ycdT,JW5143,1,2,True,S,S,Function unknown
 ycdU,JW1015,1,2,True,S,S,Function unknown
 ycdW,JW5146,1,1,False,S,S,Function unknown
-ycdX,JW1017,1,1,False,"E,R",E,Amino acid transport and metabolism
+ycdX,JW1017,1,1,False,"R,E",R,General function prediction only
 ycdY,JW1018,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
 ycdZ,JW5147,1,1,False,S,S,Function unknown
 yceA,JW1042,2,1,True,S,S,Function unknown
@@ -2498,7 +2498,7 @@ ycfQ,JW5159,1,1,False,S,S,Function unknown
 ycfR,JW1098,2,1,True,S,S,Function unknown
 ycfS,JW5820,1,1,False,S,S,Function unknown
 ycfT,JW1101,2,1,True,S,S,Function unknown
-ycfX,JW1105,2,2,False,S,S,Function unknown
+ycfX,JW1105,2,1,True,S,S,Function unknown
 ycfZ,JW1107,1,1,False,S,S,Function unknown
 ycgB,JW1177,2,2,False,D,D,"Cell cycle control, cell division, chromosome partitioning"
 ycgE,JW1149,1,1,False,S,S,Function unknown
@@ -2521,7 +2521,7 @@ ychE,JW1229,1,1,False,E,E,Amino acid transport and metabolism
 ychF,JW1194,2,2,False,J,J,"Translation, ribosomal structure and biogenesis"
 ychH,JW1196,2,1,True,S,S,Function unknown
 ychJ,JW1221,2,2,False,S,S,Function unknown
-ychM,JW5189,1,1,False,S,S,Function unknown
+ychM,JW5189,1,2,True,S,S,Function unknown
 ychN,JW1210,2,1,True,P,P,Inorganic ion transport and metabolism
 ychP,JW1211,1,1,False,S,S,Function unknown
 ychQ,JW1204,2,1,True,S,S,Function unknown
@@ -2531,7 +2531,7 @@ yciC,JW1247,2,1,True,S,S,Function unknown
 yciE,JW1249,2,1,True,P,P,Inorganic ion transport and metabolism
 yciF,JW1250,1,1,False,P,P,Inorganic ion transport and metabolism
 yciG,JW1251,2,1,True,R,R,General function prediction only
-yciH,JW1274,2,2,False,J,J,"Translation, ribosomal structure and biogenesis"
+yciH,JW1274,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
 yciI,JW1243,2,2,False,"Q,R",Q,"Secondary metabolites biosynthesis, transport and catabolism"
 yciK,JW1263,1,2,True,I,I,Lipid transport and metabolism
 yciM,JW1272,1,2,True,S,S,Function unknown
@@ -2539,19 +2539,19 @@ yciN,JW1265,1,1,False,S,S,Function unknown
 yciO,JW5196,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
 yciQ,JW5197,1,1,False,S,S,Function unknown
 yciS,JW1271,2,1,True,S,S,Function unknown
-yciT,JW1276,2,2,False,"K,G",K,Transcription
+yciT,JW1276,2,2,False,"G,K",G,Carbohydrate transport and metabolism
 yciU,JW1240,2,2,False,S,S,Function unknown
 yciV,JW1258,2,1,True,S,S,Function unknown
 yciW,JW5200,1,1,False,"P,S",P,Inorganic ion transport and metabolism
 yciX,JW5199,1,1,False,S,S,Function unknown
 ycjD,JW1282,1,1,False,L,L,"Replication, recombination and repair"
-ycjF,JW1315,2,2,False,S,S,Function unknown
+ycjF,JW1315,2,1,True,S,S,Function unknown
 ycjG,JW1318,2,2,False,"M,R",M,Cell wall/membrane/envelope biogenesis
 ycjM,JW1302,1,1,False,G,G,Carbohydrate transport and metabolism
 ycjN,JW1303,2,1,True,G,G,Carbohydrate transport and metabolism
 ycjO,JW1304,1,1,False,G,G,Carbohydrate transport and metabolism
 ycjP,JW1305,1,1,False,G,G,Carbohydrate transport and metabolism
-ycjQ,JW1306,1,1,False,"E,R",E,Amino acid transport and metabolism
+ycjQ,JW1306,1,1,False,"R,E",R,General function prediction only
 ycjR,JW5202,1,1,False,G,G,Carbohydrate transport and metabolism
 ycjS,JW1308,1,2,True,R,R,General function prediction only
 ycjT,JW1309,2,1,True,G,G,Carbohydrate transport and metabolism
@@ -2560,7 +2560,7 @@ ycjV,JW1311,1,1,False,S,S,Function unknown
 ycjW,JW1313,1,1,False,K,K,Transcription
 ycjX,JW1314,2,1,True,T,T,Signal transduction mechanisms
 ycjY,JW5804,2,1,True,T,T,Signal transduction mechanisms
-ycjZ,JW1321,1,2,True,S,S,Function unknown
+ycjZ,JW1321,1,1,False,S,S,Function unknown
 ydaC,JW1341,2,1,True,S,S,Function unknown
 ydaE,JW1346,1,1,False,S,S,Function unknown
 ydaF,JW1349,2,1,True,S,S,Function unknown
@@ -2568,7 +2568,7 @@ ydaG,JW5210,1,1,False,S,S,Function unknown
 ydaL,JW1334,2,1,True,S,S,Function unknown
 ydaM,JW5206,1,1,False,S,S,Function unknown
 ydaN,JW1336,2,1,True,S,S,Function unknown
-ydaO,JW1338,2,2,False,S,S,Function unknown
+ydaO,JW1338,2,1,True,S,S,Function unknown
 ydaQ,JW5207,1,1,False,S,S,Function unknown
 ydaS,JW1352,2,1,True,K,K,Transcription
 ydaT,JW1353,2,1,True,S,S,Function unknown
@@ -2585,7 +2585,7 @@ ydbK,JW1372,1,2,True,C,C,Energy production and conversion
 ydbL,JW5216,1,1,False,S,S,Function unknown
 ydcA,JW1416,1,1,False,S,S,Function unknown
 ydcC,JW1455,2,1,True,X,X,"Mobilome: prophages, transposons"
-ydcD,JW1452,1,1,False,S,S,Function unknown
+ydcD,JW1452,2,1,True,S,S,Function unknown
 ydcE,JW1456,2,1,True,S,S,Function unknown
 ydcF,JW1411,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 ydcH,JW5823,1,1,False,S,S,Function unknown
@@ -2598,7 +2598,7 @@ ydcN,JW1430,2,1,True,S,S,Function unknown
 ydcO,JW5229,1,1,False,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
 ydcP,JW1431,2,1,True,S,S,Function unknown
 ydcQ,JW1433,2,1,True,S,S,Function unknown
-ydcR,JW1434,2,1,True,"K,E",K,Transcription
+ydcR,JW1434,2,1,True,"E,K",E,Amino acid transport and metabolism
 ydcS,JW1435,2,2,False,E,E,Amino acid transport and metabolism
 ydcT,JW1436,2,1,True,E,E,Amino acid transport and metabolism
 ydcU,JW1437,1,1,False,E,E,Amino acid transport and metabolism
@@ -2610,7 +2610,7 @@ ydcZ,JW1442,1,1,False,S,S,Function unknown
 yddA,JW5242,1,1,False,R,R,General function prediction only
 yddB,JW1490,1,1,False,P,P,Inorganic ion transport and metabolism
 yddE,JW1459,2,1,True,R,R,General function prediction only
-yddG,JW1469,2,2,False,"G,R,E",G,Carbohydrate transport and metabolism
+yddG,JW1469,2,2,False,"R,G,E",R,General function prediction only
 yddH,JW1457,2,2,False,C,C,Energy production and conversion
 yddJ,JW1466,2,2,False,S,S,Function unknown
 yddK,JW1467,1,1,False,S,S,Function unknown
@@ -2622,7 +2622,7 @@ ydeA,JW1521,2,1,True,G,G,Carbohydrate transport and metabolism
 ydeE,JW1527,2,2,False,G,G,Carbohydrate transport and metabolism
 ydeH,JW1528,1,1,False,S,S,Function unknown
 ydeI,JW1529,2,2,False,S,S,Function unknown
-ydeJ,JW1530,1,1,False,H,H,Coenzyme transport and metabolism
+ydeJ,JW1530,2,1,True,H,H,Coenzyme transport and metabolism
 ydeK,JW1503,2,1,True,S,S,Function unknown
 ydeM,JW1492,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 ydeN,JW5243,1,2,True,P,P,Inorganic ion transport and metabolism
@@ -2631,14 +2631,14 @@ ydeP,JW1495,1,1,False,C,C,Energy production and conversion
 ydeQ,JW1496,1,2,True,S,S,Function unknown
 ydeR,JW1497,1,1,False,N,N,Cell motility
 ydeS,JW1498,2,1,True,N,N,Cell motility
-ydeT,JW1499,2,1,True,"N,W",N,Cell motility
+ydeT,JW1499,2,1,True,"W,N",W,Extracellular structures
 ydeU,JW1502,2,1,True,S,S,Function unknown
 ydeV,JW1504,2,1,True,S,S,Function unknown
 ydeW,JW1505,2,1,True,S,S,Function unknown
 ydfA,JW1563,2,1,True,S,S,Function unknown
 ydfC,JW1565,2,1,True,S,S,Function unknown
 ydfD,JW1567,2,1,True,S,S,Function unknown
-ydfE,JW1568,1,2,True,S,S,Function unknown
+ydfE,JW1568,1,1,False,S,S,Function unknown
 ydfG,JW1532,1,2,True,C,C,Energy production and conversion
 ydfH,JW1533,2,1,True,S,S,Function unknown
 ydfI,JW1535,2,1,True,G,G,Carbohydrate transport and metabolism
@@ -2650,7 +2650,7 @@ ydfQ,JW1546,2,1,True,S,S,Function unknown
 ydfR,JW1547,2,1,True,S,S,Function unknown
 ydfT,JW1551,1,1,False,S,S,Function unknown
 ydfU,JW5909,2,1,True,S,S,Function unknown
-ydfV,JW1557,2,2,False,S,S,Function unknown
+ydfV,JW1557,2,1,True,S,S,Function unknown
 ydfW,JW1559,1,1,False,S,S,Function unknown
 ydfX,JW1560,2,1,True,S,S,Function unknown
 ydfZ,JW1534,2,2,False,S,S,Function unknown
@@ -2662,9 +2662,9 @@ ydgH,JW1596,2,1,True,S,S,Function unknown
 ydgI,JW1597,1,1,False,E,E,Amino acid transport and metabolism
 ydgJ,JW5265,1,1,False,R,R,General function prediction only
 ydgK,JW1618,2,1,True,S,S,Function unknown
-ydgR,JW1626,2,1,True,S,S,Function unknown
+ydgR,JW1626,2,2,False,S,S,Function unknown
 ydgT,JW1617,2,1,True,S,S,Function unknown
-ydhA,JW1631,2,1,True,S,S,Function unknown
+ydhA,JW1631,2,2,False,S,S,Function unknown
 ydhB,JW1651,1,1,False,S,S,Function unknown
 ydhC,JW1652,1,2,True,S,S,Function unknown
 ydhD,JW1646,1,1,False,S,S,Function unknown
@@ -2683,8 +2683,8 @@ ydhS,JW1658,2,1,True,R,R,General function prediction only
 ydhT,JW1659,1,1,False,S,S,Function unknown
 ydhU,JW1660,1,2,True,P,P,Inorganic ion transport and metabolism
 ydhV,JW5272,1,2,True,C,C,Energy production and conversion
-ydhW,JW1662,2,2,False,S,S,Function unknown
-ydhX,JW5271,1,1,False,C,C,Energy production and conversion
+ydhW,JW1662,2,1,True,S,S,Function unknown
+ydhX,JW5271,1,2,True,C,C,Energy production and conversion
 ydhY,JW1664,2,2,False,C,C,Energy production and conversion
 ydhZ,JW1665,1,1,False,S,S,Function unknown
 ydiA,JW1693,2,1,True,S,S,Function unknown
@@ -2699,36 +2699,36 @@ ydiK,JW1678,1,1,False,R,R,General function prediction only
 ydiM,JW1680,2,2,False,G,G,Carbohydrate transport and metabolism
 ydiN,JW5274,2,2,False,G,G,Carbohydrate transport and metabolism
 ydiO,JW5275,1,1,False,I,I,Lipid transport and metabolism
-ydiP,JW1686,1,1,False,"K,R",K,Transcription
+ydiP,JW1686,1,1,False,"R,K",R,General function prediction only
 ydiQ,JW5276,1,1,False,C,C,Energy production and conversion
 ydiR,JW1688,2,1,True,C,C,Energy production and conversion
-ydiS,JW1689,2,1,True,C,C,Energy production and conversion
+ydiS,JW1689,2,2,False,C,C,Energy production and conversion
 ydiT,JW1690,2,1,True,C,C,Energy production and conversion
 ydiU,JW1696,2,1,True,S,S,Function unknown
 ydiV,JW1697,2,1,True,S,S,Function unknown
 ydiY,JW1711,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 ydiZ,JW1713,1,1,False,S,S,Function unknown
-ydjA,JW1754,1,1,False,C,C,Energy production and conversion
+ydjA,JW1754,2,1,True,C,C,Energy production and conversion
 ydjE,JW1758,1,1,False,G,G,Carbohydrate transport and metabolism
-ydjF,JW1759,2,1,True,"K,G",K,Transcription
-ydjG,JW1760,2,1,True,"H,R",H,Coenzyme transport and metabolism
+ydjF,JW1759,2,1,True,"G,K",G,Carbohydrate transport and metabolism
+ydjG,JW1760,2,1,True,"R,H",R,General function prediction only
 ydjH,JW5289,1,1,False,G,G,Carbohydrate transport and metabolism
 ydjI,JW1762,2,1,True,G,G,Carbohydrate transport and metabolism
-ydjJ,JW1763,2,1,True,"E,R",E,Amino acid transport and metabolism
+ydjJ,JW1763,2,1,True,"R,E",R,General function prediction only
 ydjK,JW5290,1,1,False,G,G,Carbohydrate transport and metabolism
-ydjL,JW1765,2,2,False,"E,R",E,Amino acid transport and metabolism
+ydjL,JW1765,2,2,False,"R,E",R,General function prediction only
 ydjM,JW5281,2,1,True,R,R,General function prediction only
 ydjN,JW1718,1,1,False,S,S,Function unknown
-ydjO,JW1719,2,2,False,S,S,Function unknown
+ydjO,JW1719,2,1,True,S,S,Function unknown
 ydjQ,JW1730,1,1,False,S,S,Function unknown
 ydjR,JW1731,2,1,True,S,S,Function unknown
-ydjX,JW1739,2,1,True,S,S,Function unknown
+ydjX,JW1739,2,2,False,S,S,Function unknown
 ydjY,JW5283,1,1,False,S,S,Function unknown
 ydjZ,JW1741,2,1,True,S,S,Function unknown
 yeaA,JW1767,2,1,True,S,S,Function unknown
 yeaB,JW1802,2,1,True,S,S,Function unknown
 yeaC,JW1766,2,1,True,S,S,Function unknown
-yeaD,JW1769,1,2,True,G,G,Carbohydrate transport and metabolism
+yeaD,JW1769,1,1,False,G,G,Carbohydrate transport and metabolism
 yeaE,JW1770,2,1,True,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
 yeaG,JW1772,2,2,False,T,T,Signal transduction mechanisms
 yeaH,JW1773,1,1,False,R,R,General function prediction only
@@ -2745,10 +2745,10 @@ yeaR,JW1786,2,1,True,P,P,Inorganic ion transport and metabolism
 yeaS,JW1787,2,1,True,S,S,Function unknown
 yeaT,JW1788,2,1,True,S,S,Function unknown
 yeaU,JW1789,1,1,False,S,S,Function unknown
-yeaV,JW5293,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
+yeaV,JW5293,1,2,True,M,M,Cell wall/membrane/envelope biogenesis
 yeaW,JW5294,1,2,True,"P,R",P,Inorganic ion transport and metabolism
-yeaX,JW1792,1,1,False,C,C,Energy production and conversion
-yeaY,JW1795,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
+yeaX,JW1792,1,2,True,C,C,Energy production and conversion
+yeaY,JW1795,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
 yebA,JW5304,1,1,False,S,S,Function unknown
 yebB,JW5306,1,1,False,S,S,Function unknown
 yebC,JW1853,1,1,False,"J,K",J,"Translation, ribosomal structure and biogenesis"
@@ -2758,7 +2758,7 @@ yebG,JW1837,1,1,False,L,L,"Replication, recombination and repair"
 yebK,JW1842,2,2,False,K,K,Transcription
 yebN,JW5830,1,1,False,S,S,Function unknown
 yebO,JW1814,2,2,False,S,S,Function unknown
-yebQ,JW5299,2,1,True,G,G,Carbohydrate transport and metabolism
+yebQ,JW5299,1,2,True,G,G,Carbohydrate transport and metabolism
 yebR,JW1821,2,1,True,S,S,Function unknown
 yebS,JW1822,1,1,False,S,S,Function unknown
 yebT,JW1823,2,1,True,S,S,Function unknown
@@ -2769,12 +2769,12 @@ yebY,JW1828,2,2,False,S,S,Function unknown
 yebZ,JW1829,2,1,True,P,P,Inorganic ion transport and metabolism
 yecA,JW1896,2,2,False,S,S,Function unknown
 yecC,JW1902,1,1,False,S,S,Function unknown
-yecD,JW5307,1,1,False,"H,R",H,Coenzyme transport and metabolism
-yecE,JW1857,2,1,True,R,R,General function prediction only
+yecD,JW5307,1,1,False,"R,H",R,General function prediction only
+yecE,JW1857,2,2,False,R,R,General function prediction only
 yecF,JW1900,2,2,False,S,S,Function unknown
-yecG,JW1884,1,1,False,S,S,Function unknown
+yecG,JW1884,1,2,True,S,S,Function unknown
 yecH,JW1894,2,2,False,S,S,Function unknown
-yecI,JW1890,1,1,False,S,S,Function unknown
+yecI,JW1890,2,1,True,S,S,Function unknown
 yecJ,JW1891,2,1,True,S,S,Function unknown
 yecM,JW5309,1,1,False,R,R,General function prediction only
 yecN,JW5308,1,1,False,S,S,Function unknown
@@ -2783,7 +2783,7 @@ yecP,JW1860,2,2,False,S,S,Function unknown
 yecR,JW1892,2,1,True,S,S,Function unknown
 yecS,JW1903,1,1,False,S,S,Function unknown
 yecT,JW5310,1,1,False,S,S,Function unknown
-yedA,JW1942,2,1,True,"G,R,E",G,Carbohydrate transport and metabolism
+yedA,JW1942,2,1,True,"R,G,E",R,General function prediction only
 yedD,JW1913,1,2,True,S,S,Function unknown
 yedE,JW1914,2,2,False,R,R,General function prediction only
 yedF,JW1915,2,2,False,"J,H,O",J,"Translation, ribosomal structure and biogenesis"
@@ -2814,7 +2814,7 @@ yeeN,JW1964,1,1,False,"J,K",J,"Translation, ribosomal structure and biogenesis"
 yeeO,JW1965,1,1,False,V,V,Defense mechanisms
 yeeP,JW5327,1,1,False,S,S,Function unknown
 yeeR,JW1983,2,1,True,S,S,Function unknown
-yeeS,JW1984,2,2,False,L,L,"Replication, recombination and repair"
+yeeS,JW1984,2,1,True,L,L,"Replication, recombination and repair"
 yeeT,JW1985,1,1,False,S,S,Function unknown
 yeeU,JW1986,1,1,False,S,S,Function unknown
 yeeV,JW1987,1,1,False,S,S,Function unknown
@@ -2832,14 +2832,14 @@ yegL,JW2058,2,2,False,S,S,Function unknown
 yegP,JW5339,1,1,False,S,S,Function unknown
 yegQ,JW2066,2,1,True,S,S,Function unknown
 yegR,JW5837,1,1,False,S,S,Function unknown
-yegS,JW2070,1,1,False,"R,I",R,General function prediction only
+yegS,JW2070,1,1,False,"I,R",I,Lipid transport and metabolism
 yegT,JW2085,1,1,False,S,S,Function unknown
 yegU,JW2086,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
 yegV,JW2087,1,1,False,G,G,Carbohydrate transport and metabolism
 yegW,JW2088,1,1,False,K,K,Transcription
 yegX,JW5345,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
-yehA,JW2095,2,2,False,S,S,Function unknown
-yehB,JW2096,2,1,True,"N,W",N,Cell motility
+yehA,JW2095,2,1,True,S,S,Function unknown
+yehB,JW2096,2,1,True,"W,N",W,Extracellular structures
 yehC,JW2097,1,2,True,W,W,Extracellular structures
 yehD,JW2098,1,1,False,N,N,Cell motility
 yehE,JW2099,2,1,True,S,S,Function unknown
@@ -2851,19 +2851,19 @@ yehP,JW5350,1,1,False,S,S,Function unknown
 yehQ,JW2110,2,2,False,S,S,Function unknown
 yehR,JW5351,1,1,False,S,S,Function unknown
 yehS,JW2112,2,1,True,S,S,Function unknown
-yehT,JW5352,1,1,False,S,S,Function unknown
+yehT,JW5352,1,2,True,S,S,Function unknown
 yehU,JW5353,1,1,False,S,S,Function unknown
 yehW,JW2116,1,1,False,E,E,Amino acid transport and metabolism
 yehX,JW2117,2,1,True,E,E,Amino acid transport and metabolism
 yehY,JW2118,2,1,True,E,E,Amino acid transport and metabolism
-yehZ,JW2119,1,2,True,S,S,Function unknown
+yehZ,JW2119,1,1,False,S,S,Function unknown
 yeiA,JW2134,1,1,False,S,S,Function unknown
 yeiB,JW2139,2,1,True,S,S,Function unknown
 yeiC,JW2153,2,2,False,S,S,Function unknown
 yeiE,JW2144,2,1,True,K,K,Transcription
 yeiG,JW2141,1,1,False,V,V,Defense mechanisms
 yeiH,JW2145,2,1,True,S,S,Function unknown
-yeiI,JW2147,2,1,True,"K,G",K,Transcription
+yeiI,JW2147,2,1,True,"G,K",G,Carbohydrate transport and metabolism
 yeiJ,JW2148,2,2,False,S,S,Function unknown
 yeiL,JW2150,2,1,True,T,T,Signal transduction mechanisms
 yeiM,JW2151,2,2,False,S,S,Function unknown
@@ -2886,10 +2886,10 @@ yejL,JW2175,2,1,True,S,S,Function unknown
 yejO,JW5839,1,1,False,S,S,Function unknown
 yfaA,JW2224,2,1,True,S,S,Function unknown
 yfaD,JW2238,2,2,False,S,S,Function unknown
-yfaE,JW2230,1,2,True,C,C,Energy production and conversion
+yfaE,JW2230,1,1,False,C,C,Energy production and conversion
 yfaH,JW2232,2,1,True,S,S,Function unknown
-yfaL,JW2227,2,2,False,"M,U",M,Cell wall/membrane/envelope biogenesis
-yfaO,JW2245,1,1,False,S,S,Function unknown
+yfaL,JW2227,2,1,True,"M,U",M,Cell wall/membrane/envelope biogenesis
+yfaO,JW2245,2,1,True,S,S,Function unknown
 yfaP,JW2219,2,1,True,S,S,Function unknown
 yfaQ,JW2220,2,1,True,S,S,Function unknown
 yfaS,JW2221,2,1,True,S,S,Function unknown
@@ -2899,7 +2899,7 @@ yfaV,JW2240,1,1,False,G,G,Carbohydrate transport and metabolism
 yfaW,JW2241,2,2,False,S,S,Function unknown
 yfaX,JW2242,2,1,True,K,K,Transcription
 yfaY,JW2243,2,1,True,L,L,"Replication, recombination and repair"
-yfaZ,JW5371,1,1,False,S,S,Function unknown
+yfaZ,JW5371,1,2,True,S,S,Function unknown
 yfbB,JW2258,2,1,True,S,S,Function unknown
 yfbE,JW5372,1,1,False,S,S,Function unknown
 yfbF,JW2248,2,1,True,S,S,Function unknown
@@ -2907,18 +2907,18 @@ yfbG,JW2249,1,1,False,S,S,Function unknown
 yfbH,JW2250,2,1,True,S,S,Function unknown
 yfbJ,JW5373,1,1,False,S,S,Function unknown
 yfbK,JW2265,2,1,True,R,R,General function prediction only
-yfbL,JW2266,2,2,False,"O,E",O,"Post-translational modification, protein turnover, chaperones"
-yfbM,JW2267,2,2,False,S,S,Function unknown
+yfbL,JW2266,2,2,False,"E,O",E,Amino acid transport and metabolism
+yfbM,JW2267,2,1,True,S,S,Function unknown
 yfbN,JW2268,2,2,False,S,S,Function unknown
 yfbO,JW2269,1,2,True,S,S,Function unknown
-yfbP,JW2270,2,2,False,S,S,Function unknown
-yfbQ,JW2287,1,2,True,S,S,Function unknown
+yfbP,JW2270,2,1,True,S,S,Function unknown
+yfbQ,JW2287,2,2,False,S,S,Function unknown
 yfbR,JW2288,2,1,True,"F,R",F,Nucleotide transport and metabolism
 yfbS,JW2289,2,1,True,G,G,Carbohydrate transport and metabolism
 yfbT,JW5376,1,1,False,S,S,Function unknown
-yfbU,JW2291,1,1,False,S,S,Function unknown
+yfbU,JW2291,1,2,True,S,S,Function unknown
 yfbV,JW2292,2,1,True,S,S,Function unknown
-yfbW,JW2252,2,1,True,S,S,Function unknown
+yfbW,JW2252,2,2,False,S,S,Function unknown
 yfcA,JW2324,1,2,True,P,P,Inorganic ion transport and metabolism
 yfcC,JW2295,2,1,True,R,R,General function prediction only
 yfcD,JW2296,2,1,True,I,I,Lipid transport and metabolism
@@ -2927,7 +2927,7 @@ yfcF,JW2298,2,1,True,O,O,"Post-translational modification, protein turnover, cha
 yfcG,JW2299,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 yfcH,JW2301,1,1,False,R,R,General function prediction only
 yfcI,JW2302,1,1,False,S,S,Function unknown
-yfcJ,JW2319,1,1,False,G,G,Carbohydrate transport and metabolism
+yfcJ,JW2319,1,2,True,G,G,Carbohydrate transport and metabolism
 yfcL,JW2322,2,1,True,S,S,Function unknown
 yfcM,JW5381,1,1,False,S,S,Function unknown
 yfcN,JW2328,2,1,True,S,S,Function unknown
@@ -2936,8 +2936,8 @@ yfcP,JW2330,2,1,True,N,N,Cell motility
 yfcQ,JW2331,1,2,True,N,N,Cell motility
 yfcR,JW2332,2,1,True,N,N,Cell motility
 yfcS,JW2333,1,2,True,W,W,Extracellular structures
-yfcT,JW2334,2,2,False,S,S,Function unknown
-yfcU,JW2335,1,2,True,S,S,Function unknown
+yfcT,JW2334,2,1,True,S,S,Function unknown
+yfcU,JW2335,1,1,False,S,S,Function unknown
 yfcV,JW2336,2,1,True,N,N,Cell motility
 yfcX,JW2338,2,2,False,S,S,Function unknown
 yfcY,JW2339,2,1,True,S,S,Function unknown
@@ -2946,7 +2946,7 @@ yfdC,JW2344,1,1,False,P,P,Inorganic ion transport and metabolism
 yfdE,JW2368,1,1,False,I,I,Lipid transport and metabolism
 yfdF,JW2342,2,1,True,S,S,Function unknown
 yfdG,JW2346,2,1,True,I,I,Lipid transport and metabolism
-yfdH,JW2347,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
+yfdH,JW2347,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 yfdI,JW5382,1,1,False,S,S,Function unknown
 yfdK,JW2350,2,1,True,S,S,Function unknown
 yfdL,JW5384,1,1,False,S,S,Function unknown
@@ -2958,19 +2958,19 @@ yfdQ,JW2357,2,2,False,S,S,Function unknown
 yfdR,JW2358,2,2,False,"F,R",F,Nucleotide transport and metabolism
 yfdS,JW2359,1,1,False,S,S,Function unknown
 yfdV,JW2369,2,1,True,R,R,General function prediction only
-yfdX,JW2372,2,1,True,S,S,Function unknown
+yfdX,JW2372,2,2,False,S,S,Function unknown
 yfdY,JW2374,1,2,True,S,S,Function unknown
 yfdZ,JW2376,2,1,True,S,S,Function unknown
 yfeA,JW5391,1,1,False,S,S,Function unknown
 yfeC,JW2393,2,2,False,S,S,Function unknown
 yfeD,JW2394,2,2,False,S,S,Function unknown
 yfeG,JW2430,1,1,False,S,S,Function unknown
-yfeH,JW5876,1,1,False,R,R,General function prediction only
+yfeH,JW5876,1,2,True,R,R,General function prediction only
 yfeK,JW2412,2,2,False,S,S,Function unknown
 yfeN,JW2399,1,2,True,S,S,Function unknown
 yfeO,JW2386,2,2,False,P,P,Inorganic ion transport and metabolism
 yfeR,JW2400,1,2,True,K,K,Transcription
-yfeS,JW2413,1,1,False,"K,S",K,Transcription
+yfeS,JW2413,1,1,False,"S,K",S,Function unknown
 yfeT,JW2420,2,2,False,S,S,Function unknown
 yfeU,JW2421,2,2,False,S,S,Function unknown
 yfeW,JW5395,1,1,False,V,V,Defense mechanisms
@@ -2979,7 +2979,7 @@ yfeY,JW2425,1,1,False,S,S,Function unknown
 yfeZ,JW2426,2,2,False,S,S,Function unknown
 yffB,JW2455,2,1,True,P,P,Inorganic ion transport and metabolism
 yffH,JW2451,2,1,True,S,S,Function unknown
-yffI,JW2431,2,1,True,S,S,Function unknown
+yffI,JW2431,2,2,False,S,S,Function unknown
 yfgA,JW2500,2,2,False,S,S,Function unknown
 yfgB,JW2501,2,2,False,S,S,Function unknown
 yfgC,JW2479,2,1,True,S,S,Function unknown
@@ -3002,7 +3002,7 @@ yfhK,JW5407,1,1,False,S,S,Function unknown
 yfhL,JW2546,2,1,True,S,S,Function unknown
 yfhM,JW2504,2,2,False,R,R,General function prediction only
 yfhQ,JW2516,2,1,True,S,S,Function unknown
-yfhR,JW2518,2,1,True,T,T,Signal transduction mechanisms
+yfhR,JW2518,2,2,False,T,T,Signal transduction mechanisms
 yfiA,JW2578,2,1,True,S,S,Function unknown
 yfiB,JW2586,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 yfiC,JW2559,2,2,False,J,J,"Translation, ribosomal structure and biogenesis"
@@ -3021,14 +3021,14 @@ yfjD,JW5415,1,1,False,P,P,Inorganic ion transport and metabolism
 yfjF,JW2599,2,1,True,V,V,Defense mechanisms
 yfjG,JW2600,2,2,False,S,S,Function unknown
 yfjH,JW2603,2,2,False,S,S,Function unknown
-yfjI,JW2605,2,2,False,S,S,Function unknown
+yfjI,JW2605,2,1,True,S,S,Function unknown
 yfjJ,JW2607,1,2,True,S,S,Function unknown
-yfjK,JW2608,1,2,True,S,S,Function unknown
+yfjK,JW2608,1,1,False,S,S,Function unknown
 yfjL,JW2609,1,1,False,S,S,Function unknown
-yfjM,JW2610,2,2,False,S,S,Function unknown
+yfjM,JW2610,2,1,True,S,S,Function unknown
 yfjN,JW2611,2,2,False,S,S,Function unknown
 yfjO,JW5418,1,1,False,S,S,Function unknown
-yfjP,JW5419,1,1,False,R,R,General function prediction only
+yfjP,JW5419,1,2,True,R,R,General function prediction only
 yfjQ,JW2614,2,2,False,S,S,Function unknown
 yfjR,JW2615,2,1,True,K,K,Transcription
 yfjS,JW5921,2,2,False,S,S,Function unknown
@@ -3047,7 +3047,7 @@ ygaM,JW2647,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
 ygaP,JW2643,2,2,False,P,P,Inorganic ion transport and metabolism
 ygaQ,JW5425,1,1,False,S,S,Function unknown
 ygaR,JW2631,2,1,True,S,S,Function unknown
-ygaT,JW5427,2,2,False,S,S,Function unknown
+ygaT,JW5427,2,1,True,S,S,Function unknown
 ygaU,JW2640,1,1,False,S,S,Function unknown
 ygaV,JW2642,2,2,False,K,K,Transcription
 ygaW,JW2645,2,1,True,S,S,Function unknown
@@ -3057,24 +3057,24 @@ ygaZ,JW2657,2,1,True,E,E,Amino acid transport and metabolism
 ygbA,JW2702,2,1,True,S,S,Function unknown
 ygbE,JW2719,2,1,True,S,S,Function unknown
 ygbF,JW5438,1,2,True,S,S,Function unknown
-ygbI,JW2705,2,1,True,"K,G",K,Transcription
+ygbI,JW2705,2,1,True,"G,K",G,Carbohydrate transport and metabolism
 ygbJ,JW2706,2,1,True,I,I,Lipid transport and metabolism
 ygbK,JW2707,2,1,True,G,G,Carbohydrate transport and metabolism
 ygbL,JW2708,2,1,True,"G,E",G,Carbohydrate transport and metabolism
-ygbM,JW2709,1,2,True,G,G,Carbohydrate transport and metabolism
+ygbM,JW2709,1,1,False,G,G,Carbohydrate transport and metabolism
 ygbN,JW2710,1,1,False,G,G,Carbohydrate transport and metabolism
 ygbT,JW2725,2,1,True,S,S,Function unknown
 ygcB,JW2731,1,1,False,S,S,Function unknown
 ygcE,JW5444,1,2,True,G,G,Carbohydrate transport and metabolism
-ygcF,JW2748,2,2,False,S,S,Function unknown
-ygcG,JW5445,1,2,True,S,S,Function unknown
+ygcF,JW2748,2,1,True,S,S,Function unknown
+ygcG,JW5445,1,1,False,S,S,Function unknown
 ygcH,JW2726,2,1,True,S,S,Function unknown
 ygcI,JW5844,1,1,False,S,S,Function unknown
-ygcJ,JW2728,2,2,False,S,S,Function unknown
+ygcJ,JW2728,2,1,True,S,S,Function unknown
 ygcK,JW2729,1,1,False,S,S,Function unknown
 ygcL,JW2730,1,2,True,S,S,Function unknown
 ygcM,JW2735,2,2,False,S,S,Function unknown
-ygcN,JW2736,2,1,True,C,C,Energy production and conversion
+ygcN,JW2736,1,1,False,C,C,Energy production and conversion
 ygcO,JW2737,2,2,False,C,C,Energy production and conversion
 ygcP,JW2738,1,1,False,K,K,Transcription
 ygcQ,JW5440,1,2,True,C,C,Energy production and conversion
@@ -3092,36 +3092,36 @@ ygdL,JW2783,1,1,False,S,S,Function unknown
 ygdQ,JW2800,2,1,True,P,P,Inorganic ion transport and metabolism
 ygdR,JW2801,2,1,True,S,S,Function unknown
 ygeA,JW2808,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
-ygeD,JW2803,2,2,False,S,S,Function unknown
+ygeD,JW2803,2,1,True,S,S,Function unknown
 ygeF,JW2818,2,1,True,S,S,Function unknown
 ygeG,JW2819,2,1,True,S,S,Function unknown
 ygeH,JW2820,2,1,True,K,K,Transcription
 ygeI,JW5456,1,1,False,S,S,Function unknown
-ygeK,JW5458,1,2,True,S,S,Function unknown
+ygeK,JW5458,1,1,False,S,S,Function unknown
 ygeL,JW2824,2,1,True,S,S,Function unknown
 ygeM,JW5459,1,1,False,S,S,Function unknown
 ygeN,JW5460,1,2,True,S,S,Function unknown
 ygeO,JW5846,1,1,False,S,S,Function unknown
 ygeP,JW2831,1,1,False,S,S,Function unknown
-ygeQ,JW5461,1,1,False,S,S,Function unknown
+ygeQ,JW5461,1,2,True,S,S,Function unknown
 ygeR,JW2833,2,1,True,S,S,Function unknown
 ygeV,JW2837,1,1,False,"T,K",T,Signal transduction mechanisms
 ygeW,JW5463,1,1,False,E,E,Amino acid transport and metabolism
-ygeX,JW2839,2,2,False,E,E,Amino acid transport and metabolism
+ygeX,JW2839,2,1,True,E,E,Amino acid transport and metabolism
 ygeY,JW2840,2,1,True,E,E,Amino acid transport and metabolism
 ygfA,JW2879,1,2,True,S,S,Function unknown
 ygfB,JW5473,1,1,False,S,S,Function unknown
 ygfF,JW2870,1,1,False,I,I,Lipid transport and metabolism
 ygfG,JW2886,1,1,False,S,S,Function unknown
 ygfH,JW2887,2,1,True,S,S,Function unknown
-ygfI,JW5476,1,1,False,S,S,Function unknown
+ygfI,JW5476,1,2,True,S,S,Function unknown
 ygfJ,JW2845,1,1,False,S,S,Function unknown
-ygfK,JW5923,1,2,True,"F,E,R,C",F,Nucleotide transport and metabolism
+ygfK,JW5923,1,1,False,"C,R,F,E",C,Energy production and conversion
 ygfM,JW2848,1,1,False,C,C,Energy production and conversion
 ygfO,JW2850,1,1,False,S,S,Function unknown
 ygfQ,JW5467,1,1,False,S,S,Function unknown
 ygfS,JW5468,1,1,False,C,C,Energy production and conversion
-ygfT,JW5469,1,1,False,"E,R,C",E,Amino acid transport and metabolism
+ygfT,JW5469,1,1,False,"C,R,E",C,Energy production and conversion
 ygfU,JW5470,1,1,False,S,S,Function unknown
 ygfX,JW2864,2,1,True,S,S,Function unknown
 ygfY,JW2865,2,2,False,S,S,Function unknown
@@ -3133,17 +3133,17 @@ yggF,JW2897,2,1,True,G,G,Carbohydrate transport and metabolism
 yggG,JW2903,2,1,True,S,S,Function unknown
 yggH,JW2927,2,1,True,S,S,Function unknown
 yggJ,JW2913,1,1,False,S,S,Function unknown
-yggL,JW2926,2,2,False,S,S,Function unknown
+yggL,JW2926,1,2,True,S,S,Function unknown
 yggM,JW2923,2,1,True,S,S,Function unknown
-yggN,JW2925,1,1,False,S,S,Function unknown
-yggP,JW5477,1,1,False,"E,R",E,Amino acid transport and metabolism
-yggR,JW2917,1,2,True,"N,W",N,Cell motility
+yggN,JW2925,1,2,True,S,S,Function unknown
+yggP,JW5477,1,1,False,"R,E",R,General function prediction only
+yggR,JW2917,1,2,True,"W,N",W,Extracellular structures
 yggS,JW2918,1,1,False,H,H,Coenzyme transport and metabolism
-yggT,JW2919,2,1,True,O,O,"Post-translational modification, protein turnover, chaperones"
+yggT,JW2919,2,2,False,O,O,"Post-translational modification, protein turnover, chaperones"
 yggU,JW5479,1,1,False,S,S,Function unknown
 yggV,JW2921,1,1,False,S,S,Function unknown
 yggW,JW2922,2,1,True,S,S,Function unknown
-yggX,JW2929,1,1,False,"O,P",O,"Post-translational modification, protein turnover, chaperones"
+yggX,JW2929,1,1,False,"P,O",P,Inorganic ion transport and metabolism
 yghA,JW2972,1,1,False,I,I,Lipid transport and metabolism
 yghB,JW2976,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 yghD,JW2935,1,1,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
@@ -3173,12 +3173,12 @@ ygiP,JW3032,1,1,False,S,S,Function unknown
 ygiQ,JW5501,1,1,False,R,R,General function prediction only
 ygiS,JW2988,1,2,True,E,E,Amino acid transport and metabolism
 ygiU,JW2990,2,1,True,S,S,Function unknown
-ygiV,JW5502,1,1,False,L,L,"Replication, recombination and repair"
+ygiV,JW5502,1,2,True,L,L,"Replication, recombination and repair"
 ygiW,JW2992,1,1,False,S,S,Function unknown
 ygiZ,JW2995,1,1,False,S,S,Function unknown
 ygjE,JW3035,2,1,True,S,S,Function unknown
 ygjF,JW3040,2,1,True,S,S,Function unknown
-ygjG,JW5510,1,1,False,S,S,Function unknown
+ygjG,JW5510,1,2,True,S,S,Function unknown
 ygjH,JW3045,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
 ygjI,JW5512,2,1,True,E,E,Amino acid transport and metabolism
 ygjJ,JW3050,2,1,True,S,S,Function unknown
@@ -3193,31 +3193,31 @@ ygjV,JW3061,1,1,False,S,S,Function unknown
 yhaB,JW3091,1,1,False,S,S,Function unknown
 yhaC,JW3092,1,1,False,S,S,Function unknown
 yhaH,JW3074,1,1,False,S,S,Function unknown
-yhaI,JW3075,1,2,True,S,S,Function unknown
+yhaI,JW3075,1,1,False,S,S,Function unknown
 yhaJ,JW3076,1,1,False,K,K,Transcription
-yhaK,JW3077,2,1,True,R,R,General function prediction only
+yhaK,JW3077,2,2,False,R,R,General function prediction only
 yhaL,JW5517,1,1,False,S,S,Function unknown
 yhaM,JW5518,1,1,False,S,S,Function unknown
 yhaO,JW5519,1,1,False,S,S,Function unknown
 yhaV,JW3099,1,1,False,S,S,Function unknown
 yhbC,JW5533,1,1,False,S,S,Function unknown
-yhbE,JW3151,2,2,False,"G,R,E",G,Carbohydrate transport and metabolism
+yhbE,JW3151,2,2,False,"R,G,E",R,General function prediction only
 yhbG,JW3168,2,2,False,S,S,Function unknown
-yhbH,JW3170,1,2,True,S,S,Function unknown
-yhbJ,JW3172,2,2,False,S,S,Function unknown
+yhbH,JW3170,1,1,False,S,S,Function unknown
+yhbJ,JW3172,2,1,True,S,S,Function unknown
 yhbO,JW5529,2,1,True,V,V,Defense mechanisms
 yhbP,JW3123,2,2,False,S,S,Function unknown
-yhbQ,JW3124,2,2,False,L,L,"Replication, recombination and repair"
+yhbQ,JW3124,2,1,True,L,L,"Replication, recombination and repair"
 yhbS,JW3125,1,2,True,R,R,General function prediction only
 yhbT,JW3126,1,1,False,S,S,Function unknown
 yhbU,JW3127,2,1,True,S,S,Function unknown
-yhbW,JW3129,1,2,True,"H,R",H,Coenzyme transport and metabolism
+yhbW,JW3129,1,1,False,"R,H",R,General function prediction only
 yhbX,JW5534,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 yhbY,JW3147,2,2,False,J,J,"Translation, ribosomal structure and biogenesis"
 yhcA,JW3182,2,2,False,W,W,Extracellular structures
 yhcB,JW5539,2,1,True,S,S,Function unknown
 yhcC,JW3178,1,1,False,R,R,General function prediction only
-yhcD,JW3183,2,1,True,"N,W",N,Cell motility
+yhcD,JW3183,2,1,True,"W,N",W,Extracellular structures
 yhcE,JW3187,1,1,False,S,S,Function unknown
 yhcF,JW3188,2,2,False,S,S,Function unknown
 yhcG,JW3189,2,2,False,R,R,General function prediction only
@@ -3227,20 +3227,20 @@ yhcN,JW5540,1,1,False,S,S,Function unknown
 yhcO,JW3208,2,1,True,K,K,Transcription
 yhdA,JW3221,1,1,False,S,S,Function unknown
 yhdE,JW3217,2,2,False,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
-yhdH,JW3222,2,2,False,"R,C",R,General function prediction only
+yhdH,JW3222,2,2,False,"C,R",C,Energy production and conversion
 yhdJ,JW5543,1,1,False,L,L,"Replication, recombination and repair"
 yhdL,JW3253,1,1,False,S,S,Function unknown
-yhdN,JW3255,2,2,False,S,S,Function unknown
+yhdN,JW3255,2,1,True,S,S,Function unknown
 yhdP,JW5542,1,1,False,S,S,Function unknown
 yhdT,JW3225,2,1,True,S,S,Function unknown
 yhdU,JW3231,2,2,False,S,S,Function unknown
 yhdV,JW3235,2,1,True,S,S,Function unknown
 yhdW,JW3236,1,1,False,S,S,Function unknown
 yhdX,JW5544,1,1,False,E,E,Amino acid transport and metabolism
-yhdY,JW5545,2,2,False,E,E,Amino acid transport and metabolism
+yhdY,JW5545,2,1,True,E,E,Amino acid transport and metabolism
 yhdZ,JW3239,1,1,False,E,E,Amino acid transport and metabolism
 yheL,JW3305,2,1,True,S,S,Function unknown
-yheM,JW3306,1,1,False,S,S,Function unknown
+yheM,JW3306,1,2,True,S,S,Function unknown
 yheN,JW3307,1,1,False,S,S,Function unknown
 yheO,JW5703,1,1,False,K,K,Transcription
 yheS,JW3315,1,2,True,R,R,General function prediction only
@@ -3249,9 +3249,9 @@ yheU,JW3317,2,1,True,S,S,Function unknown
 yheV,JW3312,1,1,False,R,R,General function prediction only
 yhfA,JW3319,2,1,True,R,R,General function prediction only
 yhfG,JW3325,2,1,True,S,S,Function unknown
-yhfK,JW5701,2,1,True,S,S,Function unknown
+yhfK,JW5701,1,1,False,S,S,Function unknown
 yhfL,JW3332,1,1,False,S,S,Function unknown
-yhfS,JW3339,1,2,True,"K,E",K,Transcription
+yhfS,JW3339,1,2,True,"E,K",E,Amino acid transport and metabolism
 yhfT,JW3340,1,1,False,S,S,Function unknown
 yhfU,JW5697,1,1,False,S,S,Function unknown
 yhfW,JW3343,2,1,True,G,G,Carbohydrate transport and metabolism
@@ -3259,7 +3259,7 @@ yhfX,JW3344,2,1,True,E,E,Amino acid transport and metabolism
 yhfY,JW5696,1,1,False,S,S,Function unknown
 yhfZ,JW5948,1,1,False,S,S,Function unknown
 yhgA,JW3374,1,1,False,S,S,Function unknown
-yhgE,JW3365,2,2,False,S,S,Function unknown
+yhgE,JW3365,2,1,True,S,S,Function unknown
 yhgF,JW3370,1,1,False,K,K,Transcription
 yhgG,JW3373,1,1,False,S,S,Function unknown
 yhgN,JW3397,1,1,False,E,E,Amino acid transport and metabolism
@@ -3270,7 +3270,7 @@ yhhI,JW3451,2,1,True,X,X,"Mobilome: prophages, transposons"
 yhhJ,JW5677,1,1,False,V,V,Defense mechanisms
 yhhK,JW3424,2,1,True,S,S,Function unknown
 yhhL,JW5683,1,1,False,S,S,Function unknown
-yhhM,JW3432,1,1,False,S,S,Function unknown
+yhhM,JW3432,1,2,True,S,S,Function unknown
 yhhN,JW3433,2,1,True,S,S,Function unknown
 yhhP,JW3435,2,1,True,S,S,Function unknown
 yhhS,JW5945,1,1,False,G,G,Carbohydrate transport and metabolism
@@ -3285,7 +3285,7 @@ yhiI,JW3454,2,1,True,V,V,Defense mechanisms
 yhiJ,JW3455,2,1,True,S,S,Function unknown
 yhiK,JW5674,1,1,False,S,S,Function unknown
 yhiL,JW3457,1,1,False,S,S,Function unknown
-yhiM,JW5944,1,1,False,S,S,Function unknown
+yhiM,JW5944,1,2,True,S,S,Function unknown
 yhiN,JW3459,2,2,False,R,R,General function prediction only
 yhiO,JW3461,1,1,False,S,S,Function unknown
 yhiP,JW3463,2,1,True,S,S,Function unknown
@@ -3312,9 +3312,9 @@ yiaC,JW3519,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
 yiaD,JW5657,2,1,True,M,M,Cell wall/membrane/envelope biogenesis
 yiaF,JW5655,1,1,False,S,S,Function unknown
 yiaG,JW3524,1,1,False,K,K,Transcription
-yiaH,JW3533,2,2,False,S,S,Function unknown
+yiaH,JW3533,2,1,True,S,S,Function unknown
 yiaI,JW3545,1,1,False,S,S,Function unknown
-yiaJ,JW3546,2,1,True,S,S,Function unknown
+yiaJ,JW3546,2,2,False,S,S,Function unknown
 yiaK,JW3547,2,1,True,C,C,Energy production and conversion
 yiaL,JW3548,1,1,False,G,G,Carbohydrate transport and metabolism
 yiaM,JW3549,1,1,False,G,G,Carbohydrate transport and metabolism
@@ -3334,7 +3334,7 @@ yibI,JW3572,1,1,False,S,S,Function unknown
 yibK,JW3581,1,1,False,S,S,Function unknown
 yibL,JW3577,1,2,True,S,S,Function unknown
 yibN,JW3586,1,1,False,P,P,Inorganic ion transport and metabolism
-yibQ,JW5645,1,2,True,G,G,Carbohydrate transport and metabolism
+yibQ,JW5645,1,1,False,G,G,Carbohydrate transport and metabolism
 yibT,JW3576,1,2,True,S,S,Function unknown
 yicC,JW3619,1,1,False,S,S,Function unknown
 yicE,JW3629,1,1,False,S,S,Function unknown
@@ -3342,13 +3342,13 @@ yicG,JW3621,1,1,False,S,S,Function unknown
 yicH,JW3630,1,1,False,S,S,Function unknown
 yicI,JW3631,1,1,False,G,G,Carbohydrate transport and metabolism
 yicJ,JW5939,2,2,False,G,G,Carbohydrate transport and metabolism
-yicL,JW3634,1,1,False,"G,R,E",G,Carbohydrate transport and metabolism
+yicL,JW3634,1,1,False,"R,G,E",R,General function prediction only
 yicM,JW5938,1,2,True,S,S,Function unknown
-yicN,JW5637,1,2,True,S,S,Function unknown
+yicN,JW5637,1,1,False,S,S,Function unknown
 yicO,JW5636,1,1,False,S,S,Function unknown
-yicR,JW5643,2,2,False,L,L,"Replication, recombination and repair"
+yicR,JW5643,2,1,True,L,L,"Replication, recombination and repair"
 yicS,JW5965,2,2,False,S,S,Function unknown
-yidA,JW3674,2,1,True,"H,R",H,Coenzyme transport and metabolism
+yidA,JW3674,2,1,True,"R,H",R,General function prediction only
 yidB,JW3675,1,1,False,S,S,Function unknown
 yidD,JW3682,2,2,False,M,M,Cell wall/membrane/envelope biogenesis
 yidE,JW3662,1,1,False,R,R,General function prediction only
@@ -3363,7 +3363,7 @@ yidP,JW3661,1,1,False,K,K,Transcription
 yidQ,JW5633,1,2,True,S,S,Function unknown
 yidR,JW5860,2,2,False,U,U,"Intracellular trafficking, secretion, and vesicular transport"
 yidX,JW5858,2,2,False,S,S,Function unknown
-yidZ,JW3689,2,3,True,K,K,Transcription
+yidZ,JW3689,2,2,False,K,K,Transcription
 yieE,JW3690,2,2,False,H,H,Coenzyme transport and metabolism
 yieF,JW3691,2,2,False,C,C,Energy production and conversion
 yieG,JW3692,2,2,False,S,S,Function unknown
@@ -3375,7 +3375,7 @@ yieM,JW5610,2,1,True,S,S,Function unknown
 yieN,JW3725,1,1,False,S,S,Function unknown
 yieP,JW5608,2,2,False,K,K,Transcription
 yifB,JW3738,1,2,True,O,O,"Post-translational modification, protein turnover, chaperones"
-yifE,JW3737,1,2,True,S,S,Function unknown
+yifE,JW3737,1,1,False,S,S,Function unknown
 yifK,JW5595,2,1,True,S,S,Function unknown
 yifL,JW3781,1,1,False,S,S,Function unknown
 yifN,JW3750,1,2,True,S,S,Function unknown
@@ -3386,16 +3386,16 @@ yigE,JW5591,1,1,False,S,S,Function unknown
 yigF,JW3790,2,1,True,S,S,Function unknown
 yigG,JW5590,2,2,False,S,S,Function unknown
 yigI,JW5588,2,2,False,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
-yigL,JW5854,1,1,False,"H,R",H,Coenzyme transport and metabolism
+yigL,JW5854,1,1,False,"R,H",R,General function prediction only
 yigM,JW3803,1,1,False,S,S,Function unknown
 yigZ,JW5577,1,1,False,R,R,General function prediction only
 yihD,JW3830,2,1,True,S,S,Function unknown
 yihE,JW3831,1,1,False,S,S,Function unknown
 yihF,JW5574,2,2,False,S,S,Function unknown
-yihG,JW3834,2,1,True,I,I,Lipid transport and metabolism
+yihG,JW3834,2,2,False,I,I,Lipid transport and metabolism
 yihI,JW3837,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
 yihL,JW3843,2,1,True,K,K,Transcription
-yihM,JW3844,2,1,True,G,G,Carbohydrate transport and metabolism
+yihM,JW3844,2,2,False,G,G,Carbohydrate transport and metabolism
 yihN,JW3845,1,1,False,G,G,Carbohydrate transport and metabolism
 yihO,JW5852,1,1,False,G,G,Carbohydrate transport and metabolism
 yihP,JW3848,1,1,False,G,G,Carbohydrate transport and metabolism
@@ -3408,11 +3408,11 @@ yihV,JW5568,1,1,False,G,G,Carbohydrate transport and metabolism
 yihW,JW5567,1,1,False,S,S,Function unknown
 yihX,JW5566,1,1,False,H,H,Coenzyme transport and metabolism
 yiiD,JW3859,2,1,True,S,S,Function unknown
-yiiE,JW5929,1,2,True,S,S,Function unknown
-yiiF,JW5563,2,1,True,S,S,Function unknown
+yiiE,JW5929,1,1,False,S,S,Function unknown
+yiiF,JW5563,2,2,False,S,S,Function unknown
 yiiG,JW3867,2,1,True,S,S,Function unknown
 yiiL,JW3872,1,1,False,S,S,Function unknown
-yiiM,JW5559,1,1,False,"F,V",F,Nucleotide transport and metabolism
+yiiM,JW5559,1,2,True,"V,F",V,Defense mechanisms
 yiiQ,JW3891,1,1,False,S,S,Function unknown
 yiiR,JW3892,1,1,False,S,S,Function unknown
 yiiS,JW3893,1,1,False,S,S,Function unknown
@@ -3420,7 +3420,7 @@ yiiT,JW3894,1,1,False,S,S,Function unknown
 yiiU,JW3899,1,1,False,S,S,Function unknown
 yiiX,JW3908,2,1,True,S,S,Function unknown
 yijD,JW3936,1,1,False,S,S,Function unknown
-yijE,JW5557,1,1,False,"G,R,E",G,Carbohydrate transport and metabolism
+yijE,JW5557,1,1,False,"R,G,E",R,General function prediction only
 yijF,JW3916,2,1,True,S,S,Function unknown
 yijO,JW3926,1,1,False,K,K,Transcription
 yijP,JW3927,2,1,True,S,S,Function unknown
@@ -3446,7 +3446,7 @@ yjbQ,JW4017,1,1,False,H,H,Coenzyme transport and metabolism
 yjbR,JW4018,2,1,True,K,K,Transcription
 yjcB,JW5718,1,1,False,S,S,Function unknown
 yjcC,JW4022,1,1,False,S,S,Function unknown
-yjcD,JW4025,1,1,False,S,S,Function unknown
+yjcD,JW4025,1,2,True,S,S,Function unknown
 yjcE,JW4026,1,1,False,P,P,Inorganic ion transport and metabolism
 yjcF,JW4027,2,1,True,S,S,Function unknown
 yjcH,JW4029,2,1,True,S,S,Function unknown
@@ -3454,10 +3454,10 @@ yjcO,JW4039,2,1,True,R,R,General function prediction only
 yjcP,JW4041,1,1,False,S,S,Function unknown
 yjcQ,JW4042,1,1,False,S,S,Function unknown
 yjcR,JW4043,1,1,False,S,S,Function unknown
-yjcS,JW5721,2,1,True,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
+yjcS,JW5721,1,1,False,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
 yjcZ,JW5729,1,1,False,S,S,Function unknown
 yjdA,JW4070,1,1,False,S,S,Function unknown
-yjdC,JW5733,1,1,False,S,S,Function unknown
+yjdC,JW5733,1,2,True,S,S,Function unknown
 yjdF,JW4082,1,1,False,S,S,Function unknown
 yjdI,JW4087,1,1,False,S,S,Function unknown
 yjdJ,JW4088,1,1,False,R,R,General function prediction only
@@ -3469,7 +3469,7 @@ yjeF,JW4125,1,1,False,S,S,Function unknown
 yjeH,JW4101,2,1,True,E,E,Amino acid transport and metabolism
 yjeI,JW5736,1,1,False,S,S,Function unknown
 yjeJ,JW4105,1,1,False,S,S,Function unknown
-yjeK,JW4106,2,2,False,S,S,Function unknown
+yjeK,JW4106,2,1,True,S,S,Function unknown
 yjeM,JW5739,1,2,True,E,E,Amino acid transport and metabolism
 yjeN,JW4118,1,1,False,S,S,Function unknown
 yjeO,JW4119,1,1,False,S,S,Function unknown
@@ -3484,15 +3484,15 @@ yjfK,JW4141,1,1,False,S,S,Function unknown
 yjfL,JW4142,2,1,True,S,S,Function unknown
 yjfM,JW4143,1,1,False,S,S,Function unknown
 yjfN,JW5742,1,2,True,S,S,Function unknown
-yjfO,JW5743,2,2,False,S,S,Function unknown
-yjfP,JW4148,1,2,True,T,T,Signal transduction mechanisms
+yjfO,JW5743,1,2,True,S,S,Function unknown
+yjfP,JW4148,1,1,False,T,T,Signal transduction mechanisms
 yjfY,JW4157,2,2,False,S,S,Function unknown
 yjfZ,JW4162,1,2,True,S,S,Function unknown
 yjgA,JW4193,2,2,False,J,J,"Translation, ribosomal structure and biogenesis"
 yjgB,JW5761,1,1,False,S,S,Function unknown
 yjgD,JW4212,1,1,False,S,S,Function unknown
 yjgF,JW5755,2,2,False,S,S,Function unknown
-yjgH,JW4206,1,2,True,V,V,Defense mechanisms
+yjgH,JW4206,1,1,False,V,V,Defense mechanisms
 yjgI,JW4207,1,1,False,S,S,Function unknown
 yjgJ,JW4208,1,1,False,S,S,Function unknown
 yjgK,JW5756,2,2,False,S,S,Function unknown
@@ -3516,7 +3516,7 @@ yjhP,JW4268,1,1,False,I,I,Lipid transport and metabolism
 yjhQ,JW4269,2,2,False,R,R,General function prediction only
 yjhR,JW4271,1,1,False,S,S,Function unknown
 yjhS,JW4272,1,1,False,S,S,Function unknown
-yjhT,JW5777,1,2,True,S,S,Function unknown
+yjhT,JW5777,1,1,False,S,S,Function unknown
 yjhU,JW5952,1,1,False,K,K,Transcription
 yjhV,JW4246,1,1,False,S,S,Function unknown
 yjhX,JW5968,1,1,False,S,S,Function unknown
@@ -3534,28 +3534,28 @@ yjiN,JW4299,1,1,False,S,S,Function unknown
 yjiO,JW4300,1,1,False,S,S,Function unknown
 yjiP,JW5953,2,2,False,S,S,Function unknown
 yjiQ,JW4302,2,2,False,S,S,Function unknown
-yjiR,JW4303,1,1,False,"K,E",K,Transcription
+yjiR,JW4303,1,1,False,"E,K",E,Amino acid transport and metabolism
 yjiS,JW4304,1,1,False,S,S,Function unknown
 yjiT,JW5787,1,2,True,S,S,Function unknown
 yjiV,JW5954,1,1,False,S,S,Function unknown
 yjiW,JW4310,1,1,False,S,S,Function unknown
-yjiX,JW4316,1,1,False,S,S,Function unknown
+yjiX,JW4316,2,1,True,S,S,Function unknown
 yjiY,JW5791,1,1,False,S,S,Function unknown
 yjiZ,JW4319,1,1,False,S,S,Function unknown
 yjjA,JW5795,1,1,False,S,S,Function unknown
 yjjB,JW4327,2,2,False,S,S,Function unknown
-yjjG,JW4336,1,1,False,H,H,Coenzyme transport and metabolism
+yjjG,JW4336,2,1,True,H,H,Coenzyme transport and metabolism
 yjjI,JW4343,1,1,False,S,S,Function unknown
 yjjJ,JW4348,1,1,False,S,S,Function unknown
 yjjK,JW4354,1,1,False,S,S,Function unknown
-yjjM,JW5792,1,1,False,S,S,Function unknown
+yjjM,JW5792,1,2,True,S,S,Function unknown
 yjjN,JW5793,1,2,True,S,S,Function unknown
 yjjP,JW5796,1,1,False,S,S,Function unknown
 yjjQ,JW4329,2,2,False,"T,K",T,Signal transduction mechanisms
 yjjU,JW4340,2,1,True,I,I,Lipid transport and metabolism
 yjjV,JW4341,1,1,False,N,N,Cell motility
 yjjW,JW4342,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
-yjjX,JW5801,1,1,False,"F,V",F,Nucleotide transport and metabolism
+yjjX,JW5801,1,1,False,"V,F",V,Defense mechanisms
 yjjY,JW4365,1,1,False,S,S,Function unknown
 yjjZ,JW5797,1,1,False,S,S,Function unknown
 yjtD,JW4366,1,1,False,J,J,"Translation, ribosomal structure and biogenesis"
@@ -3568,10 +3568,10 @@ ykfH,JW5956,2,1,True,S,S,Function unknown
 ykfI,JW0234,2,1,True,S,S,Function unknown
 ykfJ,JW0225,2,1,True,S,S,Function unknown
 ykgA,JW5037,1,1,False,S,S,Function unknown
-ykgB,JW5038,1,2,True,S,S,Function unknown
+ykgB,JW5038,1,1,False,S,S,Function unknown
 ykgC,JW5040,1,1,False,S,S,Function unknown
-ykgD,JW0298,1,1,False,S,S,Function unknown
-ykgE,JW5041,1,2,True,C,C,Energy production and conversion
+ykgD,JW0298,1,2,True,S,S,Function unknown
+ykgE,JW5041,1,1,False,C,C,Energy production and conversion
 ykgF,JW0300,2,1,True,C,C,Energy production and conversion
 ykgG,JW5042,2,1,True,C,C,Energy production and conversion
 ykgH,JW0302,2,1,True,S,S,Function unknown
@@ -3610,10 +3610,10 @@ ymcD,JW5133,1,1,False,S,S,Function unknown
 ymcE,JW0975,1,2,True,S,S,Function unknown
 ymdA,JW1031,2,2,False,S,S,Function unknown
 ymdB,JW1032,2,1,True,J,J,"Translation, ribosomal structure and biogenesis"
-ymdC,JW5150,1,1,False,S,S,Function unknown
-ymdE,JW5145,1,1,False,S,S,Function unknown
+ymdC,JW5150,1,2,True,S,S,Function unknown
+ymdE,JW5145,1,2,True,S,S,Function unknown
 ymdF,JW5136,1,1,False,R,R,General function prediction only
-ymfA,JW5164,2,1,True,S,S,Function unknown
+ymfA,JW5164,2,2,False,S,S,Function unknown
 ymfB,JW1120,2,1,True,S,S,Function unknown
 ymfC,JW1121,2,1,True,S,S,Function unknown
 ymfD,JW1123,2,1,True,H,H,Coenzyme transport and metabolism
@@ -3640,7 +3640,7 @@ ymgF,JW1156,2,1,True,S,S,Function unknown
 ymgG,JW5178,1,1,False,S,S,Function unknown
 ymgH,JW5179,1,1,False,S,S,Function unknown
 ymjA,JW1288,2,1,True,S,S,Function unknown
-ymjB,JW5203,1,1,False,S,S,Function unknown
+ymjB,JW5203,1,2,True,S,S,Function unknown
 ymjC,JW5960,2,1,True,S,S,Function unknown
 ynaA,JW1361,2,1,True,S,S,Function unknown
 ynaE,JW1369,2,1,True,S,S,Function unknown
@@ -3650,7 +3650,7 @@ ynaK,JW1359,2,1,True,D,D,"Cell cycle control, cell division, chromosome partitio
 ynbA,JW1405,2,1,True,I,I,Lipid transport and metabolism
 ynbB,JW1406,2,2,False,R,R,General function prediction only
 ynbC,JW1407,1,1,False,I,I,Lipid transport and metabolism
-ynbD,JW1408,2,1,True,"T,I",T,Signal transduction mechanisms
+ynbD,JW1408,2,1,True,"I,T",I,Lipid transport and metabolism
 ynbE,JW1377,2,1,True,S,S,Function unknown
 yncA,JW5233,1,1,False,S,S,Function unknown
 yncB,JW5907,1,1,False,S,S,Function unknown
@@ -3658,19 +3658,19 @@ yncC,JW1445,1,1,False,S,S,Function unknown
 yncD,JW1446,2,2,False,S,S,Function unknown
 yncE,JW1447,2,1,True,R,R,General function prediction only
 yncG,JW1449,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
-yncH,JW5235,1,2,True,S,S,Function unknown
+yncH,JW5235,1,1,False,S,S,Function unknown
 yncI,JW1453,2,2,False,S,S,Function unknown
 yncJ,JW1432,2,1,True,S,S,Function unknown
-yncK,JW5961,2,1,True,S,S,Function unknown
+yncK,JW5961,2,2,False,S,S,Function unknown
 yncM,JW5237,1,2,True,S,S,Function unknown
-yncN,JW5230,1,2,True,S,S,Function unknown
+yncN,JW5230,1,1,False,S,S,Function unknown
 yneE,JW5245,1,2,True,P,P,Inorganic ion transport and metabolism
 yneF,JW5825,1,1,False,S,S,Function unknown
 yneG,JW1516,2,2,False,S,S,Function unknown
 yneH,JW1517,2,1,True,S,S,Function unknown
-yneI,JW5247,1,2,True,S,S,Function unknown
+yneI,JW5247,1,1,False,S,S,Function unknown
 yneJ,JW1519,2,1,True,S,S,Function unknown
-yneK,JW1520,2,2,False,S,S,Function unknown
+yneK,JW1520,2,1,True,S,S,Function unknown
 yneL,JW5244,1,1,False,S,S,Function unknown
 ynfA,JW1574,2,2,False,R,R,General function prediction only
 ynfB,JW1575,2,1,True,S,S,Function unknown
@@ -3691,10 +3691,10 @@ yniA,JW1714,2,1,True,G,G,Carbohydrate transport and metabolism
 yniB,JW1715,2,1,True,S,S,Function unknown
 yniC,JW1716,2,2,False,S,S,Function unknown
 yniD,JW5911,1,1,False,S,S,Function unknown
-ynjA,JW1742,2,2,False,P,P,Inorganic ion transport and metabolism
+ynjA,JW1742,2,1,True,P,P,Inorganic ion transport and metabolism
 ynjB,JW5284,1,1,False,R,R,General function prediction only
-ynjC,JW5285,1,1,False,R,R,General function prediction only
-ynjD,JW5286,1,1,False,R,R,General function prediction only
+ynjC,JW5285,1,2,True,R,R,General function prediction only
+ynjD,JW5286,1,2,True,R,R,General function prediction only
 ynjE,JW5287,1,2,True,P,P,Inorganic ion transport and metabolism
 ynjF,JW1747,2,2,False,I,I,Lipid transport and metabolism
 ynjH,JW1749,2,1,True,S,S,Function unknown
@@ -3715,9 +3715,9 @@ yobG,JW1815,1,1,False,S,S,Function unknown
 yobH,JW5298,1,1,False,S,S,Function unknown
 yodA,JW1956,2,1,True,S,S,Function unknown
 yodB,JW5323,1,1,False,C,C,Energy production and conversion
-yodC,JW1940,2,1,True,S,S,Function unknown
+yodC,JW1940,2,2,False,S,S,Function unknown
 yodD,JW5317,1,1,False,S,S,Function unknown
-yoeA,JW5326,1,1,False,S,S,Function unknown
+yoeA,JW5326,1,2,True,S,S,Function unknown
 yoeB,JW5331,2,2,False,V,V,Defense mechanisms
 yoeE,JW1980,2,2,False,S,S,Function unknown
 yoeF,JW5328,2,2,False,E,E,Amino acid transport and metabolism
@@ -3756,18 +3756,18 @@ ypfJ,JW2460,1,1,False,R,R,General function prediction only
 ypfN,JW2457,2,3,True,S,S,Function unknown
 yphA,JW2527,2,1,True,S,S,Function unknown
 yphB,JW2528,1,2,True,G,G,Carbohydrate transport and metabolism
-yphC,JW5842,1,2,True,"E,R",E,Amino acid transport and metabolism
+yphC,JW5842,1,2,True,"R,E",R,General function prediction only
 yphD,JW2530,2,1,True,G,G,Carbohydrate transport and metabolism
 yphE,JW2531,1,1,False,G,G,Carbohydrate transport and metabolism
 yphF,JW2532,1,1,False,G,G,Carbohydrate transport and metabolism
 yphG,JW5405,1,1,False,S,S,Function unknown
-yphH,JW5406,1,1,False,"K,G",K,Transcription
+yphH,JW5406,1,1,False,"G,K",G,Carbohydrate transport and metabolism
 ypjA,JW5422,1,2,True,S,S,Function unknown
 ypjB,JW2629,2,2,False,S,S,Function unknown
 ypjC,JW5424,2,2,False,S,S,Function unknown
 ypjD,JW2592,2,2,False,R,R,General function prediction only
 ypjF,JW2627,2,1,True,S,S,Function unknown
-ypjJ,JW5421,1,2,True,S,S,Function unknown
+ypjJ,JW5421,1,1,False,S,S,Function unknown
 ypjL,JW5922,2,1,True,S,S,Function unknown
 ypjM,JW5420,1,1,False,S,S,Function unknown
 yqaA,JW2664,2,1,True,S,S,Function unknown
@@ -3781,7 +3781,7 @@ yqcC,JW2763,2,1,True,S,S,Function unknown
 yqcD,JW2765,2,2,False,S,S,Function unknown
 yqcE,JW2746,2,2,False,P,P,Inorganic ion transport and metabolism
 yqeA,JW2842,1,1,False,E,E,Amino acid transport and metabolism
-yqeB,JW2843,1,1,False,"O,I",O,"Post-translational modification, protein turnover, chaperones"
+yqeB,JW2843,1,1,False,"I,O",I,Lipid transport and metabolism
 yqeC,JW5464,1,1,False,S,S,Function unknown
 yqeF,JW5453,1,1,False,I,I,Lipid transport and metabolism
 yqeG,JW2813,1,1,False,E,E,Amino acid transport and metabolism
@@ -3802,7 +3802,7 @@ yqhD,JW2978,1,1,False,C,C,Energy production and conversion
 yqhG,JW5500,1,1,False,S,S,Function unknown
 yqhH,JW2982,1,1,False,M,M,Cell wall/membrane/envelope biogenesis
 yqiA,JW2999,1,1,False,R,R,General function prediction only
-yqiB,JW3001,2,2,False,S,S,Function unknown
+yqiB,JW3001,2,1,True,S,S,Function unknown
 yqiC,JW5505,1,1,False,S,S,Function unknown
 yqiG,JW5507,1,1,False,S,S,Function unknown
 yqiH,JW5508,1,1,False,W,W,Extracellular structures
@@ -3821,14 +3821,14 @@ yqjI,JW3042,2,1,True,S,S,Function unknown
 yqjK,JW3071,2,2,False,S,S,Function unknown
 yraH,JW3111,1,1,False,N,N,Cell motility
 yraI,JW3112,1,2,True,W,W,Extracellular structures
-yraJ,JW3113,2,1,True,"N,W",N,Cell motility
-yraK,JW3114,1,1,False,N,N,Cell motility
-yraM,JW3116,1,1,False,S,S,Function unknown
+yraJ,JW3113,2,1,True,"W,N",W,Extracellular structures
+yraK,JW3114,2,1,True,N,N,Cell motility
+yraM,JW3116,1,2,True,S,S,Function unknown
 yraN,JW3117,1,1,False,L,L,"Replication, recombination and repair"
 yraO,JW3118,1,2,True,S,S,Function unknown
 yraP,JW3119,1,1,False,S,S,Function unknown
 yraQ,JW3120,1,2,True,S,S,Function unknown
-yraR,JW5528,1,2,True,R,R,General function prediction only
+yraR,JW5528,1,1,False,R,R,General function prediction only
 yrbA,JW3157,1,1,False,S,S,Function unknown
 yrbC,JW3159,2,2,False,S,S,Function unknown
 yrbD,JW3160,2,2,False,S,S,Function unknown
@@ -3836,13 +3836,13 @@ yrbE,JW3161,2,2,False,S,S,Function unknown
 yrbF,JW3162,2,2,False,S,S,Function unknown
 yrbG,JW3163,2,2,False,P,P,Inorganic ion transport and metabolism
 yrbL,JW3174,2,2,False,S,S,Function unknown
-yrdA,JW5710,1,1,False,R,R,General function prediction only
+yrdA,JW5710,1,2,True,R,R,General function prediction only
 yrdB,JW3241,2,1,True,S,S,Function unknown
 yrdD,JW5949,1,1,False,L,L,"Replication, recombination and repair"
 yrfA,JW5694,1,1,False,S,S,Function unknown
-yrfB,JW3356,2,2,False,S,S,Function unknown
+yrfB,JW3356,2,1,True,S,S,Function unknown
 yrfC,JW3357,2,1,True,S,S,Function unknown
-yrfD,JW5693,1,1,False,S,S,Function unknown
+yrfD,JW5693,1,2,True,S,S,Function unknown
 yrfG,JW5865,2,2,False,H,H,Coenzyme transport and metabolism
 yrhA,JW5864,2,2,False,S,S,Function unknown
 yrhB,JW3411,2,1,True,S,S,Function unknown
@@ -3850,18 +3850,18 @@ yrhC,JW5678,2,1,True,S,S,Function unknown
 ysaB,JW3532,1,1,False,S,S,Function unknown
 ysdC,JW5937,1,1,False,S,S,Function unknown
 ysgA,JW5853,1,1,False,Q,Q,"Secondary metabolites biosynthesis, transport and catabolism"
-ytfA,JW4163,1,1,False,S,S,Function unknown
+ytfA,JW4163,1,2,True,S,S,Function unknown
 ytfB,JW5745,2,2,False,D,D,"Cell cycle control, cell division, chromosome partitioning"
-ytfE,JW4167,1,2,True,O,O,"Post-translational modification, protein turnover, chaperones"
-ytfF,JW4168,2,2,False,"G,R,E",G,Carbohydrate transport and metabolism
+ytfE,JW4167,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
+ytfF,JW4168,2,2,False,"R,G,E",R,General function prediction only
 ytfG,JW4169,1,2,True,S,S,Function unknown
 ytfH,JW5747,1,2,True,K,K,Transcription
 ytfI,JW5748,1,1,False,S,S,Function unknown
 ytfJ,JW4175,1,1,False,R,R,General function prediction only
-ytfK,JW5749,1,2,True,S,S,Function unknown
+ytfK,JW5749,1,1,False,S,S,Function unknown
 ytfL,JW4177,2,2,False,S,S,Function unknown
 ytfM,JW4179,1,1,False,S,S,Function unknown
-ytfN,JW4180,1,2,True,S,S,Function unknown
+ytfN,JW4180,1,1,False,S,S,Function unknown
 ytfP,JW4181,1,2,True,E,E,Amino acid transport and metabolism
 ytfQ,JW4186,1,2,True,G,G,Carbohydrate transport and metabolism
 ytfR,JW5752,1,1,False,G,G,Carbohydrate transport and metabolism
@@ -3871,7 +3871,7 @@ ytjC,JW4358,2,1,True,G,G,Carbohydrate transport and metabolism
 yzcX,JW3780,1,1,False,S,S,Function unknown
 yzfA,JW4182,2,2,False,S,S,Function unknown
 yzgL,JW3390,1,1,False,S,S,Function unknown
-zapA,JW2878,1,2,True,D,D,"Cell cycle control, cell division, chromosome partitioning"
+zapA,JW2878,1,1,False,D,D,"Cell cycle control, cell division, chromosome partitioning"
 zitB,JW0735,2,2,False,P,P,Inorganic ion transport and metabolism
 zntA,JW3434,2,1,True,P,P,Inorganic ion transport and metabolism
 zntR,JW3254,2,1,True,K,K,Transcription
@@ -3880,7 +3880,7 @@ znuB,JW1848,2,2,False,P,P,Inorganic ion transport and metabolism
 znuC,JW1847,2,2,False,P,P,Inorganic ion transport and metabolism
 zraP,JW5546,1,1,False,O,O,"Post-translational modification, protein turnover, chaperones"
 zraR,JW3968,2,2,False,T,T,Signal transduction mechanisms
-zraS,JW3967,2,2,False,T,T,Signal transduction mechanisms
+zraS,JW3967,2,1,True,T,T,Signal transduction mechanisms
 zupT,JW3007,2,2,False,P,P,Inorganic ion transport and metabolism
 zur,JW5714,2,1,True,P,P,Inorganic ion transport and metabolism
 zwf,JW1841,2,2,False,G,G,Carbohydrate transport and metabolism

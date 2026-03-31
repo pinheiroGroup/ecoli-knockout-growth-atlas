@@ -18,7 +18,7 @@ using Statistics
 using JSON3
 using Kinbiont
 
-const DATA_DIR = joinpath(@__DIR__, "..")
+const DATA_DIR = joinpath(@__DIR__, "../data")
 const OUT_PATH = joinpath(DATA_DIR, "docs", "data", "curves_data.json")
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -27,6 +27,21 @@ const OUT_PATH = joinpath(DATA_DIR, "docs", "data", "curves_data.json")
 
 _as_float(v) = (ismissing(v) || v === nothing) ? NaN : Float64(v)
 _as_str(v)   = (ismissing(v) || v === nothing) ? ""  : string(v)
+
+# Replace NaN/Inf in each column with the column finite mean (or 0 if all non-finite).
+# Same approach as GUIbiont clustering pipeline — avoids distorting cluster shapes with 0.
+function _fill_nan_colmean(m::Matrix{Float64})::Matrix{Float64}
+    out = copy(m)
+    for j in axes(m, 2)
+        col    = m[:, j]
+        finite = filter(isfinite, col)
+        fill_v = isempty(finite) ? 0.0 : Statistics.mean(finite)
+        for i in axes(m, 1)
+            isfinite(out[i, j]) || (out[i, j] = fill_v)
+        end
+    end
+    return out
+end
 
 function find_elbow(ks, wcss_vals)
     # Largest second-difference (maximum curvature in the elbow)
@@ -222,15 +237,7 @@ function main()
     times_m63, curves_m63 = load_curves(
         joinpath(DATA_DIR, "Growth_curves_M63.xlsx"), "M63", ids_m63)
 
-    # Use the shorter common time range if they differ
-    times = length(times_lb) <= length(times_m63) ? times_lb : times_m63
-
-    # Trim curves to common length
-    n_tp = length(times)
-    foreach(k -> curves_lb[k]  = curves_lb[k][1:n_tp],  keys(curves_lb))
-    foreach(k -> curves_m63[k] = curves_m63[k][1:n_tp], keys(curves_m63))
-
-    # Aggregate replicates
+    # Aggregate replicates (each medium uses its own full time vector)
     @info "Aggregating replicates by gene..."
     agg_lb  = aggregate_by_gene(meta_lb,  curves_lb)
     agg_m63 = aggregate_by_gene(meta_m63, curves_m63)
@@ -245,22 +252,27 @@ function main()
     genes_lb_sorted  = sort(collect(genes_lb))
     genes_m63_sorted = sort(collect(genes_m63))
 
-    mat_lb  = reduce(vcat, [agg_lb[g].mean'  for g in genes_lb_sorted])   # n_genes_lb  × n_tp
-    mat_m63 = reduce(vcat, [agg_m63[g].mean' for g in genes_m63_sorted])  # n_genes_m63 × n_tp
+    mat_lb  = reduce(vcat, [agg_lb[g].mean'  for g in genes_lb_sorted])   # n_genes_lb  × n_tp_lb
+    mat_m63 = reduce(vcat, [agg_m63[g].mean' for g in genes_m63_sorted])  # n_genes_m63 × n_tp_m63
 
-    # Clustering needs finite values — replace NaN with 0 only for this input
-    mat_lb_cl  = replace(mat_lb,  NaN => 0.0)
-    mat_m63_cl = replace(mat_m63, NaN => 0.0)
+    # Column-mean imputation for remaining NaN (timepoints where all replicates were missing).
+    # Using 0.0 would distort cluster shapes; column mean is the neutral choice.
+    mat_lb_cl  = _fill_nan_colmean(mat_lb)
+    mat_m63_cl = _fill_nan_colmean(mat_m63)
 
-    # Cluster
+    # Cluster each medium with its own time vector
     @info "Clustering LB gene curves..."
-    cl_lb  = cluster_gene_curves(mat_lb_cl,  times, genes_lb_sorted)
+    cl_lb  = cluster_gene_curves(mat_lb_cl,  times_lb,  genes_lb_sorted)
 
     @info "Clustering M63 gene curves..."
-    cl_m63 = cluster_gene_curves(mat_m63_cl, times, genes_m63_sorted)
+    cl_m63 = cluster_gene_curves(mat_m63_cl, times_m63, genes_m63_sorted)
+
+    # Use the shorter time vector for JSON output (common denominator for display)
+    times  = length(times_lb) <= length(times_m63) ? times_lb : times_m63
+    n_tp   = length(times)
 
     # Downsample time axis for JSON output (full resolution used for clustering above)
-    # Keep every 4th point → 200 → ~50 points: reduces JSON ~4x with negligible visual loss
+    # Keep every 4th point → ~50 points: reduces JSON ~4x with negligible visual loss
     ds       = 4
     ds_idx   = 1:ds:n_tp
     times_ds = times[ds_idx]

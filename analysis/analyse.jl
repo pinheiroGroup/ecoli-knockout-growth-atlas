@@ -210,11 +210,15 @@ function aggregate_by_gene(meta, curves_dict::Dict{String,Vector{Float64}})
             vs = filter(!isnan, mat[i, :])
             isempty(vs) ? NaN : Statistics.mean(vs)
         end
-        σ = map(1:size(mat, 1)) do i
+        # SEM (std / sqrt(n_finite)) so the shaded band shows uncertainty in
+        # the mean rather than raw replicate spread (more meaningful at n=3).
+        # NaN where no replicates exist so interpolation respects the valid range.
+        sem = map(1:size(mat, 1)) do i
             vs = filter(!isnan, mat[i, :])
-            length(vs) > 1 ? Statistics.std(vs) : 0.0
+            isempty(vs) ? NaN :
+            length(vs) > 1 ? Statistics.std(vs) / sqrt(length(vs)) : 0.0
         end
-        result[gene] = (; mean=μ, std=σ, n=size(mat, 2), jw_id=jw_map[gene])
+        result[gene] = (; mean=μ, std=sem, n=size(mat, 2), jw_id=jw_map[gene])
     end
     return result
 end
@@ -336,10 +340,19 @@ function main()
     m63_row = Dict(g => i for (i, g) in enumerate(genes_m63_sorted))
 
     # Interpolate std curves to the same grids
-    mat_lb_std  = reduce(vcat, [agg_lb[g].std'  for g in genes_lb_sorted])
-    mat_m63_std = reduce(vcat, [agg_m63[g].std' for g in genes_m63_sorted])
-    _, mat_lb_std_grid  = _interp_to_common_grid(times_lb,  mat_lb_std;  n_grid=length(times_lb_grid))
-    _, mat_m63_std_grid = _interp_to_common_grid(times_m63, mat_m63_std; n_grid=length(times_m63_grid))
+    # Interpolate SEM curves onto the SAME precomputed grid as the means.
+    # Using _interp1 directly avoids recomputing a different grid; since SEM is
+    # NaN where mean is NaN, the interpolation stays within the mean's valid range.
+    n_lb_genes  = length(genes_lb_sorted)
+    n_m63_genes = length(genes_m63_sorted)
+    mat_lb_std_grid  = Matrix{Float64}(undef, n_lb_genes,  length(times_lb_grid))
+    mat_m63_std_grid = Matrix{Float64}(undef, n_m63_genes, length(times_m63_grid))
+    for (i, g) in enumerate(genes_lb_sorted)
+        mat_lb_std_grid[i, :]  = _interp1(times_lb,  agg_lb[g].std,  times_lb_grid)
+    end
+    for (i, g) in enumerate(genes_m63_sorted)
+        mat_m63_std_grid[i, :] = _interp1(times_m63, agg_m63[g].std, times_m63_grid)
+    end
 
     # Use the shorter grid as the shared display time axis
     times_out = length(times_lb_grid) <= length(times_m63_grid) ? times_lb_grid : times_m63_grid

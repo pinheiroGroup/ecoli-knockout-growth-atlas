@@ -1104,7 +1104,7 @@ function renderCentroidPlot(divId, medium, zScored) {
     const lw    = ng ? 1.5 : lw_min + (lw_max - lw_min) * (counts[i] / maxCount);
     return {
       name: ng ? `Cluster ${i+1} — non-growing (n=${counts[i]})` : `Cluster ${i+1} (n=${counts[i]})`,
-      x: D.times,
+      x: D.centroid_times[medium],
       y: centroid,
       mode: 'lines',
       line: { color, width: lw, dash: ng ? 'dot' : 'solid' },
@@ -1127,7 +1127,7 @@ function renderCentroidsZ() {
       .filter(({ i }) => !isNongrowing(med, i + 1))   // exclude non-growing: z-score is meaningless for flat signals
       .map(({ centroid, i }) => ({
         name: `${med} C${i+1}`,
-        x: D.times,
+        x: D.centroid_times[med],
         y: centroid,
         mode: 'lines',
         line: { color: clusterColor(i + 1, med), width: 2,
@@ -1158,7 +1158,7 @@ function renderBrowserPlot() {
       if (!shownClusterCurves.has(info.cluster)) return;
       const ng = isNongrowing(med, info.cluster);
       traces.push({
-        x: D.times, y: info.mean,
+        x: D[`times_${med}`], y: info.mean,
         mode: 'lines',
         line: { color: clusterColor(info.cluster, med), width: ng ? 0.4 : 0.6 },
         opacity: ng ? 0.1 : 0.2,
@@ -1173,7 +1173,7 @@ function renderBrowserPlot() {
     const ng = isNongrowing(med, i + 1);
     traces.push({
       name: ng ? `Cluster ${i+1} — non-growing (centroid)` : `Cluster ${i+1} (centroid)`,
-      x: D.times, y: centroid,
+      x: D.centroid_times[med], y: centroid,
       mode: 'lines',
       line: { color: clusterColor(i + 1, med), width: ng ? 1.5 : 3, dash: ng ? 'dot' : 'solid' },
       opacity: ng ? 0.5 : 1,
@@ -1189,7 +1189,7 @@ function renderBrowserPlot() {
     const color = clusterColor(info.cluster, med);
     traces.push({
       name: `${gene} (C${info.cluster})`,
-      x: D.times, y: info.mean,
+      x: D[`times_${med}`], y: info.mean,
       mode: 'lines',
       line: { color, width: 2.5, dash: 'dot' },
       hovertemplate: `<b>${gene}</b> | Cluster ${info.cluster}<br>OD: %{y:.4f}<extra></extra>`,
@@ -1349,9 +1349,10 @@ function renderCompareOverlay() {
     const upper = info.mean.map((v, i) => v + info.std[i]);
     const lower = info.mean.map((v, i) => v - info.std[i]);
 
+    const tAxis = D[`times_${med}`];
     // SD band
     traces.push({
-      x: [...D.times, ...D.times.slice().reverse()],
+      x: [...tAxis, ...tAxis.slice().reverse()],
       y: [...upper, ...lower.slice().reverse()],
       fill: 'toself',
       fillcolor: color.replace(')', ',0.15)').replace('rgb', 'rgba').replace('#', '').padEnd(9),
@@ -1364,7 +1365,7 @@ function renderCompareOverlay() {
 
     traces.push({
       name: `${med} (cluster ${info.cluster}, n=${info.n_replicates})`,
-      x: D.times,
+      x: tAxis,
       y: info.mean,
       mode: 'lines',
       line: { color, width: 2.5 },

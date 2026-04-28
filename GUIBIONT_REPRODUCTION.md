@@ -16,7 +16,7 @@ Two short Python scripts handle data preparation; everything else runs in the br
 
 ## Prerequisites
 
-- GUIbiont server running (`julia --project=. web_server.jl` from the GUIbiont repo)
+- GUIbiont server running (`julia --project=. --threads=auto web_server.jl` from the GUIbiont repo)
 - Python ≥ 3.9 with `pandas`, `numpy`, `openpyxl`
 - Install dependencies once: `pip install pandas numpy openpyxl`
 
@@ -90,7 +90,7 @@ Do this **twice** — once for LB, once for M63.
 3. **Models**: check all four — `logistic`, `gompertz`, `baranyi_richards`, `aHPM`
 4. Leave AICc model selection enabled (default)
 5. Click **Run**  
-   (expect ~3–5 min for ~3,800 genes; convergence rate should be ≥ 98%)
+   (runtime depends heavily on hardware and Julia thread count — convergence rate should be ≥ 98%)
 6. Click **Download CSV** → save as `results/keio_batch_fit_lb.csv`
 
 Repeat for `keio_m63`, saving as `results/keio_batch_fit_m63.csv`.

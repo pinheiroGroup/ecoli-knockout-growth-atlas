@@ -5,8 +5,11 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "analysis"))
 from ml_keio import build_gene_cog_map
 import pandas as pd
 
-df    = pd.read_csv("results/keio_batch_fit_lb.csv")
-genes = df["gene"].dropna().unique().tolist()
+df = pd.read_csv("results/keio_lb_gene_means.csv")
+if "gene" in df.columns:
+    genes = df["gene"].dropna().astype(str).unique().tolist()
+else:
+    genes = [col for col in df.columns if col != "Time"]
 
 gene_cog = build_gene_cog_map(genes)
 all_cats = sorted({c for cats in gene_cog.values() for c in cats})

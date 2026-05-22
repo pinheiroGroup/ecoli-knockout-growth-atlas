@@ -30,8 +30,8 @@ def clean_fit_results(path):
 
 
 for medium in ["lb", "m63"]:
-    src = f"results/keio_batch_fit_{medium}.csv"
-    dst = f"results/keio_batch_fit_{medium}_clean.csv"
+    src = f"results/keio_{medium}_batch_fit.csv"
+    dst = f"results/keio_{medium}_batch_fit_clean.csv"
     cleaned = clean_fit_results(src)
     cleaned.to_csv(dst, index=False)
     print(f"{medium.upper()}: {len(cleaned)} converged rows -> {dst}")

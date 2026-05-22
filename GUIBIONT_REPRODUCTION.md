@@ -91,9 +91,9 @@ Do this **twice** — once for LB, once for M63.
 4. Leave AICc model selection enabled (default)
 5. Click **Run**  
    (runtime depends heavily on hardware and Julia thread count — convergence rate should be ≥ 98%)
-6. Click **Download CSV** → save as `results/keio_batch_fit_lb.csv`
+6. Click **Download CSV** → save as `results/keio_lb_batch_fit.csv`
 
-Repeat for `keio_m63`, saving as `results/keio_batch_fit_m63.csv`.
+Repeat for `keio_m63`, saving as `results/keio_m63_batch_fit.csv`.
 
 ---
 
@@ -143,9 +143,9 @@ python scripts/05_clean_fit_results.py
 Do this **twice** — once for LB, once for M63.
 
 1. Open the **ML Analysis** tab
-2. **Fit results CSV**: upload `results/keio_batch_fit_lb_clean.csv`
+2. **Fit results CSV**: upload `results/keio_lb_batch_fit_clean.csv`
 3. **Label column**: `gene`
-4. **Feature matrix CSV**: upload `results/cog_feature_matrix.csv`
+4. **Feature matrix CSV**: upload `results/lb_cog_feature_matrix.csv` (use `m63_cog_feature_matrix.csv` for the M63 run)
 5. **Parameters to analyse**: select `gr`, `N_max`, `lag`
 6. Click **Run**
 
@@ -154,7 +154,7 @@ The interface shows:
 - **Random forest feature importance** — top COG categories per parameter
 - **Partial dependence plots** — marginal effect of top 5 COG categories
 
-Repeat with `keio_batch_fit_m63_clean.csv` for M63.
+Repeat with `keio_m63_batch_fit_clean.csv` for M63.
 
 ---
 
@@ -166,10 +166,10 @@ Repeat with `keio_batch_fit_m63_clean.csv` for M63.
 | `results/keio_m63_gene_means.csv` | Script 01 |
 | `results/clusters_lb.csv` | GUIbiont Clustering tab |
 | `results/clusters_m63.csv` | GUIbiont Clustering tab |
-| `results/keio_batch_fit_lb.csv` | GUIbiont Batch Fit tab |
-| `results/keio_batch_fit_m63.csv` | GUIbiont Batch Fit tab |
+| `results/keio_lb_batch_fit.csv` | GUIbiont Batch Fit tab |
+| `results/keio_m63_batch_fit.csv` | GUIbiont Batch Fit tab |
 | `results/cluster_assignments_both.csv` | Script 03 |
 | `results/cluster_shifters.csv` | Script 03 |
 | `results/enrichment/` | `enrichment.py` |
-| `results/cog_feature_matrix.csv` | Script 04 |
-| `results/keio_batch_fit_{lb,m63}_clean.csv` | Script 05 |
+| `results/{lb,m63}_cog_feature_matrix.csv` | Script 04 |
+| `results/keio_{lb,m63}_batch_fit_clean.csv` | Script 05 |

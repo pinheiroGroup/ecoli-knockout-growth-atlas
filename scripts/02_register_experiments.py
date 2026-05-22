@@ -1,24 +1,50 @@
 #!/usr/bin/env python3
 """Register Keio gene-mean CSVs as GUIbiont experiments."""
 import os
+import sys
 import shutil
 import pandas as pd
-import tkinter as tk
-from tkinter import filedialog
 
 RESULTS = "results"
 
-root = tk.Tk()
-root.withdraw()
 
-GUIBIONT = filedialog.askdirectory(
-    title="Select your GUIbiont repository folder"
-)
+def pick_guibiont_dir() -> str:
+    """Resolve the GUIbiont repo path from CLI arg, env var, GUI picker, or stdin."""
+    if len(sys.argv) > 1:
+        return sys.argv[1]
 
-if GUIBIONT == "":
+    env_dir = os.environ.get("GUIBIONT_DIR")
+    if env_dir:
+        return env_dir
+
+    try:
+        import tkinter as tk
+        from tkinter import filedialog
+    except ImportError:
+        path = input("Path to your GUIbiont repository folder: ").strip()
+        return path
+
+    try:
+        root = tk.Tk()
+        root.withdraw()
+        path = filedialog.askdirectory(title="Select your GUIbiont repository folder")
+        root.destroy()
+        return path
+    except tk.TclError:
+        # No display available (headless / SSH / CI).
+        path = input("Path to your GUIbiont repository folder: ").strip()
+        return path
+
+
+GUIBIONT = pick_guibiont_dir()
+
+if not GUIBIONT:
     raise ValueError("No folder selected. Please select your GUIbiont repository.")
 
-GUIBIONT = os.path.abspath(GUIBIONT)
+GUIBIONT = os.path.abspath(os.path.expanduser(GUIBIONT))
+
+if not os.path.isdir(GUIBIONT):
+    raise ValueError(f"Not a directory: {GUIBIONT}")
 
 for medium in ["lb", "m63"]:
     exp_dir = os.path.join(GUIBIONT, "Clean_data", f"keio_{medium}")

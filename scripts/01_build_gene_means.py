@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build per-gene mean curves for LB and M63 from the Keio atlas raw data."""
 
+import logging
 import os
 import numpy as np
 import pandas as pd
@@ -8,18 +9,33 @@ import pandas as pd
 DATA_DIR = "data"
 RESULTS_DIR = "results"
 
+# OD readings at or below this value are treated as non-informative baseline /
+# evaporated wells / blank Excel cells (which read as 0).
+MIN_VALID_OD = 0.01
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+log = logging.getLogger(__name__)
+
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 
 def normalize_curve_id(x):
-    """Return curve id in the same format used by curve columns, e.g. Curve00001."""
-    x = str(x).strip()
+    """Return curve id in the same format used by curve columns, e.g. Curve00001.
 
-    if x.startswith("Curve"):
-        return x
+    Excel reads numeric ids as floats ("5.0"), so we coerce via int(float(...))
+    when the value is numeric. Non-numeric ids are zero-padded as-is.
+    """
+    s = str(x).strip()
 
-    x = x.replace(".0", "")
-    return "Curve" + x.zfill(5)
+    if s.startswith("Curve"):
+        return s
+
+    try:
+        n = int(float(s))
+    except ValueError:
+        return "Curve" + s.zfill(5)
+
+    return f"Curve{n:05d}"
 
 
 # =============================================================================
@@ -35,12 +51,8 @@ meta["curve_id"] = meta.iloc[:, 0].apply(normalize_curve_id)
 meta["gene_name"] = meta.iloc[:, 2].astype(str).str.strip()
 meta["medium"] = meta.iloc[:, 4].astype(str).str.strip()
 
-print("Example metadata curve_ids:")
-print(meta["curve_id"].head(10).tolist())
-
-print()
-print("Media in metadata:")
-print(meta["medium"].value_counts())
+log.info("Example metadata curve_ids: %s", meta["curve_id"].head(10).tolist())
+log.info("Media in metadata:\n%s", meta["medium"].value_counts())
 
 
 # =============================================================================
@@ -65,13 +77,11 @@ lb_times = lb_curves_for_time[lb_time_col].values.astype(float)
 for medium, path in FILES.items():
     curves = pd.read_excel(path)
 
-    print()
-    print("=" * 80)
-    print(f"Processing medium: {medium}")
-    print("=" * 80)
-
-    print(f"{medium} curve columns:")
-    print(curves.columns[:10].tolist())
+    log.info("")
+    log.info("=" * 80)
+    log.info("Processing medium: %s", medium)
+    log.info("=" * 80)
+    log.info("%s curve columns: %s", medium, curves.columns[:10].tolist())
 
     time_col = curves.columns[0]
     times = curves[time_col].values.astype(float)
@@ -101,8 +111,7 @@ for medium, path in FILES.items():
         series = curves[curve_id].values.astype(float).copy()
 
         # Identify real observed OD values.
-        # Values <= 0.01 are treated as non-informative baseline/artefact.
-        valid_idx = np.where((~np.isnan(series)) & (series > 0.01))[0]
+        valid_idx = np.where((~np.isnan(series)) & (series > MIN_VALID_OD))[0]
 
         if valid_idx.size == 0:
             # Completely invalid curve: skip it.
@@ -111,7 +120,7 @@ for medium, path in FILES.items():
                 "medium": medium,
                 "curve_id": curve_id,
                 "gene_name": gene,
-                "reason": "no_valid_od_above_0.01",
+                "reason": f"no_valid_od_above_{MIN_VALID_OD}",
             })
             continue
 
@@ -134,10 +143,10 @@ for medium, path in FILES.items():
         groups.setdefault(gene, []).append(series)
         valid_curves += 1
 
-    print(f"{medium}: metadata rows = {len(subset)}")
-    print(f"{medium}: valid curves used = {valid_curves}")
-    print(f"{medium}: missing curves = {missing_curves}")
-    print(f"{medium}: invalid curves skipped = {invalid_curves}")
+    log.info("%s: metadata rows = %d", medium, len(subset))
+    log.info("%s: valid curves used = %d", medium, valid_curves)
+    log.info("%s: missing curves = %d", medium, missing_curves)
+    log.info("%s: invalid curves skipped = %d", medium, invalid_curves)
 
     # -------------------------------------------------------------------------
     # Build per-gene mean curves
@@ -167,13 +176,13 @@ for medium, path in FILES.items():
     out = pd.DataFrame(result)
 
     nan_count = out.isna().sum().sum()
-    print(f"{medium}: total NaN values in output = {nan_count}")
+    log.info("%s: total NaN values in output = %d", medium, nan_count)
 
     out_path = f"{RESULTS_DIR}/keio_{medium.lower()}_gene_means.csv"
     out.to_csv(out_path, index=False)
 
-    print(f"{medium}: {len(result) - 1} genes written")
-    print(f"{medium}: output written to {out_path}")
+    log.info("%s: %d genes written", medium, len(result) - 1)
+    log.info("%s: output written to %s", medium, out_path)
 
     # -------------------------------------------------------------------------
     # Save reports
@@ -182,9 +191,9 @@ for medium, path in FILES.items():
     if invalid_curve_records:
         invalid_curves_path = f"{RESULTS_DIR}/keio_{medium.lower()}_invalid_curves.csv"
         pd.DataFrame(invalid_curve_records).to_csv(invalid_curves_path, index=False)
-        print(f"{medium}: invalid curve report written to {invalid_curves_path}")
+        log.info("%s: invalid curve report written to %s", medium, invalid_curves_path)
 
     if skipped_genes:
         skipped_genes_path = f"{RESULTS_DIR}/keio_{medium.lower()}_skipped_genes.csv"
         pd.DataFrame(skipped_genes).to_csv(skipped_genes_path, index=False)
-        print(f"{medium}: skipped gene report written to {skipped_genes_path}")
+        log.info("%s: skipped gene report written to %s", medium, skipped_genes_path)

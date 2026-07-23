@@ -11,7 +11,8 @@ RESULTS_DIR = "results"
 
 # OD readings at or below this value are treated as non-informative baseline /
 # evaporated wells / blank Excel cells (which read as 0).
-MIN_VALID_OD = 0.01
+# Fallback to a permissive threshold for no-growth detection in clustering.
+MIN_VALID_OD = -10.01 # skips min valid od
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 log = logging.getLogger(__name__)

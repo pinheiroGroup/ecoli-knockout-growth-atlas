@@ -14,12 +14,18 @@
 # Output: ../docs/data/curves_data.json
 
 using XLSX
+using CSV
+using DataFrames
 using Statistics
 using JSON3
 using Kinbiont
 
-const DATA_DIR = joinpath(@__DIR__, "../data")
-const OUT_PATH = joinpath(DATA_DIR, "docs", "data", "curves_data.json")
+const DATA_DIR    = joinpath(@__DIR__, "../data")
+const RESULTS_DIR = joinpath(@__DIR__, "../results")
+# The tracked file the frontend and analysis/enrichment_nongrowers.py read.
+# This used to resolve under DATA_DIR, i.e. ../data/docs/data/, so runs wrote to
+# an untracked copy and every consumer kept reading a stale checked-in file.
+const OUT_PATH    = joinpath(@__DIR__, "..", "docs", "data", "curves_data.json")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Helpers
@@ -81,6 +87,42 @@ function _fill_nan_colmean(m::Matrix{Float64})::Matrix{Float64}
     return out
 end
 
+# Load the replicate-averaged matrix that scripts/01_build_gene_means.py writes.
+#
+# Clustering (and therefore the non-growing pre-screen) must run on these curves,
+# not on a matrix re-aggregated here from the raw workbooks. The Python builder
+# extends every replicate to the full run before averaging (leading values back-
+# filled, internal gaps carried forward, post-final values carried forward), so
+# each strain is judged over the whole 0.25–50 h window. Re-aggregating instead
+# truncates each strain at the earliest replicate dropout, which cuts late
+# growers short and makes them look flat: strains such as ptsH, ybhM and yccE
+# reach OD 0.6–0.8 only after 23 h and were previously mis-assigned to the
+# non-growing sentinel. `genes` fixes the row order.
+function load_gene_mean_matrix(
+    medium::String,
+    genes::Vector{String},
+)::Tuple{Vector{Float64}, Matrix{Float64}}
+    path = joinpath(RESULTS_DIR, "keio_$(lowercase(medium))_gene_means.csv")
+    isfile(path) || error(
+        "Replicate-averaged matrix not found: $path\n" *
+        "Run `python scripts/01_build_gene_means.py` first."
+    )
+    df    = CSV.read(path, DataFrame)
+    times = Float64.(df[!, 1])
+
+    missing_genes = filter(g -> !hasproperty(df, Symbol(g)), genes)
+    isempty(missing_genes) || error(
+        "$medium: $(length(missing_genes)) gene(s) absent from $path: " *
+        join(first(missing_genes, 10), ", ")
+    )
+
+    mat = Matrix{Float64}(undef, length(genes), length(times))
+    for (i, g) in enumerate(genes)
+        mat[i, :] = Float64.(df[!, Symbol(g)])
+    end
+    return times, mat
+end
+
 # Build a clustering matrix on a robust common time grid.
 # t_end is chosen as the `end_quantile` quantile of per-gene valid endpoints,
 # so a few genes with very short replicates do not truncate the entire dataset.
@@ -117,6 +159,30 @@ function _interp_to_cluster_grid(
     # Impute any remaining NaN (genes whose valid range ends before t1)
     out = _fill_nan_colmean(out)
     return grid, out
+end
+
+# Emit the centroid table Figure 2c reads: one row per cluster per scale, with
+# the cluster size and the centroid sampled on the clustering grid.
+const CENTROID_CSV_DIR = "/media/aivuk/64fce268-2613-4033-b39f-537ae2d28805/roms/pinheiroTech/GUIbiontPaper/scripts"
+
+function write_centroid_csv(medium::String, times, curves, cl)
+    isdir(CENTROID_CSV_DIR) || return
+    zs   = Kinbiont._zscore_rows(curves)
+    cols = ["centroid_t_$(round(t; digits=4))" for t in times]
+    rows = NamedTuple[]
+    for scale in ("raw", "normalized")
+        src = scale == "raw" ? curves : zs
+        for k in 1:cl.optimal_k
+            idx = findall(==(k), cl.clusters)
+            isempty(idx) && continue
+            c = vec(mean(src[idx, :], dims=1))
+            push!(rows, (; cluster=k, n_series=length(idx), type=scale,
+                         NamedTuple{Tuple(Symbol.(cols))}(Tuple(round.(c; digits=6)))...))
+        end
+    end
+    path = joinpath(CENTROID_CSV_DIR, "cluster_centroids_raw_and_normalized_$(medium).csv")
+    CSV.write(path, DataFrame(rows))
+    @info "  Centroid table written to $path"
 end
 
 function find_elbow(ks, wcss_vals)
@@ -262,51 +328,136 @@ end
 # 4. KinBiont clustering with WCSS elbow sweep
 # ─────────────────────────────────────────────────────────────────────────────
 
+# Identify the non-growing strains with Kinbiont's own detector, run on the
+# FULL-LENGTH replicate-averaged curves rather than on the shape-clustering grid.
+#
+# The two matrices serve different purposes and must not be conflated. The
+# clustering grid is deliberately truncated at the 5th-percentile endpoint so a
+# few short strains cannot cut the whole dataset; judging "does this strain
+# grow?" on that window declares every late grower flat (ptsH, ybhM and yccE
+# exceed OD 0.6, but only after the M63 grid ends at ~23 h). Conversely the
+# full-length curves carry a long carried-forward tail, which flattens the
+# z-scored shapes and collapses the LB k-means. So: growth/no-growth is decided
+# on the whole time course, shape is clustered on the truncated grid.
+function detect_non_growing(
+    gene_means_full::Matrix{Float64},   # n_genes × n_tp, full length, finite
+    times_full::Vector{Float64},
+    gene_labels::Vector{String};
+    tol_const::Float64 = 1.5,      # τ (Kinbiont default)
+    q_low::Float64  = 0.05,        # lower pre-screen quantile (Kinbiont default)
+    q_high::Float64 = 0.95,        # upper pre-screen quantile (Kinbiont default)
+)::Vector{Bool}
+    idx = detect_non_growing_indices(
+        gene_means_full, times_full;
+        prescreen_constant = true,
+        prescreen_tol      = tol_const,
+        prescreen_q_low    = q_low,
+        prescreen_q_high   = q_high,
+    )
+    mask = falses(length(gene_labels))
+    mask[idx] .= true
+    return collect(mask)
+end
+
+# Curves whose signal range is negligible over the clustering grid. Same
+# quantile-range test Kinbiont's pre-screen applies, evaluated here on the
+# clustering matrix rather than on the full-length curves, so it catches
+# "flat in this window" rather than "does not grow".
+function _flat_on_grid(
+    curves::Matrix{Float64};
+    q_low::Float64 = 0.05,
+    q_high::Float64 = 0.95,
+    tol::Float64 = 0.01,
+)::Vector{Bool}
+    [quantile(curves[i, :], q_high) - quantile(curves[i, :], q_low) <= tol
+     for i in axes(curves, 1)]
+end
+
 function cluster_gene_curves(
-    gene_means::Matrix{Float64},   # n_genes × n_tp
+    gene_means::Matrix{Float64},   # n_genes × n_tp, shape-clustering grid
     times::Vector{Float64},
     gene_labels::Vector{String};
     k_range = 2:10,
+    # Non-growing strains, decided beforehand on the full-length curves. They are
+    # held out of the k-means and take the last cluster index, reproducing
+    # Kinbiont's sentinel semantics: k-1 dynamic groups plus the sentinel.
+    non_growing::Vector{Bool} = Bool[],
+    force_k::Union{Nothing,Int} = nothing,  # override the auto-elbow selection
 )
-    gd = GrowthData(gene_means, times, gene_labels)
+    n_genes = size(gene_means, 1)
+    ng      = isempty(non_growing) ? falses(n_genes) : non_growing
+    length(ng) == n_genes || throw(ArgumentError(
+        "non_growing length $(length(ng)) != n_genes $n_genes"))
 
-    # WCSS sweep
-    @info "  Running WCSS sweep k=$(first(k_range))..$(last(k_range))"
+    prescreen = any(ng)
+    grow_idx  = findall(!, ng)
+
+    # A growing strain can still be flat *inside the clustering window* if it only
+    # takes off later (ptsI and uidR are at baseline through 22.75 h and reach
+    # OD ~0.27 by 50 h). Z-scoring such a curve rescales pure measurement noise
+    # into an extreme shape: these sit 12-15 units from the centroid where the
+    # median curve sits at 1.4, so k-means spends a whole cluster isolating two of
+    # them and the dynamic structure collapses to 3786/2. They are excluded from
+    # the FIT for that numerical reason only -- they are growers, not members of
+    # the non-growing class -- and are assigned to their nearest centroid
+    # afterwards so they still appear in a dynamic cluster.
+    flat_in_window = _flat_on_grid(gene_means) .& .!ng
+    fit_idx        = [i for i in grow_idx if !flat_in_window[i]]
+    assign_idx     = [i for i in grow_idx if flat_in_window[i]]
+    isempty(assign_idx) ||
+        @info "  $(length(assign_idx)) growing strain(s) flat within the clustering " *
+              "window held out of the fit, assigned to the nearest centroid"
+
+    fit_gd = GrowthData(gene_means[fit_idx, :], times, gene_labels[fit_idx])
+
+    # k in the reported sweep counts the sentinel, so the k-means over the
+    # remaining dynamic curves is run with one cluster fewer.
+    n_dynamic(k) = prescreen ? k - 1 : k
+
+    @info "  Running WCSS sweep k=$(first(k_range))..$(last(k_range)) (prescreen=$prescreen)"
     ks        = collect(k_range)
     wcss_vals = Float64[]
     for k in ks
-        opts      = FitOptions(
-            cluster                  = true,
-            n_clusters               = k,
-            cluster_prescreen_constant = true,
-            cluster_tol_const        = 1.5,
-        )
-        proc = preprocess(gd, opts)
+        proc = preprocess(fit_gd, FitOptions(cluster = true, n_clusters = n_dynamic(k)))
         push!(wcss_vals, something(proc.wcss, 0.0))
     end
 
-    # Elbow
-    opt_k = find_elbow(ks, wcss_vals)
-    @info "  Optimal k = $opt_k (elbow method)"
+    # Elbow (diagnostic aid). `force_k` overrides it when the analysis fixes k.
+    auto_k = find_elbow(ks, wcss_vals)
+    opt_k  = force_k === nothing ? auto_k : force_k
+    @info "  Optimal k = $opt_k (auto-elbow suggested $auto_k)"
 
-    # Final clustering
-    opts_final = FitOptions(
-        cluster                  = true,
-        n_clusters               = opt_k,
-        cluster_prescreen_constant = true,
-        cluster_tol_const        = 1.5,
-    )
-    proc_final = preprocess(gd, opts_final)
+    # Final clustering, then splice the sentinel back in at index opt_k.
+    proc_final = preprocess(fit_gd, FitOptions(cluster = true, n_clusters = n_dynamic(opt_k)))
+    fit_labels = something(proc_final.clusters, ones(Int, length(fit_idx)))
+
+    clusters = Vector{Int}(undef, n_genes)
+    clusters[fit_idx] = fit_labels
+    prescreen && (clusters[ng] .= opt_k)
+
+    # Nearest-centroid assignment for the held-out late growers, in the same
+    # z-scored space the k-means used.
+    if !isempty(assign_idx)
+        Z = Kinbiont._zscore_rows(gene_means)
+        cents = [vec(mean(Z[fit_idx[fit_labels .== j], :], dims=1)) for j in 1:n_dynamic(opt_k)]
+        for i in assign_idx
+            clusters[i] = argmin([sum((Z[i, :] .- c) .^ 2) for c in cents])
+        end
+    end
 
     return (
         ks         = ks,
         wcss       = wcss_vals,
         optimal_k  = opt_k,
-        clusters   = something(proc_final.clusters, ones(Int, size(gene_means, 1))),
-        # z-scored centroids (shape prototypes, scale-independent)
-        centroids_z  = proc_final.centroids,
+        prescreen  = prescreen,
+        clusters   = clusters,
+        # z-scored centroids (shape prototypes, scale-independent). Computed over
+        # all curves, so the sentinel gets a centroid too; `proc_final.centroids`
+        # only covers the dynamic curves the k-means actually saw. z-scoring uses
+        # Kinbiont's own row normalization, including its constant-curve guard.
+        centroids_z  = raw_centroids(Kinbiont._zscore_rows(gene_means), clusters, opt_k),
         # original-space centroids
-        centroids_raw = raw_centroids(gene_means, something(proc_final.clusters, ones(Int, size(gene_means, 1))), opt_k),
+        centroids_raw = raw_centroids(gene_means, clusters, opt_k),
     )
 end
 
@@ -351,9 +502,10 @@ function main()
     mat_m63 = reduce(vcat, [agg_m63[g].mean' for g in genes_m63_sorted])  # n_genes_m63 × n_tp_m63
 
     # ── Clustering ────────────────────────────────────────────────────────────
-    # Use a robust common grid (5th-percentile t_end) so that one gene with a
-    # very short replicate does not truncate the entire dataset. Genes that don't
-    # reach the grid end are imputed with column mean (inside _interp_to_cluster_grid).
+    # Shape is clustered on a robust common grid (5th-percentile t_end) so that
+    # one gene with a very short replicate does not truncate the entire dataset.
+    # Genes that don't reach the grid end are imputed with column mean (inside
+    # _interp_to_cluster_grid).
     @info "Building clustering grid for LB..."
     times_lb_cl, mat_lb_cl   = _interp_to_cluster_grid(times_lb,  mat_lb)
     @info "  LB clustering grid: $(times_lb_cl[1])–$(times_lb_cl[end]) h, $(length(times_lb_cl)) points"
@@ -362,11 +514,28 @@ function main()
     times_m63_cl, mat_m63_cl = _interp_to_cluster_grid(times_m63, mat_m63)
     @info "  M63 clustering grid: $(times_m63_cl[1])–$(times_m63_cl[end]) h, $(length(times_m63_cl)) points"
 
-    @info "Clustering LB gene curves..."
-    cl_lb  = cluster_gene_curves(mat_lb_cl,  times_lb_cl,  genes_lb_sorted)
+    # Growth/no-growth is decided separately, on the full-length replicate-
+    # averaged curves from scripts/01_build_gene_means.py, so that strains which
+    # only take off after the clustering grid ends are not called non-growing.
+    @info "Pre-screening non-growing strains on the full-length curves..."
+    times_lb_full,  mat_lb_full  = load_gene_mean_matrix("LB",  genes_lb_sorted)
+    times_m63_full, mat_m63_full = load_gene_mean_matrix("M63", genes_m63_sorted)
 
-    @info "Clustering M63 gene curves..."
-    cl_m63 = cluster_gene_curves(mat_m63_cl, times_m63_cl, genes_m63_sorted)
+    ng_lb  = detect_non_growing(mat_lb_full,  times_lb_full,  genes_lb_sorted)
+    ng_m63 = detect_non_growing(mat_m63_full, times_m63_full, genes_m63_sorted)
+    @info "  LB: $(count(ng_lb)) non-growing; M63: $(count(ng_m63)) non-growing (τ=1.5, q=0.05/0.95)"
+
+    # Paper configuration: LB has no non-growing subpopulation, so no sentinel is
+    # reserved and two dynamic clusters are used; M63 reserves the last cluster
+    # index for the pre-screened strains, giving two dynamic clusters plus the
+    # sentinel (k=3).
+    @info "Clustering LB gene curves (no pre-screen, k=2)..."
+    cl_lb  = cluster_gene_curves(mat_lb_cl,  times_lb_cl,  genes_lb_sorted;
+                                 non_growing = ng_lb, force_k = 2)
+
+    @info "Clustering M63 gene curves (pre-screen τ=1.5, k=3)..."
+    cl_m63 = cluster_gene_curves(mat_m63_cl, times_m63_cl, genes_m63_sorted;
+                                 non_growing = ng_m63, force_k = 3)
 
     # ── Visualisation ─────────────────────────────────────────────────────────
     # Per-gene curves are stored on the ORIGINAL time axis (downsampled 4x).
@@ -451,17 +620,26 @@ function main()
             "M63" => [to_json_vec(cl_m63.centroids_z[k, :]) for k in 1:size(cl_m63.centroids_z, 1)],
         ),
         "genes" => gene_records,
-        # With cluster_prescreen_constant=true, KinBiont always assigns
-        # non-growing wells to label n_clusters (the last index).
+        # With cluster_prescreen_constant=true, KinBiont assigns non-growing wells
+        # to label n_clusters (the last index). When the pre-screen is disabled
+        # (LB), no sentinel is reserved: report cluster 0 (matches no cluster) and
+        # an empty gene list so the figure draws no non-growing cluster.
         "nongrowing_cluster" => Dict(
-            "LB"  => cl_lb.optimal_k,
-            "M63" => cl_m63.optimal_k,
+            "LB"  => cl_lb.prescreen  ? cl_lb.optimal_k  : 0,
+            "M63" => cl_m63.prescreen ? cl_m63.optimal_k : 0,
         ),
         "nongrowing_genes" => Dict(
-            "LB"  => sort([g for g in genes_lb_sorted  if lb_cluster_map[g]  == cl_lb.optimal_k]),
-            "M63" => sort([g for g in genes_m63_sorted if m63_cluster_map[g] == cl_m63.optimal_k]),
+            "LB"  => cl_lb.prescreen  ? sort([g for g in genes_lb_sorted  if lb_cluster_map[g]  == cl_lb.optimal_k])  : String[],
+            "M63" => cl_m63.prescreen ? sort([g for g in genes_m63_sorted if m63_cluster_map[g] == cl_m63.optimal_k]) : String[],
         ),
     )
+
+    # Centroid tables for the paper's Figure 2c generator
+    # (GUIbiontPaper/scripts/plot_keio_cluster_centroids_raw_svg_v2.py). Written
+    # from the same run as the JSON so the panel can never drift from the
+    # clustering it is supposed to depict.
+    write_centroid_csv("lb",  times_lb_cl,  mat_lb_cl,  cl_lb)
+    write_centroid_csv("m63", times_m63_cl, mat_m63_cl, cl_m63)
 
     mkpath(dirname(OUT_PATH))
     open(OUT_PATH, "w") do io

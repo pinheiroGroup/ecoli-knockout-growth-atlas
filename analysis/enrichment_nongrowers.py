@@ -11,7 +11,8 @@ one-sided Fisher exact test:
   3. COG E                    -- amino-acid transport & metabolism
 
 The wider set is fetched live from the KEGG REST API so the gene list is
-reproducible rather than hand-curated. Writes enrichment_94_nongrowers.csv.
+reproducible rather than hand-curated. Writes enrichment_<n>_nongrowers.csv,
+where <n> is the size of the pre-screen class in curves_data.json.
 """
 import csv
 import json
@@ -24,7 +25,6 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 CURVES = ROOT / "docs" / "data" / "curves_data.json"
 COG_CSV = ROOT.parent / "GUIbiont" / "supplementary_data" / "gene_cog_assignments.csv"
-OUT_NAME = "enrichment_94_nongrowers.csv"
 
 AA_PREFIXES = ("arg", "aro", "cys", "his", "ilv", "leu", "lys",
                "met", "phe", "pro", "ser", "thr", "trp", "tyr", "gly")
@@ -75,6 +75,7 @@ def main() -> None:
     data = json.loads(CURVES.read_text())
     universe = {g["gene"].lower() for g in data["genes"]}
     nongrowers = {g.lower() for g in data["nongrowing_genes"]["M63"]}
+    out_name = f"enrichment_{len(nongrowers)}_nongrowers.csv"
 
     aa_set = {g for g in universe if g[:3] in AA_PREFIXES}
 
@@ -99,9 +100,9 @@ def main() -> None:
 
     for base in (ROOT / "results",
                  ROOT.parent / "GUIbiont" / "supplementary_data"):
-        with (base / OUT_NAME).open("w", newline="") as fh:
+        with (base / out_name).open("w", newline="") as fh:
             csv.writer(fh).writerows(rows)
-        print("wrote", base / OUT_NAME)
+        print("wrote", base / out_name)
     for r in rows[1:]:
         print(r)
 

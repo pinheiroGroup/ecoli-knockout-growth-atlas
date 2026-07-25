@@ -1,4 +1,0 @@
-gene_set,set_size,in_nongrowers,expected,fold_enrichment,odds_ratio,p_fisher_greater
-amino-acid biosynthesis (name prefixes),125,56,3.02,18.52,79.49,2.389754985268354e-64
-wider biosynthesis (KEGG AA + cofactor + nucleotide),278,72,6.73,10.7,56.95,1.2853374446134558e-66
-COG E (amino-acid transport & metabolism),274,40,6.63,6.03,11.26,1.0938279078697116e-22

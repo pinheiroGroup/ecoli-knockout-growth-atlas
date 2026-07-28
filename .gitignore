@@ -1,0 +1,4 @@
+
+# Bulk reference databases: downloaded on demand, hundreds of MB, well above
+# GitHub's 100 MB limit. The small KEGG lookups this repo caches are tracked.
+results/cache/cog-20.*

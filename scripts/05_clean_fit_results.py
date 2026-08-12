@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Clean GUIbiont batch fit exports for ML Analysis upload."""
+"""Clean GUIbiont batch fit exports for ML Analysis upload.
+
+NOT used to reproduce the manuscript's results: cleans the four-model AICc
+batch fit (batch_fit.jl), which the paper does not use (it fits gr/N_max
+with the log-linear estimator only). Feeds the COG-based exploratory
+analysis only.
+"""
 
 import numpy as np
 import pandas as pd

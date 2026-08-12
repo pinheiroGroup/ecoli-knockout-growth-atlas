@@ -11,4 +11,5 @@ XLSX = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"
 
 [compat]
 JSON3 = "1.14.3"
-XLSX = "0.11.0"
+Kinbiont = "1.5"
+XLSX = "0.10.4, 0.11"

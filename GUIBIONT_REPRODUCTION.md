@@ -52,54 +52,68 @@ python scripts/02_register_experiments.py
 
 ---
 
-## Step 3 — Clustering (GUIbiont interface)
+## Step 3 — Clustering
 
-Do this **twice** — once for LB, once for M63.
+The manuscript's clustering (Guibiont.tex/SM.tex Methods, "Trajectory
+preparation for clustering") runs on the **complete 0.25–50 h gene-mean
+trajectories from Step 1 directly — no interpolation, no truncated grid**.
+`analysis/analyse.jl` reproduces this natively against `Kinbiont.jl` (the same
+`preprocess`/`FitOptions` call GUIbiont's `/api/cluster` route makes), so it
+never drifts from what the GUIbiont interface itself would compute:
 
-### 3a — Cluster sweep (find optimal k)
+```bash
+cd analysis
+julia --project=. analyse.jl
+```
 
-1. Open the **Clustering** tab → click **File** mode
-2. Upload `results/keio_lb_gene_means.csv`
-3. Open **Advanced options**:
-   - Smooth method: `lowess`, frac `0.05`
-   - Check **Interpolate to common grid**
-     - Grid points: `100`
-     - t_start quantile: `0.05`
-     - t_end quantile: `0.95`
-   - Cluster method: `kmeans`
-4. Click **Sweep** (k = 2 to 10)
-5. Look at the **WCSS elbow plot** — note the suggested k (expect ~4 for LB, ~4 for M63, where one cluster is the non-growing sentinel)
+This loads the raw workbooks, builds the full-length gene means, runs the
+non-growing pre-screen (constant-curve criterion, τ=0.5, q=0.05/0.95, **no**
+trend test — `Kinbiont`'s `cluster_trend_test` defaults to `true` and must be
+passed as `false` explicitly, or it reserves extra sentinel slots beyond the
+pre-screen), and clusters with **k=2 for LB, k=3 for M63** (WCSS elbow
+baseline at k=1 with the pre-screen disabled, applied for k≥2 — Guibiont.tex
+"Elbow support for choosing k"). Output: `docs/data/curves_data.json`, plus
+the centroid tables for Figure 2c if `GUIBIONT_PAPER_SCRIPTS_DIR` points at
+the paper repo's `scripts/` directory.
 
-### 3b — Run clustering at optimal k
-
-1. Set **k** to the elbow value from the sweep
-2. Click **Run**
-3. Inspect the cluster grid — one cluster should contain the non-growing/flat genes
-4. Click **Export all (CSV)** → save as `results/clusters_lb.csv`
-
-Repeat steps 3a–3b for M63, saving as `results/clusters_m63.csv`.
+If you'd rather drive this from the GUIbiont interface directly instead
+(equivalent, just manual): **Clustering** tab → **File** mode → upload
+`results/keio_lb_gene_means.csv` → leave **Interpolate to common grid**
+unchecked → pre-screen on, τ=0.5 → cluster method `kmeans`, k=2 (k=3 for
+M63). Do **not** enable the trend test.
 
 ---
 
-## Step 4 — Batch fitting (GUIbiont interface)
+## Step 4 — Batch fitting
 
-Do this **twice** — once for LB, once for M63.
+The manuscript uses the **log-linear sliding-window estimator only** — not
+the four-model AICc parametric fit. `analysis/run_keio_loglin_via_guibiont.py`
+drives this through GUIbiont's actual `/api/batch-fit-loglin` endpoint (the
+same route the Batch Fit tab's "Log-linear only" option calls), with the
+manuscript's parameters baked in (`LOGLIN_PARAMS` in the script):
 
-1. Open the **Batch Fit** tab
-2. Select experiment `keio_lb`
-3. **Models**: check all four — `logistic`, `gompertz`, `baranyi_richards`, `aHPM`
-4. Leave AICc model selection enabled (default)
-5. Click **Run**  
-   (runtime depends heavily on hardware and Julia thread count — convergence rate should be ≥ 98%)
-6. Click **Download CSV** → save as `results/keio_lb_batch_fit.csv`
+```bash
+GUIBIONT_API=http://localhost:8080 python analysis/run_keio_loglin_via_guibiont.py
+```
 
-Repeat for `keio_m63`, saving as `results/keio_m63_batch_fit.csv`.
+Output: `results/keio_loglin_results.csv`, 7,770 gene×medium rows. Expect
+7,768 converged (`leuA` and `nuoB` in M63 return no finite positive
+$\mu_{\max}$ — SM.tex, "Additional log-linear results").
+
+Equivalently from the interface: **Batch Fit** tab → experiment `keio_lb` →
+**Log-linear only** → Run → Download CSV. Repeat for `keio_m63`.
+
+The four-model parametric fit (`analysis/batch_fit.jl`,
+`scripts/05_clean_fit_results.py`) is **not** part of the published Keio
+analysis; it predates the log-linear methodology and is kept only for the
+COG-based exploratory analysis below, which is likewise not in the paper.
 
 ---
 
 ## Step 5 — Identify cluster shifters (external script)
 
-Genes whose cluster assignment differs between LB and M63:
+Genes whose cluster assignment differs between LB and M63, read from the
+clustering output of Step 3:
 
 ```bash
 python scripts/03_find_shifters.py
@@ -108,6 +122,12 @@ python scripts/03_find_shifters.py
 ---
 
 ## Step 6 — COG functional enrichment (external script)
+
+**Steps 6–8 are supplementary exploratory analysis, not part of the
+published manuscript** (which reports KEGG pathway enrichment among the
+non-growing strains, via `analysis/kegg_enrichment_s2.py`, not COG
+categories — see Supplementary Data S2). They still depend on the four-model
+parametric fit from Step 4's `batch_fit.jl`, which the paper no longer uses.
 
 Uses `enrichment.py` from the atlas repo unchanged.  
 It reads `results/cluster_shifters.csv` and downloads COG annotations from NCBI.

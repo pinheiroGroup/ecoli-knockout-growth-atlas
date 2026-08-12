@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# NOT used to reproduce the manuscript's results — feeds the COG-based
+# exploratory analysis only, which the paper does not report.
 import pandas as pd
 
 lb  = pd.read_csv("results/clusters_lb.csv") \

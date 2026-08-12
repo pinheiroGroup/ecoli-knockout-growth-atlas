@@ -1,20 +1,14 @@
 #!/usr/bin/env python3
-"""Drive the full Keio log-linear batch fit through GUIbiont's new
-/api/batch-fit-loglin endpoint and write the per-gene μ_max CSV.
+"""Drive the full Keio log-linear batch fit through GUIbiont's
+/api/batch-fit-loglin endpoint and write the canonical per-gene result CSV.
 
 Steps:
   1. POST /api/batch-fit-loglin for each medium (keio_lb, keio_m63).
   2. Poll /api/batch-fit/progress/{job_id} until done.
-  3. Collect results and write results/keio_loglin_via_guibiont.csv with
+  3. Collect results and write results/keio_loglin_results.csv with
      the same schema as keio_loglin_results.csv (gene, medium, gr_loglin,
      gr_loglin_se, gr_max_sliding, t_exp_start, t_exp_end, doubling_time,
-     R_squared, converged).
-  4. Cross-check against the existing offline results — they must match
-     to the 5 % tolerance we already verified at the unit level
-     (companion path uses parametric floor 0.01, batch-fit-loglin uses
-     log-lin floor 1e-4; both agree for healthy curves but can differ
-     in the right tail).
-
+     R_squared, lag_loglin, N_max_emp, converged).
 This is the actual GUIbiont workflow a user would run from the Batch Fit
 tab with "Log-linear only" selected.
 
@@ -35,20 +29,21 @@ import numpy as np
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES  = os.path.join(REPO, "results")
-OUT_CSV   = os.path.join(RES, "keio_loglin_via_guibiont.csv")
-REF_CSV   = os.path.join(RES, "keio_loglin_results.csv")
+OUT_CSV = os.path.join(RES, "keio_loglin_results.csv")
 
 API = os.environ.get("GUIBIONT_API", "http://localhost:9090")
 MEDIA = ("keio_lb", "keio_m63")
 
-# Match the parameters my offline batch_fit_loglin.jl used so we can
-# cross-check against the existing reference CSV.
+# Parameters reported for the Keio analysis in the GUIbiont manuscript.
 LOGLIN_PARAMS = {
+    "blank_subtraction":       False,
+    "type_of_smoothing":       "rolling_avg",
     "pt_avg":                  5,
     "pt_smoothing_derivative": 5,
     "pt_min_size_of_win":      5,
+    "type_of_win":             "maximum",
     "threshold_of_exp":        0.9,
-    "skip_flat_threshold":     0.0,   # 0 → don't skip flats (we want all wells)
+    "skip_flat_threshold":     0.0,   # zero keeps all wells
 }
 
 
@@ -72,7 +67,7 @@ def submit_and_wait(experiment, poll_interval=5.0, max_wait=2400.0):
     """Submit a batch-fit-loglin job and poll until done."""
     payload = {"experiment": experiment, **LOGLIN_PARAMS}
     print(f"[{experiment}] POST /api/batch-fit-loglin "
-          f"(this kicks off all {3885} wells; expect a few minutes)…")
+          f"(this kicks off all {3885} wells; expect a few minutes)...")
     status, body = _post("/api/batch-fit-loglin", payload)
     if status != 200:
         raise RuntimeError(f"submission failed: HTTP {status}  body={body}")
@@ -108,10 +103,9 @@ def results_to_rows(job_payload, medium_label):
     """Flatten GUIbiont's results list into the same schema as
     keio_loglin_results.csv produced by analysis/batch_fit_loglin.jl.
 
-    Carries the two model-free companions Kinbiont now appends to the
-    log-linear estimator: lag_loglin (Buchanan tangent-intercept lag) and
-    N_max_emp (95th percentile of smoothed OD). NaN when the upgraded
-    Kinbiont/GUIbiont is not running."""
+    Carries the two model-free companions returned with the log-linear
+    estimator: lag_loglin (Buchanan tangent-intercept lag) and N_max_emp
+    (stationary-region mean OD)."""
     rows = []
     for r in job_payload["results"]:
         rows.append({
@@ -161,32 +155,20 @@ def main():
         payload = submit_and_wait(exp)
         all_rows.extend(results_to_rows(payload, media_label[exp]))
 
-    df = pd.DataFrame(all_rows)
+    df = (pd.DataFrame(all_rows)
+          .sort_values(["medium", "gene"], kind="stable")
+          .reset_index(drop=True))
+    if len(df) != 7770 or df.duplicated(["gene", "medium"]).any():
+        raise RuntimeError("expected 7,770 unique gene-medium rows")
     df.to_csv(OUT_CSV, index=False)
     print(f"\nWrote {OUT_CSV}  ({len(df)} rows)")
 
-    # ── Cross-check against the offline reference ─────────────────────────
-    if not os.path.exists(REF_CSV):
-        print("(no offline reference to compare against — done)")
-        return
-    ref = pd.read_csv(REF_CSV)
-    merged = df.merge(
-        ref[["gene", "medium", "gr_loglin"]].rename(columns={"gr_loglin": "gr_ref"}),
-        on=["gene", "medium"], how="inner",
-    )
-    merged["delta"] = (merged["gr_loglin"] - merged["gr_ref"]).abs()
-    finite = merged.dropna(subset=["gr_loglin", "gr_ref"])
-    print(f"\n── Cross-check vs {os.path.basename(REF_CSV)} "
-          f"({len(finite)} comparable pairs) ──")
-    print(f"  max |Δ|:    {finite['delta'].max():.6g}")
-    print(f"  mean |Δ|:   {finite['delta'].mean():.6g}")
-    print(f"  median |Δ|: {finite['delta'].median():.6g}")
-    print(f"  # exact matches: {(finite['delta'] == 0).sum()} / {len(finite)}")
-    n_big = int((finite["delta"] > 0.05).sum())
-    print(f"  # |Δ| > 0.05 (5% physiological μ_max units): {n_big} / {len(finite)}")
+    print("\nMissing values in canonical output:")
+    for column in ("gr_loglin", "lag_loglin", "R_squared", "N_max_emp"):
+        print(f"  {column}: {int(df[column].isna().sum())}")
 
     # Per-medium quantile summary
-    print("\nPer-medium μ_max quantiles (via GUIbiont):")
+    print("\nPer-medium mu_max quantiles (via GUIbiont):")
     for med in ("LB", "M63"):
         sub = df[(df["medium"] == med) & df["converged"]]["gr_loglin"]
         if not sub.empty:

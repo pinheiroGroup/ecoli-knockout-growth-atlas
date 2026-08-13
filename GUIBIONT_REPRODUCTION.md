@@ -19,6 +19,17 @@ Two short Python scripts handle data preparation; everything else runs in the br
 - GUIbiont server running (`julia --project=. --threads=auto web_server.jl` from the GUIbiont repo)
 - Python ≥ 3.9 with `pandas`, `numpy`, `openpyxl`
 - Install dependencies once: `pip install pandas numpy openpyxl`
+- Julia ≥ 1.12, with the analysis environment instantiated once:
+
+  ```bash
+  cd analysis
+  julia --project=. -e 'using Pkg; Pkg.instantiate()'
+  ```
+
+  This installs the exact versions recorded in `analysis/Manifest.toml`
+  (Kinbiont v1.5.0, from the General registry). Skipping it makes Step 3 fail
+  at precompile with `Package Parsers ... is required but does not seem to be
+  installed`. The first run pulls a large dependency tree and takes a while.
 
 ---
 
@@ -75,6 +86,13 @@ baseline at k=1 with the pre-screen disabled, applied for k≥2 — Guibiont.tex
 "Elbow support for choosing k"). Output: `docs/data/curves_data.json`, plus
 the centroid tables for Figure 2c if `GUIBIONT_PAPER_SCRIPTS_DIR` points at
 the paper repo's `scripts/` directory.
+
+To confirm the run reproduced the manuscript, check `docs/data/curves_data.json`:
+`optimal_k` should be `{"LB": 2, "M63": 3}` and `nongrowing_genes` should hold
+0 genes for LB and 97 for M63. Clustering is seeded (`kmeans_seed = 42`), so a
+correct run reproduces the committed `curves_data.json` and the two centroid
+tables byte for byte. If your elbow or centroids move between runs, you are on
+a checkout that predates commit `fe169cf` — pull and re-instantiate.
 
 If you'd rather drive this from the GUIbiont interface directly instead
 (equivalent, just manual): **Clustering** tab → **File** mode → upload

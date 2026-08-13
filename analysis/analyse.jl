@@ -83,14 +83,21 @@ function write_centroid_csv(medium::String, times, curves, cl)
     zs   = Kinbiont._zscore_rows(curves)
     cols = ["centroid_t_$(round(t; digits=4))" for t in times]
     rows = NamedTuple[]
-    for scale in ("raw", "normalized")
-        src = scale == "raw" ? curves : zs
-        for k in 1:cl.optimal_k
-            idx = findall(==(k), cl.clusters)
-            isempty(idx) && continue
+    # Row order matches the tables committed to the paper repo so a rerun diffs
+    # cleanly against them. Values are rounded to 12 digits rather than written
+    # at full precision: `mean` sums in a BLAS-thread-dependent order, so the
+    # last bit of a Float64 is not reproducible across machines, and a
+    # full-precision table shows spurious 1-ULP differences on a rerun. Twelve
+    # digits is stable across configurations and still six orders of magnitude
+    # finer than the 0.000001 this previously rounded to.
+    for k in 1:cl.optimal_k
+        idx = findall(==(k), cl.clusters)
+        isempty(idx) && continue
+        for scale in ("raw", "normalized")
+            src = scale == "raw" ? curves : zs
             c = vec(mean(src[idx, :], dims=1))
             push!(rows, (; cluster=k, n_series=length(idx), type=scale,
-                         NamedTuple{Tuple(Symbol.(cols))}(Tuple(round.(c; digits=6)))...))
+                         NamedTuple{Tuple(Symbol.(cols))}(Tuple(round.(c; digits=12)))...))
         end
     end
     path = joinpath(CENTROID_CSV_DIR, "cluster_centroids_raw_and_normalized_$(medium).csv")

@@ -1,8 +1,9 @@
 # E. coli Keio Knockout Growth Curve Atlas
 
-Interactive visualization and analysis of the *E. coli* Keio single-gene knockout
-collection (3,885 genes, grown in LB and M63 media — 7,770 gene-medium growth
-curves), clustered and fitted with [Kinbiont.jl](https://github.com/pinheiroGroup/Kinbiont.jl)
+Interactive visualization and analysis of 3,885 gene-level profiles aggregated
+from 3,909 *E. coli* Keio single-gene deletion strains, grown in LB and M63
+media (7,770 gene-medium trajectories), clustered and fitted with
+[Kinbiont.jl](https://github.com/pinheiroGroup/Kinbiont.jl)
 via [GUIbiont](https://github.com/pinheiroGroup/GUIbiont).
 
 **Data source**: [Nature Scientific Data 2026](https://www.nature.com/articles/s41597-026-07075-9)
@@ -17,25 +18,38 @@ lighter-weight clustering-only path used for the interactive visualization site.
 
 Served from `docs/` via GitHub Pages.
 
+## Licenses and data attribution
+
+Repository-authored software is available under the MIT License; see
+[`LICENSE`](LICENSE). The source workbooks under `data/` were deposited by
+Zehui Lao and Bei-Wen Ying as *Bacterial growth dynamics of 3,909 genetic
+variants*, [Figshare 28342043.v2](https://doi.org/10.6084/m9.figshare.28342043.v2),
+under CC BY 4.0. Derived tabular and JSON data in this repository retain that
+attribution; see [`DATA_LICENSE`](DATA_LICENSE).
+
 ## Setup
 
 ```bash
 # 1. Install Julia dependencies (Kinbiont is a registered General-registry package)
 julia --project=analysis -e 'using Pkg; Pkg.instantiate()'
 
-# 2. Run the analysis (generates docs/data/curves_data.json)
+# 2. Run the analysis and synchronize the source-code tab
 julia --project=analysis analysis/analyse.jl
+python scripts/sync_docs_analysis_source.py
 
 # 3. Preview locally
-python3 -m http.server 8080 --directory docs
-# open http://localhost:8080
+python3 -m http.server 8000 --directory docs
+# open http://localhost:8000
+# (port 8000, not 8080, so it does not collide with a running GUIbiont server)
 ```
 
 ## GitHub Pages
 
 In the repo settings → Pages → Source: **Deploy from branch `main`, folder `/docs`**.
 
-Commit `docs/data/curves_data.json` along with `docs/index.html`.
+Commit `docs/data/curves_data.json` along with the synchronized
+`docs/index.html`. The synchronization command is deterministic and should
+leave both files clean on a repeated run.
 
 ## Project structure
 
@@ -60,13 +74,13 @@ ecoli-knockout-growth-atlas/
 
 1. Reads `Curves_knockouts_media.xlsx` to map each curve to a gene and medium
 2. Loads raw OD time series from `Growth_curves_LB.xlsx` and `Growth_curves_M63.xlsx`
-3. Averages replicates per (gene, medium) → 3,885 genes × 2 media = 7,770 curves
-4. Flags non-growing strains with a constant-curve pre-screen (before clustering)
-5. Sweeps k = 2…10 with Kinbiont's k-means + WCSS to find the elbow (k=2 for LB, k=3 for M63)
+3. Aggregates the 3,909 source strains by gene symbol and medium → 3,885 gene-level profiles × 2 media = 7,770 trajectories
+4. Flags non-growing gene-level profiles with a constant-curve pre-screen (before clustering)
+5. Sweeps k = 1…10 with Kinbiont's k-means + WCSS; k=1 is the single-cluster baseline (selected k=2 for LB and k=3 for M63)
 6. Clusters gene-level curves separately for LB and M63
 7. Exports times, centroids, cluster assignments, WCSS sweep to JSON
 
-KEGG pathway enrichment among the non-growing strains and the log-linear
+KEGG pathway enrichment among the non-growing gene-level profiles and the log-linear
 batch-fit results reported in the manuscript are produced separately — see
 `GUIBIONT_REPRODUCTION.md` and `analysis/kegg_enrichment_s2.py` /
 `analysis/run_keio_loglin_via_guibiont.py`.
@@ -79,4 +93,4 @@ batch-fit results reported in the manuscript are produced separately — see
 | **Elbow Analysis** | WCSS vs k plot with optimal k marked |
 | **Cluster Profiles** | Mean OD curves per cluster ± 1 SD |
 | **Gene Browser** | All gene curves coloured by cluster, searchable table |
-| **LB vs M63** | Per-gene overlay of both conditions with SD bands |
+| **LB vs M63** | Per-gene mean and individual replicate overlays in both conditions |

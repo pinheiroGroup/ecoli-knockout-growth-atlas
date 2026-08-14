@@ -10,7 +10,8 @@
 # Run:
 #   julia --project=. analyse.jl
 #
-# Outputs: ../docs/data/curves_data.json and
+# Outputs: ../docs/data/curves_data.json,
+#          ../results/keio_s1_metadata.csv and
 #          ../results/keio_m63_nongrowing_genes.json
 
 using XLSX
@@ -27,6 +28,7 @@ const RESULTS_DIR = joinpath(@__DIR__, "../results")
 # an untracked copy and every consumer kept reading a stale checked-in file.
 const OUT_PATH    = joinpath(@__DIR__, "..", "docs", "data", "curves_data.json")
 const NONGROWING_JSON_PATH = joinpath(RESULTS_DIR, "keio_m63_nongrowing_genes.json")
+const S1_METADATA_PATH = joinpath(RESULTS_DIR, "keio_s1_metadata.csv")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Helpers
@@ -210,7 +212,7 @@ function load_curves(path::String, sheet_name::String, wanted::Set{String})
 end
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 3. Aggregate replicates → mean ± std per (gene, medium)
+# 3. Aggregate replicates → mean ± SEM per (gene, medium)
 # ─────────────────────────────────────────────────────────────────────────────
 
 function aggregate_by_gene(meta, curves_dict::Dict{String,Vector{Float64}})
@@ -228,7 +230,7 @@ function aggregate_by_gene(meta, curves_dict::Dict{String,Vector{Float64}})
         push!(groups[gene], curves_dict[curve_id])
     end
 
-    result = Dict{String, @NamedTuple{mean::Vector{Float64}, std::Vector{Float64},
+    result = Dict{String, @NamedTuple{mean::Vector{Float64}, sem::Vector{Float64},
                                        n::Int, jw_id::String,
                                        replicates::Vector{Vector{Float64}}}}()
     for (gene, replicates) in groups
@@ -259,7 +261,7 @@ function aggregate_by_gene(meta, curves_dict::Dict{String,Vector{Float64}})
             isempty(vs) ? NaN :
             length(vs) > 1 ? Statistics.std(vs) / sqrt(length(vs)) : 0.0
         end
-        result[gene] = (; mean=μ, std=sem, n=n_rep, jw_id=jw_map[gene],
+        result[gene] = (; mean=μ, sem=sem, n=n_rep, jw_id=jw_map[gene],
                           replicates=[vec(mat[:, j]) for j in 1:n_rep])
     end
     return result
@@ -269,7 +271,7 @@ end
 # 4. Kinbiont clustering with WCSS elbow sweep
 # ─────────────────────────────────────────────────────────────────────────────
 
-# Identify the non-growing strains with Kinbiont's own detector. Per SM.tex
+# Identify the non-growing gene-level profiles with Kinbiont's own detector. Per SM.tex
 # Methods ("Trajectory preparation for clustering"), the same complete
 # 0.25–50 h replicate-averaged trajectories are used for both this pre-screen
 # and shape clustering below — there is no separate truncated grid.
@@ -475,7 +477,7 @@ function main()
         if haskey(agg_lb, gene)
             rec["LB"] = Dict(
                 "mean"         => to_json_vec(agg_lb[gene].mean[lb_ds_idx]),
-                "std"          => to_json_vec(agg_lb[gene].std[lb_ds_idx]),
+                "sem"          => to_json_vec(agg_lb[gene].sem[lb_ds_idx]),
                 "n_replicates" => agg_lb[gene].n,
                 "cluster"      => lb_cluster_map[gene],
                 "replicates"   => [to_json_vec(rep[lb_ds_idx]) for rep in agg_lb[gene].replicates],
@@ -484,7 +486,7 @@ function main()
         if haskey(agg_m63, gene)
             rec["M63"] = Dict(
                 "mean"         => to_json_vec(agg_m63[gene].mean[m63_ds_idx]),
-                "std"          => to_json_vec(agg_m63[gene].std[m63_ds_idx]),
+                "sem"          => to_json_vec(agg_m63[gene].sem[m63_ds_idx]),
                 "n_replicates" => agg_m63[gene].n,
                 "cluster"      => m63_cluster_map[gene],
                 "replicates"   => [to_json_vec(rep[m63_ds_idx]) for rep in agg_m63[gene].replicates],
@@ -497,6 +499,27 @@ function main()
         "LB"  => cl_lb.prescreen  ? sort([g for g in genes_lb_sorted  if lb_cluster_map[g]  == cl_lb.optimal_k])  : String[],
         "M63" => cl_m63.prescreen ? sort([g for g in genes_m63_sorted if m63_cluster_map[g] == cl_m63.optimal_k]) : String[],
     )
+
+    # Lightweight provenance table used by Supplementary Data S1. These are
+    # metadata of the gene-level aggregation, so reproducing S1 must not require
+    # rerunning the unrelated four-model parametric fit in batch_fit.jl.
+    metadata_rows = NamedTuple[]
+    for gene in all_genes
+        for (medium, agg) in (("LB", agg_lb), ("M63", agg_m63))
+            haskey(agg, gene) || continue
+            push!(metadata_rows, (
+                gene=gene,
+                # Match the atlas JSON and the historical batch-fit CSV: a
+                # gene symbol has one retained JW identifier, preferring LB
+                # when multiple source deletion strains map to that symbol.
+                jw_id=get(jw_ids, gene, ""),
+                medium=medium,
+                n_replicates=agg[gene].n,
+            ))
+        end
+    end
+    CSV.write(S1_METADATA_PATH, DataFrame(metadata_rows))
+    @info "S1 metadata written to $S1_METADATA_PATH"
 
     # Assemble final JSON — separate time axes per medium since they may differ
     out = Dict(

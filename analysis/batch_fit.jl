@@ -1,11 +1,16 @@
 #!/usr/bin/env julia
 # batch_fit.jl — Batch-fit all gene-level mean curves with AICc model selection
 #
-# NOT used to reproduce the manuscript's results: the published Keio analysis
-# fits gr/N_max with the log-linear sliding-window estimator only (see
-# analysis/run_keio_loglin_via_guibiont.py), not this four-model AICc fit.
-# This script only feeds the COG-based exploratory analysis (scripts/04-05,
-# analysis/ml_keio.py), which is likewise not part of the manuscript.
+# The FITTED PARAMETERS here are NOT the manuscript's results: the published
+# Keio analysis fits gr/N_max with the log-linear sliding-window estimator only
+# (see analysis/run_keio_loglin_via_guibiont.py), not this four-model AICc fit.
+# Those parameters feed only the COG-based exploratory analysis (scripts/04-05,
+# analysis/ml_keio.py), which is not part of the manuscript.
+#
+# This workflow is retained for the optional COG/ML exploration and as an
+# example of four-model fitting. It is not required for Supplementary Data S1:
+# analyse.jl writes the aggregation metadata used there to
+# results/keio_s1_metadata.csv without performing parametric fits.
 #
 # Reads docs/data/curves_data.json (produced by analyse.jl) and fits each
 # gene × medium curve with four models: logistic, gompertz, baranyi_richards,

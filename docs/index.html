@@ -293,7 +293,7 @@
         Nature Scientific Data 2026
       </a>
       &nbsp;·&nbsp; Analysed with
-      <a href="https://github.com/pinheiroGroup/KinBiont.jl" target="_blank">KinBiont.jl</a>
+      <a href="https://github.com/pinheiroGroup/Kinbiont.jl" target="_blank">Kinbiont.jl</a>
     </p>
   </div>
   <span class="badge" id="badge-genes">— genes</span>
@@ -399,7 +399,7 @@
       <div class="card">
         <h3>WCSS elbow plot</h3>
         <p>
-          Within-cluster sum of squares (WCSS) from KinBiont's k-means sweep.
+          Within-cluster sum of squares (WCSS) from Kinbiont's k-means sweep.
           The elbow point (★) was selected as the optimal number of clusters.
         </p>
         <div id="plot-elbow" style="height:360px"></div>
@@ -478,7 +478,7 @@
         <h3>LB vs M63 — per-gene overlay</h3>
         <p>
           Select a gene from the table below to compare its growth curve in both media side by side.
-          Shaded area = ± 1 SD across replicates.
+          Faint lines show individual replicates; the solid line is their gene-level mean.
         </p>
         <div id="plot-compare-overlay" style="height:360px"></div>
       </div>
@@ -505,7 +505,7 @@
           <div>
             <h3>Analysis script — <code style="font-size:0.9em;color:var(--accent)">analysis/analyse.jl</code></h3>
             <p style="margin:0.25rem 0 0;font-size:0.82rem;color:var(--muted)">
-              Julia · reads XLSX data · aggregates replicates · runs KinBiont.jl k-means (WCSS elbow) · exports JSON
+              Julia · reads XLSX data · aggregates replicates · runs Kinbiont.jl k-means (WCSS elbow) · exports JSON
             </p>
           </div>
           <a class="gh-link"
@@ -525,41 +525,142 @@
           </a>
         </div>
         <div class="code-wrap">
+<!-- BEGIN GENERATED ANALYSIS SOURCE -->
 <pre><code class="language-julia">#!/usr/bin/env julia
-# analyse.jl &#x2014; Growth curve analysis for E. coli Keio knockout dataset
+# analyse.jl — Growth curve analysis for E. coli Keio knockout dataset
 #
 # Setup (run once):
-#   julia --project=. -e &#39;
-#     using Pkg
-#     Pkg.develop(path=&quot;../../KinBiont.jl&quot;)
-#     Pkg.instantiate()
-#   &#39;
+#   julia --project=. -e 'import Pkg; Pkg.instantiate()'
+#
+# Kinbiont is pinned to the registered v1.5.1 (Project.toml compat,
+# https://github.com/pinheiroGroup/Kinbiont.jl) — no local dev path.
 #
 # Run:
 #   julia --project=. analyse.jl
 #
-# Output: ../docs/data/curves_data.json
+# Outputs: ../docs/data/curves_data.json,
+#          ../results/keio_s1_metadata.csv and
+#          ../results/keio_m63_nongrowing_genes.json
 
 using XLSX
+using CSV
+using DataFrames
 using Statistics
 using JSON3
 using Kinbiont
 
-const DATA_DIR = joinpath(@__DIR__, &quot;..&quot;)
-const OUT_PATH = joinpath(DATA_DIR, &quot;docs&quot;, &quot;data&quot;, &quot;curves_data.json&quot;)
+const DATA_DIR    = joinpath(@__DIR__, "../data")
+const RESULTS_DIR = joinpath(@__DIR__, "../results")
+# The tracked file the frontend and analysis/enrichment_nongrowers.py read.
+# This used to resolve under DATA_DIR, i.e. ../data/docs/data/, so runs wrote to
+# an untracked copy and every consumer kept reading a stale checked-in file.
+const OUT_PATH    = joinpath(@__DIR__, "..", "docs", "data", "curves_data.json")
+const NONGROWING_JSON_PATH = joinpath(RESULTS_DIR, "keio_m63_nongrowing_genes.json")
+const S1_METADATA_PATH = joinpath(RESULTS_DIR, "keio_s1_metadata.csv")
 
-# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# ─────────────────────────────────────────────────────────────────────────────
 # Helpers
-# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# ─────────────────────────────────────────────────────────────────────────────
 
 _as_float(v) = (ismissing(v) || v === nothing) ? NaN : Float64(v)
-_as_str(v)   = (ismissing(v) || v === nothing) ? &quot;&quot;  : string(v)
+_as_str(v)   = (ismissing(v) || v === nothing) ? ""  : string(v)
 
-function find_elbow(ks, wcss_vals)
-    # Largest second-difference (maximum curvature in the elbow)
-    length(ks) &lt; 3 &amp;&amp; return ks[end]
-    d2 = diff(diff(wcss_vals))
-    return ks[argmax(d2) + 1]
+# Load the replicate-averaged matrix that scripts/01_build_gene_means.py writes.
+#
+# Clustering (and therefore the non-growing pre-screen) must run on these curves,
+# not on a matrix re-aggregated here from the raw workbooks. The Python builder
+# extends every replicate to the full run before averaging (leading values back-
+# filled, internal gaps carried forward, post-final values carried forward), so
+# each strain is judged over the whole 0.25–50 h window. Re-aggregating instead
+# truncates each strain at the earliest replicate dropout, which cuts late
+# growers short and makes them look flat: strains such as ptsH, ybhM and yccE
+# reach OD 0.6–0.8 only after 23 h and were previously mis-assigned to the
+# non-growing sentinel. `genes` fixes the row order.
+function load_gene_mean_matrix(
+    medium::String,
+    genes::Vector{String},
+)::Tuple{Vector{Float64}, Matrix{Float64}}
+    path = joinpath(RESULTS_DIR, "keio_$(lowercase(medium))_gene_means.csv")
+    isfile(path) || error(
+        "Replicate-averaged matrix not found: $path\n" *
+        "Run `python scripts/01_build_gene_means.py` first."
+    )
+    df    = CSV.read(path, DataFrame)
+    times = Float64.(df[!, 1])
+
+    missing_genes = filter(g -&gt; !hasproperty(df, Symbol(g)), genes)
+    isempty(missing_genes) || error(
+        "$medium: $(length(missing_genes)) gene(s) absent from $path: " *
+        join(first(missing_genes, 10), ", ")
+    )
+
+    mat = Matrix{Float64}(undef, length(genes), length(times))
+    for (i, g) in enumerate(genes)
+        mat[i, :] = Float64.(df[!, Symbol(g)])
+    end
+    return times, mat
+end
+
+# Emit the centroid table Figure 2c reads: one row per cluster per scale, with
+# the cluster size and the centroid sampled on the clustering grid.
+const CENTROID_CSV_DIR = get(ENV, "GUIBIONT_PAPER_SCRIPTS_DIR",
+    joinpath(@__DIR__, "..", "..", "GUIbiontPaper", "scripts"))
+
+function write_centroid_csv(medium::String, times, curves, cl)
+    if !isdir(CENTROID_CSV_DIR)
+        @warn "  Centroid table not written: $CENTROID_CSV_DIR does not exist " *
+              "(set GUIBIONT_PAPER_SCRIPTS_DIR to override)"
+        return
+    end
+    zs   = Kinbiont._zscore_rows(curves)
+    cols = ["centroid_t_$(round(t; digits=4))" for t in times]
+    rows = NamedTuple[]
+    # Row order matches the tables committed to the paper repo so a rerun diffs
+    # cleanly against them. Values are rounded to 12 digits rather than written
+    # at full precision: `mean` sums in a BLAS-thread-dependent order, so the
+    # last bit of a Float64 is not reproducible across machines, and a
+    # full-precision table shows spurious 1-ULP differences on a rerun. Twelve
+    # digits is stable across configurations and still six orders of magnitude
+    # finer than the 0.000001 this previously rounded to.
+    for k in 1:cl.optimal_k
+        idx = findall(==(k), cl.clusters)
+        isempty(idx) &amp;&amp; continue
+        for scale in ("raw", "normalized")
+            src = scale == "raw" ? curves : zs
+            c = vec(mean(src[idx, :], dims=1))
+            push!(rows, (; cluster=k, n_series=length(idx), type=scale,
+                         NamedTuple{Tuple(Symbol.(cols))}(Tuple(round.(c; digits=12)))...))
+        end
+    end
+    path = joinpath(CENTROID_CSV_DIR, "cluster_centroids_raw_and_normalized_$(medium).csv")
+    CSV.write(path, DataFrame(rows))
+    @info "  Centroid table written to $path"
+end
+
+# Elbow diagnostic: the k maximizing the second finite difference of the WCSS
+# curve (Guibiont.tex Methods, "Elbow support for choosing k"). k=1 never
+# reserves a non-growing sentinel, so its WCSS only excludes what every k&gt;=2
+# candidate also excludes when the pre-screen finds nothing to exclude at any
+# k (e.g. LB) — there k=1 stays a valid neighbor. When some k&gt;=2 DOES carve
+# out a sentinel (e.g. M63), WCSS(1) includes curves WCSS(k) excludes, so k=1
+# cannot serve as a neighbor: candidates start at k=3 instead of k=2. Mirrors
+# GUIbiont's static/js/clustering.js:_detectElbow.
+function find_elbow(ks::Vector{Int}, wcss_vals::Vector{Float64}, n_nongrowing::Vector{Int})
+    n = length(wcss_vals)
+    n &lt; 3 &amp;&amp; return ks[1]
+    any_excluded = any(&gt;(0), n_nongrowing)
+    start = any_excluded ? 3 : 2
+    start &gt; n - 1 &amp;&amp; (start = 2)
+    max_d2 = -Inf
+    elbow_idx = start
+    for i in start:(n - 1)
+        d2 = wcss_vals[i - 1] - 2 * wcss_vals[i] + wcss_vals[i + 1]
+        if d2 &gt; max_d2
+            max_d2 = d2
+            elbow_idx = i
+        end
+    end
+    return ks[elbow_idx]
 end
 
 function raw_centroids(curves::Matrix{Float64}, labels::Vector{Int}, n_k::Int)
@@ -573,13 +674,13 @@ function raw_centroids(curves::Matrix{Float64}, labels::Vector{Int}, n_k::Int)
     return cents
 end
 
-# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
-# 1. Metadata: curve_id &#x2192; (gene, jw_id, medium)
-# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# ─────────────────────────────────────────────────────────────────────────────
+# 1. Metadata: curve_id → (gene, jw_id, medium)
+# ─────────────────────────────────────────────────────────────────────────────
 
 function load_metadata()
-    path = joinpath(DATA_DIR, &quot;Curves_knockouts_media.xlsx&quot;)
-    @info &quot;Reading metadata from $path&quot;
+    path = joinpath(DATA_DIR, "Curves_knockouts_media.xlsx")
+    @info "Reading metadata from $path"
     xf = XLSX.readxlsx(path)
     sh = xf[1]
     data = sh[:]
@@ -596,22 +697,22 @@ function load_metadata()
         isempty(curve_id) &amp;&amp; continue
         meta[curve_id] = (; gene=gene_name, jw_id, medium)
     end
-    @info &quot;  $(length(meta)) curve-to-gene mappings loaded&quot;
+    @info "  $(length(meta)) curve-to-gene mappings loaded"
     return meta
 end
 
-# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# ─────────────────────────────────────────────────────────────────────────────
 # 2. Growth curves for one medium file
-# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# ─────────────────────────────────────────────────────────────────────────────
 
 function load_curves(path::String, sheet_name::String, wanted::Set{String})
-    @info &quot;Reading curves from $path (sheet=$sheet_name, want=$(length(wanted)) curves)&quot;
+    @info "Reading curves from $path (sheet=$sheet_name, want=$(length(wanted)) curves)"
     xf   = XLSX.readxlsx(path)
     sh   = xf[sheet_name]
     data = sh[:]
     nrows, ncols = size(data)
 
-    # Row 1: column headers  (Time, Curve00001, &#x2026;)
+    # Row 1: column headers  (Time, Curve00001, …)
     headers = [_as_str(data[1, j]) for j in 1:ncols]
 
     # Collect valid time rows
@@ -630,22 +731,21 @@ function load_curves(path::String, sheet_name::String, wanted::Set{String})
         hdr = headers[j]
         hdr in wanted || continue
         vals = [_as_float(data[row_index[k], j]) for k in eachindex(row_index)]
-        # Replace NaN with 0 (blank baseline)
-        replace!(vals, NaN =&gt; 0.0)
+        # Keep NaN for missing/empty cells — downstream handles them
         curves[hdr] = vals
     end
 
-    @info &quot;  $(length(times)) time points, $(length(curves)) curves extracted&quot;
+    @info "  $(length(times)) time points, $(length(curves)) curves extracted"
     return times, curves
 end
 
-# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
-# 3. Aggregate replicates &#x2192; mean &#xb1; std per (gene, medium)
-# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# ─────────────────────────────────────────────────────────────────────────────
+# 3. Aggregate replicates → mean ± SEM per (gene, medium)
+# ─────────────────────────────────────────────────────────────────────────────
 
 function aggregate_by_gene(meta, curves_dict::Dict{String,Vector{Float64}})
-    # curves_dict: curve_id &#x2192; OD vector (all same medium)
-    groups = Dict{String, Vector{Vector{Float64}}}()   # gene &#x2192; list of replicate vectors
+    # curves_dict: curve_id → OD vector (all same medium)
+    groups = Dict{String, Vector{Vector{Float64}}}()   # gene → list of replicate vectors
     jw_map = Dict{String, String}()
 
     for (curve_id, info) in meta
@@ -658,154 +758,370 @@ function aggregate_by_gene(meta, curves_dict::Dict{String,Vector{Float64}})
         push!(groups[gene], curves_dict[curve_id])
     end
 
-    result = Dict{String, @NamedTuple{mean::Vector{Float64}, std::Vector{Float64},
-                                       n::Int, jw_id::String}}()
+    result = Dict{String, @NamedTuple{mean::Vector{Float64}, sem::Vector{Float64},
+                                       n::Int, jw_id::String,
+                                       replicates::Vector{Vector{Float64}}}}()
     for (gene, replicates) in groups
-        mat      = reduce(hcat, replicates)   # n_tp &#xd7; n_replicates
-        &#x3bc;        = vec(Statistics.mean(mat, dims=2))
-        &#x3c3;        = size(mat, 2) &gt; 1 ? vec(Statistics.std(mat, dims=2)) : zeros(length(&#x3bc;))
-        result[gene] = (; mean=&#x3bc;, std=&#x3c3;, n=size(mat, 2), jw_id=jw_map[gene])
+        mat = reduce(hcat, replicates)   # n_tp × n_replicates
+        n_rep = size(mat, 2)
+
+        # Per-replicate valid range: last timepoint where each replicate has finite data.
+        # The gene mean is only valid up to the minimum last-valid index across all
+        # replicates; beyond that, one or more replicates have dropped out and the mean
+        # would be biased by whichever replicate happens to run longest.
+        last_valid = n_rep &gt; 1 ? minimum(
+            let li = findlast(isfinite, mat[:, j])
+                li === nothing ? 0 : li
+            end
+            for j in 1:n_rep
+        ) : size(mat, 1)
+
+        μ = map(1:size(mat, 1)) do i
+            i &gt; last_valid &amp;&amp; return NaN
+            vs = filter(!isnan, mat[i, :])
+            isempty(vs) ? NaN : Statistics.mean(vs)
+        end
+        # SEM (std / sqrt(n)) shows uncertainty in the mean (more meaningful at n=3).
+        # NaN beyond last_valid so interpolation respects the gene's true range.
+        sem = map(1:size(mat, 1)) do i
+            i &gt; last_valid &amp;&amp; return NaN
+            vs = filter(!isnan, mat[i, :])
+            isempty(vs) ? NaN :
+            length(vs) &gt; 1 ? Statistics.std(vs) / sqrt(length(vs)) : 0.0
+        end
+        result[gene] = (; mean=μ, sem=sem, n=n_rep, jw_id=jw_map[gene],
+                          replicates=[vec(mat[:, j]) for j in 1:n_rep])
     end
     return result
 end
 
-# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
-# 4. KinBiont clustering with WCSS elbow sweep
-# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# ─────────────────────────────────────────────────────────────────────────────
+# 4. Kinbiont clustering with WCSS elbow sweep
+# ─────────────────────────────────────────────────────────────────────────────
 
+# Identify the non-growing gene-level profiles with Kinbiont's own detector. Per SM.tex
+# Methods ("Trajectory preparation for clustering"), the same complete
+# 0.25–50 h replicate-averaged trajectories are used for both this pre-screen
+# and shape clustering below — there is no separate truncated grid.
+function detect_non_growing(
+    gene_means_full::Matrix{Float64},   # n_genes × n_tp, full length, finite
+    times_full::Vector{Float64},
+    gene_labels::Vector{String};
+    tol_const::Float64 = 0.5,      # τ (Kinbiont default; SM.tex Methods)
+    q_low::Float64  = 0.05,        # lower pre-screen quantile (Kinbiont default)
+    q_high::Float64 = 0.95,        # upper pre-screen quantile (Kinbiont default)
+)::Vector{Bool}
+    idx = detect_non_growing_indices(
+        gene_means_full, times_full;
+        prescreen_constant = true,
+        prescreen_tol      = tol_const,
+        prescreen_q_low    = q_low,
+        prescreen_q_high   = q_high,
+    )
+    mask = falses(length(gene_labels))
+    mask[idx] .= true
+    return collect(mask)
+end
+
+# Cluster gene curves on the full 0.25–50 h grid, delegating entirely to
+# Kinbiont's own prescreen-aware clustering — the same `preprocess`/
+# `FitOptions` call GUIbiont's `/api/cluster` route makes — so sentinel
+# reservation, WCSS exclusion and z-scoring can never drift from what
+# GUIbiont actually computes. No separate truncated grid and no post-hoc
+# reassignment of late-growing trajectories (SM.tex Methods).
 function cluster_gene_curves(
-    gene_means::Matrix{Float64},   # n_genes &#xd7; n_tp
+    gene_means::Matrix{Float64},   # n_genes × n_tp, full 0.25–50 h grid
     times::Vector{Float64},
     gene_labels::Vector{String};
-    k_range = 2:10,
+    k::Int,                        # final k (includes the sentinel, if any)
+    tol_const::Float64 = 0.5,
+    q_low::Float64  = 0.05,
+    q_high::Float64 = 0.95,
+    k_max_sweep::Int = 10,
 )
+    n_genes = size(gene_means, 1)
     gd = GrowthData(gene_means, times, gene_labels)
 
-    # WCSS sweep
-    @info &quot;  Running WCSS sweep k=$(first(k_range))..$(last(k_range))&quot;
-    ks        = collect(k_range)
-    wcss_vals = Float64[]
-    for k in ks
-        opts      = FitOptions(
-            cluster                    = true,
-            n_clusters                 = k,
-            cluster_prescreen_constant = true,
-            cluster_tol_const          = 1.5,
-        )
-        proc = preprocess(gd, opts)
-        push!(wcss_vals, something(proc.wcss, 0.0))
-    end
-
-    # Elbow
-    opt_k = find_elbow(ks, wcss_vals)
-    @info &quot;  Optimal k = $opt_k (elbow method)&quot;
-
-    # Final clustering
-    opts_final = FitOptions(
-        cluster                    = true,
-        n_clusters                 = opt_k,
-        cluster_prescreen_constant = true,
-        cluster_tol_const          = 1.5,
+    non_growing_idx = detect_non_growing_indices(
+        gene_means, times;
+        prescreen_constant = true,
+        prescreen_tol      = tol_const,
+        prescreen_q_low    = q_low,
+        prescreen_q_high   = q_high,
     )
-    proc_final = preprocess(gd, opts_final)
+    # Only actually request the sentinel from Kinbiont when the criterion
+    # found something to reserve one for — matching GUIbiont's `do_prescreen`
+    # (routes/ml.jl) — otherwise the "last" cluster label is just an ordinary
+    # k-means cluster, not a sentinel, and must not be reported as one.
+    prescreen = !isempty(non_growing_idx)
+    @info "  $(length(non_growing_idx)) non-growing gene(s) detected (τ=$tol_const, q=$q_low/$q_high)"
+
+    # cluster_trend_test defaults to `true` in Kinbiont's FitOptions — it must
+    # be explicitly disabled here, matching GUIbiont's routes/ml.jl (which
+    # always passes it explicitly from the trend-test checkbox state), or the
+    # slope trend test silently reserves extra sentinel slots on top of the
+    # prescreen: it flagged secG, metH and ybaO on M63 even though none of
+    # them are remotely flat (OD range 0.8–1.0), because the paper's Methods
+    # only use the constant-curve pre-screen, not the trend test.
+    common = (cluster_method = :kmeans, cluster_tol_const = tol_const,
+              cluster_q_low = q_low, cluster_q_high = q_high,
+              cluster_trend_test = false,
+              kmeans_seed = 42, kmedoids_seed = 42,
+              kmeans_n_init = 3, kmedoids_n_init = 3,
+              kmeans_max_iters = 300, kmeans_tol = 1e-6)
+
+    # Informational WCSS sweep k=1..k_max_sweep, mirroring GUIbiont's
+    # /api/cluster-sweep: k=1 never reserves a sentinel (single-cluster
+    # baseline), k&gt;=2 does when the pre-screen has anything to reserve.
+    @info "  Running WCSS sweep k=1..$k_max_sweep (prescreen=$prescreen)"
+    ks = collect(1:k_max_sweep)
+    wcss_vals = Float64[]
+    n_nongrowing_sweep = Int[]
+    for kk in ks
+        prescreen_for_k = prescreen &amp;&amp; kk &gt; 1
+        proc = preprocess(gd, FitOptions(;
+            cluster = true, n_clusters = kk,
+            cluster_prescreen_constant = prescreen_for_k,
+            common...))
+        push!(wcss_vals, something(proc.wcss, 0.0))
+        push!(n_nongrowing_sweep, prescreen_for_k ? length(non_growing_idx) : 0)
+    end
+    auto_k = find_elbow(ks, wcss_vals, n_nongrowing_sweep)
+    @info "  Optimal k = $k (auto-elbow suggested $auto_k)"
+
+    # Final clustering at the chosen k.
+    proc_final = preprocess(gd, FitOptions(;
+        cluster = true, n_clusters = k,
+        cluster_prescreen_constant = prescreen &amp;&amp; k &gt; 1,
+        common...))
+    clusters = something(proc_final.clusters, ones(Int, n_genes))
 
     return (
-        ks            = ks,
-        wcss          = wcss_vals,
-        optimal_k     = opt_k,
-        clusters      = something(proc_final.clusters, ones(Int, size(gene_means, 1))),
-        centroids_z   = proc_final.centroids,          # z-scored shape prototypes
-        centroids_raw = raw_centroids(gene_means,
-                            something(proc_final.clusters,
-                                      ones(Int, size(gene_means, 1))), opt_k),
+        ks         = ks,
+        wcss       = wcss_vals,
+        optimal_k  = k,
+        prescreen  = prescreen,
+        clusters   = clusters,
+        # z-scored centroids (shape prototypes, scale-independent). z-scoring
+        # uses Kinbiont's own row normalization, including its constant-curve
+        # guard.
+        centroids_z   = raw_centroids(Kinbiont._zscore_rows(gene_means), clusters, k),
+        # original-space centroids
+        centroids_raw = raw_centroids(gene_means, clusters, k),
     )
 end
 
-# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# ─────────────────────────────────────────────────────────────────────────────
 # 5. Main
-# &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+# ─────────────────────────────────────────────────────────────────────────────
 
 function main()
+    # Load metadata
     meta = load_metadata()
 
-    ids_lb  = Set(k for (k, v) in meta if v.medium == &quot;LB&quot;)
-    ids_m63 = Set(k for (k, v) in meta if v.medium == &quot;M63&quot;)
-    meta_lb  = Dict(k =&gt; v for (k, v) in meta if v.medium == &quot;LB&quot;)
-    meta_m63 = Dict(k =&gt; v for (k, v) in meta if v.medium == &quot;M63&quot;)
+    # Determine which curve IDs we need per medium
+    ids_lb  = Set(k for (k, v) in meta if v.medium == "LB")
+    ids_m63 = Set(k for (k, v) in meta if v.medium == "M63")
 
-    times_lb,  curves_lb  = load_curves(joinpath(DATA_DIR, &quot;Growth_curves_LB.xlsx&quot;),  &quot;LB&quot;,  ids_lb)
-    times_m63, curves_m63 = load_curves(joinpath(DATA_DIR, &quot;Growth_curves_M63.xlsx&quot;), &quot;M63&quot;, ids_m63)
+    # Subset meta per medium (so aggregate_by_gene sees correct medium's curves)
+    meta_lb  = Dict(k =&gt; v for (k, v) in meta if v.medium == "LB")
+    meta_m63 = Dict(k =&gt; v for (k, v) in meta if v.medium == "M63")
 
-    times = length(times_lb) &lt;= length(times_m63) ? times_lb : times_m63
-    n_tp  = length(times)
-    foreach(k -&gt; curves_lb[k]  = curves_lb[k][1:n_tp],  keys(curves_lb))
-    foreach(k -&gt; curves_m63[k] = curves_m63[k][1:n_tp], keys(curves_m63))
+    # Load raw curves
+    times_lb, curves_lb = load_curves(
+        joinpath(DATA_DIR, "Growth_curves_LB.xlsx"), "LB", ids_lb)
+    times_m63, curves_m63 = load_curves(
+        joinpath(DATA_DIR, "Growth_curves_M63.xlsx"), "M63", ids_m63)
 
-    @info &quot;Aggregating replicates by gene...&quot;
+    # Aggregate replicates (each medium uses its own full time vector)
+    @info "Aggregating replicates by gene..."
     agg_lb  = aggregate_by_gene(meta_lb,  curves_lb)
     agg_m63 = aggregate_by_gene(meta_m63, curves_m63)
 
-    genes_lb_sorted  = sort(collect(keys(agg_lb)))
-    genes_m63_sorted = sort(collect(keys(agg_m63)))
-    all_genes         = sort(collect(Set(genes_lb_sorted) &#x222a; Set(genes_m63_sorted)))
-    @info &quot;  $(length(all_genes)) unique genes&quot;
+    # Union of genes present in both media
+    genes_lb  = Set(keys(agg_lb))
+    genes_m63 = Set(keys(agg_m63))
+    all_genes = sort(collect(genes_lb ∪ genes_m63))
+    @info "  $(length(all_genes)) unique genes (LB: $(length(genes_lb)), M63: $(length(genes_m63)))"
 
-    mat_lb  = reduce(vcat, [agg_lb[g].mean'  for g in genes_lb_sorted])
-    mat_m63 = reduce(vcat, [agg_m63[g].mean' for g in genes_m63_sorted])
+    # Build gene-level matrices per medium (only genes present in that medium)
+    genes_lb_sorted  = sort(collect(genes_lb))
+    genes_m63_sorted = sort(collect(genes_m63))
 
-    @info &quot;Clustering LB gene curves...&quot;
-    cl_lb  = cluster_gene_curves(mat_lb,  times, genes_lb_sorted)
-    @info &quot;Clustering M63 gene curves...&quot;
-    cl_m63 = cluster_gene_curves(mat_m63, times, genes_m63_sorted)
+    # ── Clustering ────────────────────────────────────────────────────────────
+    # Both the non-growing pre-screen and shape clustering run on the same
+    # complete 0.25–50 h replicate-averaged trajectories from
+    # scripts/01_build_gene_means.py — no separate truncated grid (SM.tex
+    # Methods, "Trajectory preparation for clustering").
+    @info "Loading full-length gene-mean matrices..."
+    times_lb_full,  mat_lb_full  = load_gene_mean_matrix("LB",  genes_lb_sorted)
+    times_m63_full, mat_m63_full = load_gene_mean_matrix("M63", genes_m63_sorted)
 
-    # Downsample for JSON (every 4th point: 200 &#x2192; 50 time points)
-    ds_idx   = 1:4:n_tp
-    times_ds = times[ds_idx]
-    ds_vec(v) = round.(v[ds_idx]; digits=6)
+    ng_lb  = detect_non_growing(mat_lb_full,  times_lb_full,  genes_lb_sorted)
+    ng_m63 = detect_non_growing(mat_m63_full, times_m63_full, genes_m63_sorted)
+    @info "  LB: $(count(ng_lb)) non-growing; M63: $(count(ng_m63)) non-growing (τ=0.5, q=0.05/0.95)"
 
+    # Paper configuration: LB has no non-growing subpopulation, so no sentinel is
+    # reserved and two dynamic clusters are used; M63 reserves the last cluster
+    # index for the pre-screened strains, giving two dynamic clusters plus the
+    # sentinel (k=3).
+    @info "Clustering LB gene curves (k=2)..."
+    cl_lb  = cluster_gene_curves(mat_lb_full,  times_lb_full,  genes_lb_sorted; k = 2)
+
+    @info "Clustering M63 gene curves (k=3)..."
+    cl_m63 = cluster_gene_curves(mat_m63_full, times_m63_full, genes_m63_sorted; k = 3)
+
+    times_lb_cl, times_m63_cl = times_lb_full, times_m63_full
+    mat_lb_cl,   mat_m63_cl   = mat_lb_full,   mat_m63_full
+
+    # ── Visualisation ─────────────────────────────────────────────────────────
+    # Per-gene curves are stored on the ORIGINAL time axis (downsampled 4x).
+    # Each gene has NaN where its replicates had no data — the frontend draws
+    # the curve only up to its individual valid range.
     lb_cluster_map  = Dict(zip(genes_lb_sorted,  cl_lb.clusters))
     m63_cluster_map = Dict(zip(genes_m63_sorted, cl_m63.clusters))
 
-    jw_ids = Dict{String,String}()
+    # NaN → nothing so JSON3 writes null (Plotly draws a gap)
+    to_json_vec(v) = Union{Float64,Nothing}[isnan(x) ? nothing : round(x; digits=6) for x in v]
+
+    # Downsample original time axes 4x for JSON output
+    ds = 4
+    lb_ds_idx  = 1:ds:length(times_lb)
+    m63_ds_idx = 1:ds:length(times_m63)
+    times_lb_ds  = times_lb[lb_ds_idx]
+    times_m63_ds = times_m63[m63_ds_idx]
+
+    # Collect unique jw_ids (prefer LB, fallback to M63)
+    jw_ids = Dict{String, String}()
     for (g, info) in agg_lb;  jw_ids[g] = info.jw_id; end
     for (g, info) in agg_m63; haskey(jw_ids, g) || (jw_ids[g] = info.jw_id); end
 
-    gene_records = [
-        let rec = Dict{String,Any}(&quot;gene&quot; =&gt; gene, &quot;jw_id&quot; =&gt; get(jw_ids, gene, &quot;&quot;))
-            haskey(agg_lb,  gene) &amp;&amp; (rec[&quot;LB&quot;]  = Dict(&quot;mean&quot; =&gt; ds_vec(agg_lb[gene].mean),
-                &quot;std&quot; =&gt; ds_vec(agg_lb[gene].std),  &quot;n_replicates&quot; =&gt; agg_lb[gene].n,
-                &quot;cluster&quot; =&gt; lb_cluster_map[gene]))
-            haskey(agg_m63, gene) &amp;&amp; (rec[&quot;M63&quot;] = Dict(&quot;mean&quot; =&gt; ds_vec(agg_m63[gene].mean),
-                &quot;std&quot; =&gt; ds_vec(agg_m63[gene].std), &quot;n_replicates&quot; =&gt; agg_m63[gene].n,
-                &quot;cluster&quot; =&gt; m63_cluster_map[gene]))
-            rec
+    gene_records = []
+    for gene in all_genes
+        rec = Dict{String, Any}(
+            "gene"  =&gt; gene,
+            "jw_id" =&gt; get(jw_ids, gene, ""),
+        )
+        if haskey(agg_lb, gene)
+            rec["LB"] = Dict(
+                "mean"         =&gt; to_json_vec(agg_lb[gene].mean[lb_ds_idx]),
+                "sem"          =&gt; to_json_vec(agg_lb[gene].sem[lb_ds_idx]),
+                "n_replicates" =&gt; agg_lb[gene].n,
+                "cluster"      =&gt; lb_cluster_map[gene],
+                "replicates"   =&gt; [to_json_vec(rep[lb_ds_idx]) for rep in agg_lb[gene].replicates],
+            )
         end
-        for gene in all_genes
-    ]
+        if haskey(agg_m63, gene)
+            rec["M63"] = Dict(
+                "mean"         =&gt; to_json_vec(agg_m63[gene].mean[m63_ds_idx]),
+                "sem"          =&gt; to_json_vec(agg_m63[gene].sem[m63_ds_idx]),
+                "n_replicates" =&gt; agg_m63[gene].n,
+                "cluster"      =&gt; m63_cluster_map[gene],
+                "replicates"   =&gt; [to_json_vec(rep[m63_ds_idx]) for rep in agg_m63[gene].replicates],
+            )
+        end
+        push!(gene_records, rec)
+    end
 
-    out = Dict(
-        &quot;metadata&quot;    =&gt; Dict(&quot;n_genes&quot; =&gt; length(all_genes),
-                               &quot;n_timepoints&quot; =&gt; length(times_ds),
-                               &quot;media&quot; =&gt; [&quot;LB&quot;, &quot;M63&quot;]),
-        &quot;times&quot;       =&gt; round.(times_ds; digits=4),
-        &quot;wcss_sweep&quot;  =&gt; Dict(&quot;LB&quot;  =&gt; Dict(&quot;ks&quot; =&gt; cl_lb.ks,
-                                               &quot;wcss&quot; =&gt; round.(cl_lb.wcss; digits=4)),
-                               &quot;M63&quot; =&gt; Dict(&quot;ks&quot; =&gt; cl_m63.ks,
-                                               &quot;wcss&quot; =&gt; round.(cl_m63.wcss; digits=4))),
-        &quot;optimal_k&quot;   =&gt; Dict(&quot;LB&quot; =&gt; cl_lb.optimal_k, &quot;M63&quot; =&gt; cl_m63.optimal_k),
-        &quot;centroids&quot;   =&gt; Dict(&quot;LB&quot;  =&gt; [ds_vec(cl_lb.centroids_raw[k,:])  for k in 1:cl_lb.optimal_k],
-                               &quot;M63&quot; =&gt; [ds_vec(cl_m63.centroids_raw[k,:]) for k in 1:cl_m63.optimal_k]),
-        &quot;centroids_z&quot; =&gt; Dict(&quot;LB&quot;  =&gt; [ds_vec(cl_lb.centroids_z[k,:])  for k in 1:cl_lb.optimal_k],
-                               &quot;M63&quot; =&gt; [ds_vec(cl_m63.centroids_z[k,:]) for k in 1:cl_m63.optimal_k]),
-        &quot;genes&quot;       =&gt; gene_records,
+    nongrowing_genes = Dict(
+        "LB"  =&gt; cl_lb.prescreen  ? sort([g for g in genes_lb_sorted  if lb_cluster_map[g]  == cl_lb.optimal_k])  : String[],
+        "M63" =&gt; cl_m63.prescreen ? sort([g for g in genes_m63_sorted if m63_cluster_map[g] == cl_m63.optimal_k]) : String[],
     )
 
+    # Lightweight provenance table used by Supplementary Data S1. These are
+    # metadata of the gene-level aggregation, so reproducing S1 must not require
+    # rerunning the unrelated four-model parametric fit in batch_fit.jl.
+    metadata_rows = NamedTuple[]
+    for gene in all_genes
+        for (medium, agg) in (("LB", agg_lb), ("M63", agg_m63))
+            haskey(agg, gene) || continue
+            push!(metadata_rows, (
+                gene=gene,
+                # Match the atlas JSON and the historical batch-fit CSV: a
+                # gene symbol has one retained JW identifier, preferring LB
+                # when multiple source deletion strains map to that symbol.
+                jw_id=get(jw_ids, gene, ""),
+                medium=medium,
+                n_replicates=agg[gene].n,
+            ))
+        end
+    end
+    CSV.write(S1_METADATA_PATH, DataFrame(metadata_rows))
+    @info "S1 metadata written to $S1_METADATA_PATH"
+
+    # Assemble final JSON — separate time axes per medium since they may differ
+    out = Dict(
+        "metadata" =&gt; Dict(
+            "n_genes"      =&gt; length(all_genes),
+            "media"        =&gt; ["LB", "M63"],
+            "source"       =&gt; "https://www.nature.com/articles/s41597-026-07075-9",
+            "description"  =&gt; "E. coli Keio knockout collection growth curves (mean of replicates per gene)",
+        ),
+        "times_LB"  =&gt; round.(times_lb_ds;  digits=4),
+        "times_M63" =&gt; round.(times_m63_ds; digits=4),
+        # Keep legacy "times" key as the shorter of the two for backward compat
+        "times"     =&gt; round.(length(times_lb_ds) &lt;= length(times_m63_ds) ? times_lb_ds : times_m63_ds; digits=4),
+        "wcss_sweep" =&gt; Dict(
+            "LB"  =&gt; Dict("ks" =&gt; cl_lb.ks,  "wcss" =&gt; round.(cl_lb.wcss;  digits=4)),
+            "M63" =&gt; Dict("ks" =&gt; cl_m63.ks, "wcss" =&gt; round.(cl_m63.wcss; digits=4)),
+        ),
+        "optimal_k" =&gt; Dict(
+            "LB"  =&gt; cl_lb.optimal_k,
+            "M63" =&gt; cl_m63.optimal_k,
+        ),
+        # Centroids are on their own clustering-grid time axes
+        "centroid_times" =&gt; Dict(
+            "LB"  =&gt; round.(times_lb_cl;  digits=4),
+            "M63" =&gt; round.(times_m63_cl; digits=4),
+        ),
+        "centroids" =&gt; Dict(
+            "LB"  =&gt; [to_json_vec(cl_lb.centroids_raw[k, :])  for k in 1:cl_lb.optimal_k],
+            "M63" =&gt; [to_json_vec(cl_m63.centroids_raw[k, :]) for k in 1:cl_m63.optimal_k],
+        ),
+        "centroids_z" =&gt; Dict(
+            "LB"  =&gt; [to_json_vec(cl_lb.centroids_z[k, :])  for k in 1:size(cl_lb.centroids_z, 1)],
+            "M63" =&gt; [to_json_vec(cl_m63.centroids_z[k, :]) for k in 1:size(cl_m63.centroids_z, 1)],
+        ),
+        "genes" =&gt; gene_records,
+        # With cluster_prescreen_constant=true, Kinbiont assigns non-growing wells
+        # to label n_clusters (the last index). When the pre-screen is disabled
+        # (LB), no sentinel is reserved: report cluster 0 (matches no cluster) and
+        # an empty gene list so the figure draws no non-growing cluster.
+        "nongrowing_cluster" =&gt; Dict(
+            "LB"  =&gt; cl_lb.prescreen  ? cl_lb.optimal_k  : 0,
+            "M63" =&gt; cl_m63.prescreen ? cl_m63.optimal_k : 0,
+        ),
+        "nongrowing_genes" =&gt; nongrowing_genes,
+    )
+
+    # Centroid tables for the paper's Figure 2c generator
+    # (GUIbiontPaper/scripts/plot_keio_cluster_centroids_raw_svg_v2.py). Written
+    # from the same run as the JSON so the panel can never drift from the
+    # clustering it is supposed to depict.
+    write_centroid_csv("lb",  times_lb_cl,  mat_lb_cl,  cl_lb)
+    write_centroid_csv("m63", times_m63_cl, mat_m63_cl, cl_m63)
+
     mkpath(dirname(OUT_PATH))
-    open(OUT_PATH, &quot;w&quot;) do io; JSON3.write(io, out) end
-    @info &quot;Output written to $OUT_PATH&quot;
+    open(OUT_PATH, "w") do io
+        JSON3.write(io, out)
+    end
+    @info "Output written to $OUT_PATH"
+
+    # Small adapter consumed directly by kegg_enrichment_s2.py. Keeping this
+    # beside the other analysis outputs avoids a manual conversion from the
+    # nested frontend JSON and guarantees that enrichment uses this exact
+    # pre-screen classification.
+    mkpath(dirname(NONGROWING_JSON_PATH))
+    open(NONGROWING_JSON_PATH, "w") do io
+        JSON3.write(io, Dict("genes" =&gt; nongrowing_genes["M63"]))
+        write(io, '\n')
+    end
+    @info "Non-growing gene JSON written to $NONGROWING_JSON_PATH"
 end
 
-main()</code></pre>
+main()
+</code></pre>
+<!-- END GENERATED ANALYSIS SOURCE -->
         </div>
       </div>
     </div>
@@ -893,7 +1209,7 @@ function trimAllTrailingZeros(d) {
     ['LB', 'M63'].forEach(med => {
       if (!g[med]) return;
       g[med].mean = trimTrailingZeros(g[med].mean);
-      g[med].std  = trimTrailingZeros(g[med].std);
+      g[med].sem  = trimTrailingZeros(g[med].sem);
     });
   });
 }

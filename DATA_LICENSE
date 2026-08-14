@@ -1,0 +1,20 @@
+Data license and attribution
+
+The source growth-curve workbooks in data/ were obtained from:
+
+Zehui Lao and Bei-Wen Ying. Bacterial growth dynamics of 3,909 genetic
+variants. Figshare, version 2.
+https://doi.org/10.6084/m9.figshare.28342043.v2
+
+The Figshare record declares these files under the Creative Commons
+Attribution 4.0 International license (CC BY 4.0):
+
+https://creativecommons.org/licenses/by/4.0/
+
+You may share and adapt the material for any purpose provided that appropriate
+credit is given, a link to the license is supplied, and changes are indicated.
+Derived tabular and JSON data in this repository were produced from those
+source files and should retain the same source attribution.
+
+The MIT License in LICENSE applies to repository-authored software, not to the
+third-party source data.

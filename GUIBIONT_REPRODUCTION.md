@@ -8,7 +8,7 @@ equivalent GUIbiont browser steps noted where applicable.
 
 | Path | Contents |
 |---|---|
-| `data/` | Raw Excel files and `all_curves.csv` |
+| `data/` | Raw Excel workbooks from the published dataset: `Growth_curves_LB.xlsx`, `Growth_curves_M63.xlsx`, `Curves_knockouts_media.xlsx`, `Growth_parameters.xlsx`, `Bacterial stocks.xlsx` |
 | `results/` | Output directory |
 | `$GUIBIONT` | Root of the GUIbiont server directory |
 
@@ -55,11 +55,22 @@ Format: `Time, geneA, geneB, ...` — one column per gene, rows = time points.
 GUIbiont's Batch Fit tab reads from `$GUIBIONT/Clean_data/<experiment>/`.
 This script creates the two experiment directories with the correct file names.
 
-Run from the repo root:
+Run from the repo root, passing the GUIbiont repo path as the first argument:
 
 ```bash
-python scripts/02_register_experiments.py
+python scripts/02_register_experiments.py /path/to/GUIbiont
 ```
+
+The path can also be supplied through the `GUIBIONT_DIR` environment variable:
+
+```bash
+GUIBIONT_DIR=/path/to/GUIbiont python scripts/02_register_experiments.py
+```
+
+Use one of these two forms on a headless machine. With neither the argument nor
+the environment variable set, the script falls back to a tkinter folder picker
+and then to an `input()` prompt, which may block or fail without a display or
+an interactive terminal.
 
 ---
 
@@ -77,6 +88,12 @@ cd analysis
 julia --project=. analyse.jl
 ```
 
+From the repository root, refresh the source-code tab shown on GitHub Pages:
+
+```bash
+python scripts/sync_docs_analysis_source.py
+```
+
 This loads the raw workbooks, builds the full-length gene means, runs the
 non-growing pre-screen (constant-curve criterion, τ=0.5, q=0.05/0.95, **no**
 trend test — `Kinbiont`'s `cluster_trend_test` defaults to `true` and must be
@@ -86,6 +103,8 @@ baseline at k=1 with the pre-screen disabled, applied for k≥2 — Guibiont.tex
 "Elbow support for choosing k"). Output: `docs/data/curves_data.json`, plus
 the centroid tables for Figure 2c if `GUIBIONT_PAPER_SCRIPTS_DIR` points at
 the paper repo's `scripts/` directory. It also writes
+`results/keio_s1_metadata.csv`, containing the `jw_id` and replicate count for
+each gene–medium mean used by Supplementary Data S1, and
 `results/keio_m63_nongrowing_genes.json`, a deterministic `{"genes": [...]}`
 adapter containing the M63 pre-screen class used by the KEGG analysis.
 
@@ -139,14 +158,32 @@ $\mu_{\max}$ — SM.tex, "Additional log-linear results").
 Equivalently from the interface: **Batch Fit** tab → experiment `keio_lb` →
 **Log-linear only** → Run → Download CSV. Repeat for `keio_m63`.
 
-The four-model parametric fit (`analysis/batch_fit.jl`,
-`scripts/05_clean_fit_results.py`) is **not** part of the published Keio
-analysis; it predates the log-linear methodology and is kept only for the
-COG-based exploratory analysis below, which is likewise not in the paper.
+**On `analysis/batch_fit.jl` (the four-model parametric fit).** The
+*parametric fit itself* — selecting among logistic / Gompertz / Baranyi /
+aHPM by AICc — is **not** what the manuscript reports. It predates the
+log-linear methodology, and none of its fitted parameters are published: Step 4
+above (log-linear) is what produces the paper's actual growth-rate results.
+
+The script is retained because it supports the optional COG/ML exploration and
+is a useful four-model fitting example. It is **not required to reproduce the
+manuscript or Supplementary Data S1**. Step 3 writes the two aggregation fields
+needed by S1 (`jw_id` and `n_replicates`) directly to
+`results/keio_s1_metadata.csv`, before any parametric model is fitted. Run the
+following only if you want the exploratory parametric output:
+
+```bash
+julia --threads auto --project=analysis analysis/batch_fit.jl
+```
+
+`scripts/05_clean_fit_results.py`, which post-processes that CSV for the COG
+exploratory analysis, is likewise not part of the manuscript (see Steps 6–8).
 
 ---
 
 ## Step 5 — Identify cluster shifters (external script)
+
+**Feeds only into the exploratory COG analysis below (Steps 6–8); not part of
+the published manuscript.**
 
 Genes whose cluster assignment differs between LB and M63, read from the
 clustering output of Step 3:
@@ -161,10 +198,10 @@ python scripts/03_find_shifters.py
 
 **Steps 6–8 are supplementary exploratory analysis, not part of the
 published manuscript** (which reports KEGG pathway enrichment among the
-non-growing strains, via `analysis/kegg_enrichment_s2.py`, not COG
+non-growing gene-level profiles, via `analysis/kegg_enrichment_s2.py`, not COG
 categories — see Supplementary Data S2). They still depend on the legacy
-four-model parametric workflow in `analysis/batch_fit.jl`, which is not part
-of Steps 1–4 above and which the paper no longer uses.
+four-model parametric workflow in `analysis/batch_fit.jl`; neither that fit nor
+its fitted parameters are inputs to the published results.
 
 Uses `enrichment.py` from the atlas repo unchanged.  
 It reads `results/cluster_shifters.csv` and downloads COG annotations from NCBI.
@@ -212,6 +249,25 @@ The interface shows:
 - **Partial dependence plots** — marginal effect of top 5 COG categories
 
 Repeat with `keio_m63_batch_fit_clean.csv` for M63.
+
+---
+
+## Extra / exploratory material (not used in the manuscript)
+
+Beyond Steps 5–8, the repository carries a few further scripts and committed
+output directories that no manuscript figure, table or supplementary dataset
+depends on. They are kept for transparency about what was explored; nothing in
+Steps 1–4 reads them.
+
+| Path | What it is |
+|---|---|
+| `analysis/ml_keio.py` | Random forest (with a Spearman-correlation fallback) predicting `gr` / `N_max` / `lag` from COG functional category, run locally with scikit-learn. Superseded by the GUIbiont-API version below. |
+| `analysis/run_cog_ml_via_guibiont.py` | API-driven rerun of the same COG machine-learning screen through GUIbiont's `/api/ml-downstream` route, so every number comes from the same DecisionTree.jl forest the UI exposes. |
+| `analysis/enrichment_nongrowers.py` | Auxotroph enrichment of the M63 non-growing pre-screen class (Fisher exact against amino-acid-biosynthesis, wider KEGG biosynthesis, and COG E gene sets). Exploratory only — the manuscript's non-grower enrichment is the KEGG analysis in Step 3b. |
+| `figures/figures.jl` | Static publication figures. Run from the repo root with `julia --project=figures figures/figures.jl` (the CairoMakie dependency lives in `figures/Project.toml`, not `analysis/Project.toml`). |
+| `results/enrichment/` | Committed output of `analysis/enrichment.py` (Step 6): COG enrichment CSV, gene→COG assignments, and the enrichment figure. |
+| `results/ml_keio/` | Committed output of `analysis/ml_keio.py`: per-parameter COG feature-importance CSVs and figures. |
+| `results/enrichment_97_nongrowers.csv` | Committed output of `analysis/enrichment_nongrowers.py`. |
 
 ---
 

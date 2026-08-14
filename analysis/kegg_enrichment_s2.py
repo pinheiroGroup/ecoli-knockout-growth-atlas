@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""KEGG pathway membership and enrichment for the M63 non-growing strains.
+"""KEGG pathway membership and enrichment for M63 non-growing gene-level profiles.
 
 Produces the two files published as Supplementary Data S2:
 

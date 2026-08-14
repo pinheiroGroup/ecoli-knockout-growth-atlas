@@ -5,10 +5,10 @@
 Steps:
   1. POST /api/batch-fit-loglin for each medium (keio_lb, keio_m63).
   2. Poll /api/batch-fit/progress/{job_id} until done.
-  3. Collect results and write results/keio_loglin_results.csv with
-     the same schema as keio_loglin_results.csv (gene, medium, gr_loglin,
-     gr_loglin_se, gr_max_sliding, t_exp_start, t_exp_end, doubling_time,
-     R_squared, lag_loglin, N_max_emp, converged).
+  3. Collect results and write results/keio_loglin_results.csv with the
+     schema (gene, medium, gr_loglin, gr_loglin_se, gr_max_sliding,
+     t_exp_start, t_exp_end, doubling_time, R_squared, lag_loglin,
+     N_max_emp, converged).
 This is the actual GUIbiont workflow a user would run from the Batch Fit
 tab with "Log-linear only" selected.
 
@@ -101,7 +101,7 @@ def submit_and_wait(experiment, poll_interval=5.0, max_wait=2400.0):
 
 def results_to_rows(job_payload, medium_label):
     """Flatten GUIbiont's results list into the same schema as
-    keio_loglin_results.csv produced by analysis/batch_fit_loglin.jl.
+    results/keio_loglin_results.csv, the CSV this script writes.
 
     Carries the two model-free companions returned with the log-linear
     estimator: lag_loglin (Buchanan tangent-intercept lag) and N_max_emp

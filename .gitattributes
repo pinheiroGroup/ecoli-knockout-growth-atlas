@@ -1,4 +1,11 @@
+.gitattributes text eol=lf
 analysis/analyse.jl text eol=lf
 analysis/kegg_enrichment_s2.py text eol=lf
 GUIBIONT_REPRODUCTION.md text eol=lf
 results/keio_m63_nongrowing_genes.json text eol=lf
+README.md text eol=lf
+LICENSE text eol=lf
+DATA_LICENSE text eol=lf
+docs/index.html text eol=lf
+analysis/*.jl text eol=lf
+analysis/*.py text eol=lf

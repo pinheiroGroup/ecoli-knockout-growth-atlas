@@ -115,7 +115,7 @@ GUIBIONT_API=http://localhost:8080 python analysis/run_keio_loglin_via_guibiont.
 ```
 
 Output: `results/keio_loglin_results.csv`, 7,770 gene×medium rows. Expect
-7,768 converged (`leuA` and `nuoB` in M63 return no finite positive
+7,767 converged (`leuA`, `lysA` and `nuoB` in M63 return no finite positive
 $\mu_{\max}$ — SM.tex, "Additional log-linear results").
 
 Equivalently from the interface: **Batch Fit** tab → experiment `keio_lb` →

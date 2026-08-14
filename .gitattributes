@@ -1,0 +1,4 @@
+analysis/analyse.jl text eol=lf
+analysis/kegg_enrichment_s2.py text eol=lf
+GUIBIONT_REPRODUCTION.md text eol=lf
+results/keio_m63_nongrowing_genes.json text eol=lf

@@ -1,8 +1,8 @@
 # Reproducing the Keio knockout analysis with GUIbiont
 
-This guide walks through replicating the clustering, batch fitting, and ML
-analysis from the paper using the GUIbiont web interface.  
-Two short Python scripts handle data preparation; everything else runs in the browser.
+This guide walks through the complete command-line reproduction of the
+clustering, batch fitting and KEGG enrichment reported in the paper, with the
+equivalent GUIbiont browser steps noted where applicable.
 
 **Assumed paths** (adjust if your setup differs):
 
@@ -85,7 +85,9 @@ pre-screen), and clusters with **k=2 for LB, k=3 for M63** (WCSS elbow
 baseline at k=1 with the pre-screen disabled, applied for k≥2 — Guibiont.tex
 "Elbow support for choosing k"). Output: `docs/data/curves_data.json`, plus
 the centroid tables for Figure 2c if `GUIBIONT_PAPER_SCRIPTS_DIR` points at
-the paper repo's `scripts/` directory.
+the paper repo's `scripts/` directory. It also writes
+`results/keio_m63_nongrowing_genes.json`, a deterministic `{"genes": [...]}`
+adapter containing the M63 pre-screen class used by the KEGG analysis.
 
 To confirm the run reproduced the manuscript, check `docs/data/curves_data.json`:
 `optimal_k` should be `{"LB": 2, "M63": 3}` and `nongrowing_genes` should hold
@@ -99,6 +101,22 @@ If you'd rather drive this from the GUIbiont interface directly instead
 `results/keio_lb_gene_means.csv` → leave **Interpolate to common grid**
 unchecked → pre-screen on, τ=0.5 → cluster method `kmeans`, k=2 (k=3 for
 M63). Do **not** enable the trend test.
+
+### Step 3b — KEGG enrichment of the non-growing class
+
+After Step 3, run from the repository root:
+
+```bash
+python analysis/kegg_enrichment_s2.py
+```
+
+By default the script reads the generated
+`results/keio_m63_nongrowing_genes.json`; no manual extraction from
+`docs/data/curves_data.json` is required. A different compatible JSON can
+still be supplied with `--non-growers PATH`. The command writes
+`results/keio_kegg_pathway_memberships.csv` and
+`results/keio_nongrowing_enrichment.csv`, the two inputs used for
+Supplementary Data S2.
 
 ---
 
@@ -144,8 +162,9 @@ python scripts/03_find_shifters.py
 **Steps 6–8 are supplementary exploratory analysis, not part of the
 published manuscript** (which reports KEGG pathway enrichment among the
 non-growing strains, via `analysis/kegg_enrichment_s2.py`, not COG
-categories — see Supplementary Data S2). They still depend on the four-model
-parametric fit from Step 4's `batch_fit.jl`, which the paper no longer uses.
+categories — see Supplementary Data S2). They still depend on the legacy
+four-model parametric workflow in `analysis/batch_fit.jl`, which is not part
+of Steps 1–4 above and which the paper no longer uses.
 
 Uses `enrichment.py` from the atlas repo unchanged.  
 It reads `results/cluster_shifters.csv` and downloads COG annotations from NCBI.
@@ -202,6 +221,9 @@ Repeat with `keio_m63_batch_fit_clean.csv` for M63.
 |---|---|
 | `results/keio_lb_gene_means.csv` | Script 01 |
 | `results/keio_m63_gene_means.csv` | Script 01 |
+| `results/keio_m63_nongrowing_genes.json` | `analysis/analyse.jl` |
+| `results/keio_kegg_pathway_memberships.csv` | `analysis/kegg_enrichment_s2.py` |
+| `results/keio_nongrowing_enrichment.csv` | `analysis/kegg_enrichment_s2.py` |
 | `results/clusters_lb.csv` | GUIbiont Clustering tab |
 | `results/clusters_m63.csv` | GUIbiont Clustering tab |
 | `results/keio_lb_batch_fit.csv` | GUIbiont Batch Fit tab |

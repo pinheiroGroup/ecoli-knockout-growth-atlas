@@ -10,7 +10,8 @@
 # Run:
 #   julia --project=. analyse.jl
 #
-# Output: ../docs/data/curves_data.json
+# Outputs: ../docs/data/curves_data.json and
+#          ../results/keio_m63_nongrowing_genes.json
 
 using XLSX
 using CSV
@@ -25,6 +26,7 @@ const RESULTS_DIR = joinpath(@__DIR__, "../results")
 # This used to resolve under DATA_DIR, i.e. ../data/docs/data/, so runs wrote to
 # an untracked copy and every consumer kept reading a stale checked-in file.
 const OUT_PATH    = joinpath(@__DIR__, "..", "docs", "data", "curves_data.json")
+const NONGROWING_JSON_PATH = joinpath(RESULTS_DIR, "keio_m63_nongrowing_genes.json")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Helpers
@@ -491,6 +493,11 @@ function main()
         push!(gene_records, rec)
     end
 
+    nongrowing_genes = Dict(
+        "LB"  => cl_lb.prescreen  ? sort([g for g in genes_lb_sorted  if lb_cluster_map[g]  == cl_lb.optimal_k])  : String[],
+        "M63" => cl_m63.prescreen ? sort([g for g in genes_m63_sorted if m63_cluster_map[g] == cl_m63.optimal_k]) : String[],
+    )
+
     # Assemble final JSON — separate time axes per medium since they may differ
     out = Dict(
         "metadata" => Dict(
@@ -533,10 +540,7 @@ function main()
             "LB"  => cl_lb.prescreen  ? cl_lb.optimal_k  : 0,
             "M63" => cl_m63.prescreen ? cl_m63.optimal_k : 0,
         ),
-        "nongrowing_genes" => Dict(
-            "LB"  => cl_lb.prescreen  ? sort([g for g in genes_lb_sorted  if lb_cluster_map[g]  == cl_lb.optimal_k])  : String[],
-            "M63" => cl_m63.prescreen ? sort([g for g in genes_m63_sorted if m63_cluster_map[g] == cl_m63.optimal_k]) : String[],
-        ),
+        "nongrowing_genes" => nongrowing_genes,
     )
 
     # Centroid tables for the paper's Figure 2c generator
@@ -551,6 +555,17 @@ function main()
         JSON3.write(io, out)
     end
     @info "Output written to $OUT_PATH"
+
+    # Small adapter consumed directly by kegg_enrichment_s2.py. Keeping this
+    # beside the other analysis outputs avoids a manual conversion from the
+    # nested frontend JSON and guarantees that enrichment uses this exact
+    # pre-screen classification.
+    mkpath(dirname(NONGROWING_JSON_PATH))
+    open(NONGROWING_JSON_PATH, "w") do io
+        JSON3.write(io, Dict("genes" => nongrowing_genes["M63"]))
+        write(io, '\n')
+    end
+    @info "Non-growing gene JSON written to $NONGROWING_JSON_PATH"
 end
 
 main()

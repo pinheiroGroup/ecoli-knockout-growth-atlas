@@ -22,7 +22,7 @@ and is supplied as a JSON list so this script cannot drift from the classifier
 the paper describes.
 
 Run:
-    python analysis/kegg_enrichment_s2.py --non-growers <nongrowers.json>
+    python analysis/kegg_enrichment_s2.py
 """
 from __future__ import annotations
 
@@ -39,6 +39,7 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
 RESULTS = REPO / "results"
 CACHE = RESULTS / "cache"
+DEFAULT_NON_GROWERS = RESULTS / "keio_m63_nongrowing_genes.json"
 
 AA_PATHWAY = "eco01230"
 WIDER_PATHWAYS = ("eco01230", "eco01240", "eco00230", "eco00240")
@@ -116,14 +117,24 @@ def enrichment(screen: set[str], non_growers: set[str],
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--non-growers", required=True,
-                    help="JSON with a 'genes' list from the GUIbiont pre-screen")
+    ap.add_argument(
+        "--non-growers",
+        default=str(DEFAULT_NON_GROWERS),
+        help=("JSON with a 'genes' list from the GUIbiont pre-screen "
+              f"(default: {DEFAULT_NON_GROWERS})"),
+    )
     ap.add_argument("--screen", default=str(RESULTS / "keio_m63_gene_means.csv"),
                     help="matrix whose header lists every gene in the screen")
     args = ap.parse_args()
 
+    non_growers_path = Path(args.non_growers)
+    if not non_growers_path.exists():
+        ap.error(
+            f"non-growing gene JSON not found: {non_growers_path}. "
+            "Run `julia --project=analysis analysis/analyse.jl` first."
+        )
     non_growers = {g.lower() for g in json.loads(
-        Path(args.non_growers).read_text())["genes"]}
+        non_growers_path.read_text())["genes"]}
     with open(args.screen, newline="") as fh:
         header = next(csv.reader(fh))
     screen = {g.lower() for g in header[1:] if g}

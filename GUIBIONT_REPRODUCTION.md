@@ -185,8 +185,13 @@ exploratory analysis, is likewise not part of the manuscript (see Steps 6–8).
 **Feeds only into the exploratory COG analysis below (Steps 6–8); not part of
 the published manuscript.**
 
-Genes whose cluster assignment differs between LB and M63, read from the
-clustering output of Step 3:
+Genes whose cluster assignment differs between LB and M63.
+
+This script reads `results/clusters_lb.csv` and `results/clusters_m63.csv`,
+which are the per-medium **Download CSV** exports from the GUIbiont Clustering
+tab — not the JSON that Step 3 writes. Produce them from the interface first
+(Clustering tab → run LB, download; repeat for M63), otherwise the script exits
+with `FileNotFoundError: results/clusters_lb.csv`.
 
 ```bash
 python scripts/03_find_shifters.py

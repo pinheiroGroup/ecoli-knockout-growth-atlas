@@ -24,7 +24,7 @@ from scipy.stats import fisher_exact
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 CURVES = ROOT / "docs" / "data" / "curves_data.json"
-COG_CSV = ROOT.parent / "GUIbiont" / "supplementary_data" / "gene_cog_assignments.csv"
+COG_CSV = ROOT / "results" / "enrichment" / "gene_cog_assignments.csv"
 
 AA_PREFIXES = ("arg", "aro", "cys", "his", "ilv", "leu", "lys",
                "met", "phe", "pro", "ser", "thr", "trp", "tyr", "gly")
@@ -98,8 +98,7 @@ def main() -> None:
                    cog_e, nongrowers, universe),
     ]
 
-    for base in (ROOT / "results",
-                 ROOT.parent / "GUIbiont" / "supplementary_data"):
+    for base in (ROOT / "results",):
         with (base / out_name).open("w", newline="") as fh:
             csv.writer(fh).writerows(rows)
         print("wrote", base / out_name)

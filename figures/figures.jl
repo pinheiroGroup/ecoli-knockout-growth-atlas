@@ -38,7 +38,7 @@ function fig_elbow(d)
         xlabel      = "Number of clusters (k)",
         ylabel      = "WCSS",
         xticks      = ks_lb,
-        title       = "KinBiont k-means sweep — WCSS elbow",
+        title       = "Kinbiont k-means sweep — WCSS elbow",
         titlesize   = 13,
     )
 

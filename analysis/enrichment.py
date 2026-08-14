@@ -242,7 +242,7 @@ def load_feature_table():
     df_genes = df_genes.rename(columns={gene_col: "gene"})
     df_genes["gene"] = df_genes["gene"].str.strip().str.lower()
     df_genes["locus_tag"] = df_genes["locus_tag"].str.strip()
-    print(f"  Gene→locus_tag mappings: {len(df_genes)}")
+    print(f"  Gene->locus_tag mappings: {len(df_genes)}")
     return df_genes
 
 
@@ -254,7 +254,7 @@ def build_gene_cog_map(gene_list):
     Returns dict: gene_name (lower) -> list of single-letter COG category strings.
     Falls back to "S" (unknown) when no mapping is found.
     """
-    print("\n--- Building gene → COG mapping ---")
+    print("\n--- Building gene -> COG mapping ---")
 
     cog_def    = load_cog_definitions()
     feature_df = load_feature_table()

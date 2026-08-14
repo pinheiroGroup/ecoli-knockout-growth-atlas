@@ -31,7 +31,7 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES  = os.path.join(REPO, "results")
 OUT_CSV = os.path.join(RES, "keio_loglin_results.csv")
 
-API = os.environ.get("GUIBIONT_API", "http://localhost:9090")
+API = os.environ.get("GUIBIONT_API", "http://localhost:8080")
 MEDIA = ("keio_lb", "keio_m63")
 
 # Parameters reported for the Keio analysis in the GUIbiont manuscript.

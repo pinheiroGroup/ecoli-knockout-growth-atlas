@@ -27,7 +27,7 @@ Two short Python scripts handle data preparation; everything else runs in the br
   ```
 
   This installs the exact versions recorded in `analysis/Manifest.toml`
-  (Kinbiont v1.5.0, from the General registry). Skipping it makes Step 3 fail
+  (Kinbiont v1.5.1, from the General registry). Skipping it makes Step 3 fail
   at precompile with `Package Parsers ... is required but does not seem to be
   installed`. The first run pulls a large dependency tree and takes a while.
 
@@ -111,7 +111,7 @@ same route the Batch Fit tab's "Log-linear only" option calls), with the
 manuscript's parameters baked in (`LOGLIN_PARAMS` in the script):
 
 ```bash
-GUIBIONT_API=http://localhost:8080 python analysis/run_keio_loglin_via_guibiont.py
+python analysis/run_keio_loglin_via_guibiont.py
 ```
 
 Output: `results/keio_loglin_results.csv`, 7,770 gene×medium rows. Expect

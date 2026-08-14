@@ -4,7 +4,7 @@
 # Setup (run once):
 #   julia --project=. -e 'import Pkg; Pkg.instantiate()'
 #
-# Kinbiont is pinned to the registered v1.5.0 (Project.toml compat,
+# Kinbiont is pinned to the registered v1.5.1 (Project.toml compat,
 # https://github.com/pinheiroGroup/Kinbiont.jl) — no local dev path.
 #
 # Run:
@@ -264,7 +264,7 @@ function aggregate_by_gene(meta, curves_dict::Dict{String,Vector{Float64}})
 end
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 4. KinBiont clustering with WCSS elbow sweep
+# 4. Kinbiont clustering with WCSS elbow sweep
 # ─────────────────────────────────────────────────────────────────────────────
 
 # Identify the non-growing strains with Kinbiont's own detector. Per SM.tex
@@ -525,7 +525,7 @@ function main()
             "M63" => [to_json_vec(cl_m63.centroids_z[k, :]) for k in 1:size(cl_m63.centroids_z, 1)],
         ),
         "genes" => gene_records,
-        # With cluster_prescreen_constant=true, KinBiont assigns non-growing wells
+        # With cluster_prescreen_constant=true, Kinbiont assigns non-growing wells
         # to label n_clusters (the last index). When the pre-screen is disabled
         # (LB), no sentinel is reserved: report cluster 0 (matches no cluster) and
         # an empty gene list so the figure draws no non-growing cluster.

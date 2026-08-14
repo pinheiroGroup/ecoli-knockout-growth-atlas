@@ -129,7 +129,7 @@ def load_feature_table():
     df_g = df_g.rename(columns={gene_col: "gene"})
     df_g["gene"]      = df_g["gene"].str.strip().str.lower()
     df_g["locus_tag"] = df_g["locus_tag"].str.strip()
-    print(f"  Feature table: {len(df_g)} gene→locus_tag mappings.")
+    print(f"  Feature table: {len(df_g)} gene->locus_tag mappings.")
     return df_g
 
 
@@ -201,7 +201,7 @@ def load_cog_csv(cog_def):
 
 def build_gene_cog_map(gene_list):
     """Return dict: gene_lower -> list of COG category letters."""
-    print("\n--- Building gene → COG mapping ---")
+    print("\n--- Building gene -> COG mapping ---")
     cog_def    = load_cog_definitions()
     feature_df = load_feature_table()
     cog_df     = load_cog_csv(cog_def)

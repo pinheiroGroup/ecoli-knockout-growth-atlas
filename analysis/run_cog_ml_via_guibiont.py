@@ -40,7 +40,7 @@ OUT.mkdir(exist_ok=True)
 LOGLIN_CSV = RES / "keio_loglin_results.csv"
 COG_CSV    = RES / "ml" / "cog_one_hot_features.csv"
 
-API = os.environ.get("GUIBIONT_API", "http://localhost:9090")
+API = os.environ.get("GUIBIONT_API", "http://localhost:8080")
 # (target column on the loglin CSV → short slug used in output filenames)
 TARGETS = [("gr",         "mu"),
            ("lag_loglin", "lag"),

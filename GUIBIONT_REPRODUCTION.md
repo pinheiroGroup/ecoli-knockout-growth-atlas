@@ -276,21 +276,23 @@ Steps 1–4 reads them.
 
 ---
 
-## Summary of files produced
+## Summary of manuscript-reproduction outputs
+
+The following tracked files are produced by the required manuscript-reproduction
+steps (Steps 1--4, including Step 3b):
 
 | File | How |
 |---|---|
-| `results/keio_lb_gene_means.csv` | Script 01 |
-| `results/keio_m63_gene_means.csv` | Script 01 |
-| `results/keio_m63_nongrowing_genes.json` | `analysis/analyse.jl` |
-| `results/keio_kegg_pathway_memberships.csv` | `analysis/kegg_enrichment_s2.py` |
-| `results/keio_nongrowing_enrichment.csv` | `analysis/kegg_enrichment_s2.py` |
-| `results/clusters_lb.csv` | GUIbiont Clustering tab |
-| `results/clusters_m63.csv` | GUIbiont Clustering tab |
-| `results/keio_lb_batch_fit.csv` | GUIbiont Batch Fit tab |
-| `results/keio_m63_batch_fit.csv` | GUIbiont Batch Fit tab |
-| `results/cluster_assignments_both.csv` | Script 03 |
-| `results/cluster_shifters.csv` | Script 03 |
-| `results/enrichment/` | `enrichment.py` |
-| `results/{lb,m63}_cog_feature_matrix.csv` | Script 04 |
-| `results/keio_{lb,m63}_batch_fit_clean.csv` | Script 05 |
+| `results/keio_lb_gene_means.csv` | `scripts/01_build_gene_means.py` (Step 1) |
+| `results/keio_m63_gene_means.csv` | `scripts/01_build_gene_means.py` (Step 1) |
+| `docs/data/curves_data.json` | `analysis/analyse.jl` (Step 3) |
+| `results/keio_s1_metadata.csv` | `analysis/analyse.jl` (Step 3) |
+| `results/keio_m63_nongrowing_genes.json` | `analysis/analyse.jl` (Step 3) |
+| `results/keio_kegg_pathway_memberships.csv` | `analysis/kegg_enrichment_s2.py` (Step 3b) |
+| `results/keio_nongrowing_enrichment.csv` | `analysis/kegg_enrichment_s2.py` (Step 3b) |
+| `results/keio_loglin_results.csv` | `analysis/run_keio_loglin_via_guibiont.py` (Step 4) |
+
+Step 2 creates registered experiment directories under the external GUIbiont
+`Clean_data/` directory. The manual GUI exports and the outputs of Steps 5--8
+are exploratory, are not required for the manuscript, and are documented in
+their respective sections above rather than in this summary.
